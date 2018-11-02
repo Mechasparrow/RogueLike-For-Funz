@@ -5,7 +5,7 @@ import tcod
 
 # Setup the font.
 tcod.console_set_custom_font(
-    'arial10x10.png',tcod.FONT_LAYOUT_TCOD,
+    'font_images/arial10x10.png',tcod.FONT_LAYOUT_TCOD,
     )
 
 player_x = 20

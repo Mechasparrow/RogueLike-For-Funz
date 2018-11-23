@@ -77,8 +77,8 @@ class Rect:
         self.y2 = y + h
 
     def center(self):
-        center_x = (self.x1 + self.x2) / 2
-        center_y = (self.y1 + self.y2) / 2
+        center_x = (self.x1 + self.x2) // 2
+        center_y = (self.y1 + self.y2) // 2
         return (center_x, center_y)
 
     def intersect(self, other):
@@ -132,44 +132,56 @@ def make_map():
     num_rooms = 0
 
     for r in range(MAX_ROOMS):
-        # r width + height
+        #rand width and height
         w = tcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
         h = tcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
-        # random position without going out of boundaries
+
+        # random pos
         x = tcod.random_get_int(0,0, MAP_WIDTH - w - 1)
-        y = tcod.random_get_int(0,0,MAP_WIDTH - h - 1)
+        y = tcod.random_get_int(0,0, MAP_HEIGHT - h - 1)
 
-        new_room = Rect(x,y, w, h)
+        # New room
+        new_room = Rect(x, y, w, h)
 
-        #run to see if they failed
+        # run through other rooms to check for collision
         failed = False
+
         for other_room in rooms:
             if new_room.intersect(other_room):
                 failed = True
                 break
 
         if not failed:
-
+            # paint the room
             create_room(new_room)
+
+            #center coordinates of new room
 
             (new_x, new_y) = new_room.center()
 
             if num_rooms == 0:
                 player.x = new_x
                 player.y = new_y
-        else:
 
+
+        else:
+            
+            #center coordinates of prev room
             (prev_x, prev_y) = rooms[num_rooms-1].center()
 
             if tcod.random_get_int(0,0,1) == 1:
+
                 create_h_tunnel(prev_x, new_x, prev_y)
                 create_v_tunnel(prev_y, new_y, new_x)
             else:
                 create_v_tunnel(prev_y, new_y, prev_x)
                 create_h_tunnel(prev_x, new_x, new_y)
 
-            rooms.append(new_room)
-            num_rooms += 1
+        rooms.append(new_room)
+        num_rooms += 1
+
+
+
 
 # create the map
 make_map()

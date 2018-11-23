@@ -60,6 +60,7 @@ player = Object(0, 0, '@', 'player', tcod.white, blocks = True)
 
 objects = [player]
 
+
 # game map
 MAP_WIDTH = 80
 MAP_HEIGHT = 45
@@ -76,11 +77,34 @@ FOV_LIGHT_WALLS = True
 TORCH_RADIUS = 10
 fov_recompute = True
 
+# colors
 color_dark_wall = tcod.Color(0, 0, 100)
 color_light_wall = tcod.Color(130,110,50)
 
 color_dark_ground = tcod.Color(50, 50, 150)
 color_light_ground = tcod.Color(200, 180, 50)
+
+game_state = 'playing'
+player_action = None
+
+def player_move_or_attack(dx, dy):
+    global fov_recompute
+
+    # coordinates of where player will move/attack to
+    x = player.x + dx
+    y = player.y + dy
+
+    target = None
+    for object in objects:
+        if object.x == x and object.y == y:
+            target = object
+            break
+
+    if target is not None:
+        print ('The ' + target.name + ' laughs at your puny efforts to attack him')
+    else:
+        player.move(dx, dy)
+        fov_recompute = True
 
 class Rect:
     def __init__(self, x, y, w, h):
@@ -280,23 +304,6 @@ def handle_keys():
     player_dx = 0
     player_dy = 0
 
-    #movement keys
-    if tcod.console_is_key_pressed(tcod.KEY_UP):
-        player_dy = -1
-        fov_recompute = True
-    elif tcod.console_is_key_pressed(tcod.KEY_DOWN):
-        player_dy = 1
-        fov_recompute = True
-    elif tcod.console_is_key_pressed(tcod.KEY_LEFT):
-        player_dx = -1
-        fov_recompute = True
-    elif tcod.console_is_key_pressed(tcod.KEY_RIGHT):
-        player_dx = 1
-        fov_recompute = True
-
-    # move the player
-    player.move(player_dx, player_dy)
-
     # check for specific key presses combos, etc
     key = tcod.console_check_for_keypress()
 
@@ -304,7 +311,33 @@ def handle_keys():
         # Alt-enter toggle fullscreen
         tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
     elif key.vk == tcod.KEY_ESCAPE:
-        exit_game = True
+        return 'exit'
+
+    if (game_state == 'playing'):
+        #movement keys
+        if tcod.console_is_key_pressed(tcod.KEY_UP):
+            player_dy = -1
+            # move or attack
+            player_move_or_attack(player_dx, player_dy)
+
+        elif tcod.console_is_key_pressed(tcod.KEY_DOWN):
+            player_dy = 1
+            # move or attack
+            player_move_or_attack(player_dx, player_dy)
+
+        elif tcod.console_is_key_pressed(tcod.KEY_LEFT):
+            player_dx = -1
+            # move or attack
+            player_move_or_attack(player_dx, player_dy)
+
+        elif tcod.console_is_key_pressed(tcod.KEY_RIGHT):
+            player_dx = 1
+            # move or attack
+            player_move_or_attack(player_dx, player_dy)
+
+        else:
+            return 'didnt-take-turn'
+
 
 # set the game fps
 tcod.sys_set_fps(LIMIT_FPS)
@@ -324,4 +357,13 @@ while not exit_game:
     for object in objects:
         object.clear()
 
-    handle_keys()
+    player_action = handle_keys()
+
+    if player_action == 'exit':
+        break
+
+    #let monsters take their turn
+    if game_state == 'playing' and player_action != 'didnt-take-turn':
+        for object in objects:
+            if object != player:
+                print('The ' + object.name + ' growls!')

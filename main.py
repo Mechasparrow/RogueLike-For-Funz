@@ -3,23 +3,13 @@ import time
 
 from gameconstants import *
 
+from engine.gameobject import *
+
 # Setup the font
 tcod.console_set_custom_font(
     FONT,
     FONT_FLAGS,
 )
-
-def draw_player(con, x, y):
-    # Set the player color
-    tcod.console_set_default_foreground(con, (255, 255, 255))
-    # Draw the player on to the console
-    tcod.console_put_char(con, x, y, "@", tcod.BKGND_NONE)
-
-def clear_player(con, x, y):
-    # Set the player color
-    tcod.console_set_default_foreground(con, (255, 255, 255))
-    # Draw the player on to the console
-    tcod.console_put_char(con, x, y, " ", tcod.BKGND_NONE)
 
 def handle_input():
 
@@ -37,7 +27,12 @@ def run():
     #initialize core console
     root_console = tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
 
-    player_x = 0
+    #create the player
+    player = GameObject(0,0, "@", (255, 255, 255))
+
+    # objects
+    objects = [player]
+
 
     # Set the game fps
     tcod.sys_set_fps(GAME_FPS)
@@ -45,15 +40,23 @@ def run():
     while not game_end:
         tcod.console_set_default_foreground(0, tcod.white)
 
-        draw_player(root_console, player_x, 0)
-        tcod.console_flush() # Show the console
-        clear_player(root_console, player_x, 0)
-        player_x += 1
+        # render the game objects
+        for object in objects:
+            object.draw(root_console)
+
+        tcod.console_flush()
+
+        # clear the screen
+        for object in objects:
+            object.clear(root_console)
+
 
         game_action = handle_input()
 
         if (game_action == 'exit'):
             game_end = True
+
+
 
 # Check if game is to be run
 if __name__ == "__main__":

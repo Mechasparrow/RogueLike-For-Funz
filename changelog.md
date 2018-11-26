@@ -1,14 +1,14 @@
 =========
-Date: 11/23/2018
+Date: 11/25/2018
 Author: Michael Navazhylau
 =========
 
-Tasks:
-- [] Render the initial console.
-- [] Render starting player character
-- [] Get suitable movement done on player
-- [] Rev progress
-
 Completed:
 
+- [x] Render the initial console.
+- [x] Render starting player character
+- [x] Get suitable movement done on player
+  - [x] Got @ to move in the right direction
+
 Notes:
+Tsk: generalize player into gameobject class

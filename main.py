@@ -17,7 +17,25 @@ tcod.console_set_custom_font(
 
 def player_behavior(game, action):
 
-    pass
+    # Grab the player object
+    player = game.find_gameobjects_by_name("Player")[0]
+
+    # Movement offset from current pos
+    dx = 0
+    dy = 0
+
+    if (action == "up"):
+        dy = -1
+    elif (action == "down"):
+        dy = 1
+    elif (action == "right"):
+        dx = 1
+    elif (action == "left"):
+        dx = -1
+
+    # Move the player
+    player.move(dx, dy)
+
 
 def general_game_behavior(game, action):
 
@@ -25,6 +43,9 @@ def general_game_behavior(game, action):
         game.stop_loop()
 
 def core_logic(game):
+
+    game.handle_inputs()
+
     pass
 
 def run():

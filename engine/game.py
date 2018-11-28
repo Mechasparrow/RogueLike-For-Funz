@@ -43,7 +43,7 @@ class Game:
         key = tcod.console_check_for_keypress()
 
         for handler in self.input_handlers:
-            handler.handle_input(key)
+            handler.handle_input(key.vk)
 
     # TODO see if further abstraction needed
     # Adds a gameobject to the game
@@ -82,8 +82,6 @@ class Game:
 
         while(self.running):
             logic(self)
-
-            self.handle_inputs()
 
             self.render()
             tcod.console_flush() # Show the console

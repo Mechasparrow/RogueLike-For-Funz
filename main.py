@@ -51,11 +51,11 @@ def core_logic(game):
 
 def init_game(g):
     # Add a player
-    player = GameObject(0, 0, "Player", "@", color = (255, 255, 255))
+    player = GameObject(0, 0, "Player", "@", color = (255, 255, 255), entity = True, game = g)
     g.add_gameobject_to_game(player)
 
     # input handlers
-
+    # ============== #
     # player handler
     player_key_actions = {
         "up": UP_KEY,

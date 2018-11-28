@@ -1,5 +1,7 @@
 import tcod
 
+from .mapping.tile import *
+
 class Game:
 
     def __init__(self, game_name, window_width, window_height, font, fps = None):
@@ -31,9 +33,23 @@ class Game:
         # Game objects
         self.objects = []
 
+        # World map
+        self.map = Game.gen_walkable_map(100,100)
+
         # Input handlers
         self.input_handlers = []
 
+    def gen_walkable_map(width, height):
+        walkable_map = []
+
+        for x in range(0,width):
+            walkable_column = []
+            for y in range (0,height):
+                walkable_column.append(Tile(x, y))
+
+            walkable_map.append(walkable_column)
+
+        return walkable_map
 
     def add_input_handler(self, input_handler):
         self.input_handlers.append(input_handler)
@@ -70,6 +86,10 @@ class Game:
         for object in self.objects:
             object.draw(self.root_console)
 
+        for tile_column in self.map:
+            for tile in tile_column:
+                tile.draw(self.root_console)
+
     def clear_render(self):
         for object in self.objects:
             object.clear(self.root_console)
@@ -84,6 +104,9 @@ class Game:
             logic(self)
 
             self.render()
+
+            tcod.console_set_default_foreground(self.root_console, (255, 255, 255))
+
             tcod.console_flush() # Show the console
             self.clear_render()
 

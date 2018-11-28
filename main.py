@@ -4,10 +4,14 @@ import time
 from gameconstants import *
 from keycodes import *
 
+# Game engine
 from engine.gameobject import *
 from engine.game import *
 from engine.font import *
 from engine.input_handler import *
+
+# Mapping
+from engine.mapping.tile import *
 
 # Setup the font
 tcod.console_set_custom_font(
@@ -43,16 +47,9 @@ def general_game_behavior(game, action):
         game.stop_loop()
 
 def core_logic(game):
-
     game.handle_inputs()
 
-    pass
-
-def run():
-
-    game_font = Font(FONT, FONT_FLAGS)
-    g = Game(TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, game_font, fps=GAME_FPS)
-
+def init_game(g):
     # Add a player
     player = GameObject(0, 0, "Player", "@", color = (255, 255, 255))
     g.add_gameobject_to_game(player)
@@ -79,6 +76,15 @@ def run():
     # Add input handlers
     g.add_input_handler(player_input_handler)
     g.add_input_handler(general_game_input_handler)
+
+
+def run():
+
+    game_font = Font(FONT, FONT_FLAGS)
+    g = Game(TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, game_font, fps=GAME_FPS)
+
+    init_game(g)
+
 
     g.start_loop(core_logic)
 

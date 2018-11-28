@@ -12,3 +12,14 @@ Completed:
 
 Notes:
 Tsk: generalize player into gameobject class
+
+========
+Date: 11/28/2018
+Author: Michael Navazhylau
+========
+
+TODO:
+
+Completed:
+
+Notes:

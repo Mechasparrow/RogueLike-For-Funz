@@ -1,0 +1,6 @@
+import tcod
+
+LEFT_KEY=tcod.KEY_LEFT
+RIGHT_KEY=tcod.KEY_RIGHT
+UP_KEY=tcod.KEY_UP
+DOWN_KEY=tcod.KEY_DOWN

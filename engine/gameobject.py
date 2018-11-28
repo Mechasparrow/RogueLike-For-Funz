@@ -2,9 +2,10 @@ import tcod
 
 class GameObject:
 
-    def __init__(self, x, y, chr, color):
+    def __init__(self, x, y, name, chr, color):
         self.x = x
         self.y = y
+        self.name = name
         self.chr = chr
         self.color = color
 

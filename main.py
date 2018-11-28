@@ -4,6 +4,7 @@ import time
 from gameconstants import *
 
 from engine.gameobject import *
+from engine.game import *
 
 # Setup the font
 tcod.console_set_custom_font(
@@ -20,42 +21,25 @@ def handle_input():
 
     return 'no-key'
 
+def core_logic(self):
+
+    print ("counter: " + str(self.props["counter"]))
+    if (self.props["counter"] >= 10):
+        self.running = False
+
+
+    self.props["counter"] += 1
+
+
 def run():
-    # initialize game end boolean
-    game_end = False
 
-    #initialize core console
-    root_console = tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
+    g = Game()
 
-    #create the player
-    player = GameObject(0,0, "@", (255, 255, 255))
+    g.props["counter"] = 0
 
-    # objects
-    objects = [player]
+    g.start_loop(core_logic)
 
-
-    # Set the game fps
-    tcod.sys_set_fps(GAME_FPS)
-
-    while not game_end:
-        tcod.console_set_default_foreground(0, tcod.white)
-
-        # render the game objects
-        for object in objects:
-            object.draw(root_console)
-
-        tcod.console_flush()
-
-        # clear the screen
-        for object in objects:
-            object.clear(root_console)
-
-
-        game_action = handle_input()
-
-        if (game_action == 'exit'):
-            game_end = True
-
+    pass
 
 
 # Check if game is to be run

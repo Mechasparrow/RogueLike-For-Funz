@@ -20,6 +20,12 @@ Author: Michael Navazhylau
 
 TODO:
 
+- [ ] Room Gen
+- [ ] Background color
+
 Completed:
+
+- [X] InputHandler Class
+- [X] Basic Player Controls
 
 Notes:

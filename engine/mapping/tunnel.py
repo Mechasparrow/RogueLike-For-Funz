@@ -75,6 +75,10 @@ class Tunnel:
                 map[x][y] = Tile(x, y, walkable = True)
 
                 if (y == mid_way):
+
+                    map[x-1][y+1] = Tile(x-1, y+1, blocking =True)
+
+
                     for i in range(0, dx):
 
                         if (dx > 0):

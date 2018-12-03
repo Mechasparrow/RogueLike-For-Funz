@@ -33,24 +33,32 @@ class Tunnel:
 
                 if (x == mid_way):
 
-                    if (dy >= 0):
+                    if (dy > 0):
                         # Fix special edges
                         map[x+1][y] = Tile(x+1, y, blocking = True)
                         map[x+1][y-1] = Tile(x+1, y-1, blocking = True)
                         map[x][y+dy+1] = Tile(x, y+dy+1, blocking = True)
                         map[x-1][y+dy+1] = Tile(x-1, y+dy+1, blocking = True)
+                    elif (dy < 0):
+                        map[x+1][y] = Tile(x+1, y, blocking = True)
+                        map[x+1][y+1] = Tile(x+1, y+1, blocking = True)
+                        map[x][y+dy-1] = Tile(x, y+dy-1, blocking = True)
+                        map[x-1][y+dy-1] = Tile(x-1, y+dy-1, blocking = True)
 
-
-                    for i in range(0, dy):
+                    for i in range(0, abs(dy)):
                         if (dy > 0):
                             y += 1
+
+                            if (y >= self.point1[1] and y <= (self.point1[1] + dy)):
+                                map[x+1][y] = Tile(x+1, y, blocking = True)
+                                map[x-1][y] = Tile(x-1, y, blocking = True)
+
                         if (dy < 0):
                             y -= 1
-                            print ("less")
 
-                        if (y >= self.point1[1] and y <= (self.point1[1] + dy)):
-                            map[x+1][y] = Tile(x+1, y, blocking = True)
-                            map[x-1][y] = Tile(x-1, y, blocking = True)
+                            if (y <= self.point1[1] and y >= (self.point1[1] + dy)):
+                                map[x+1][y] = Tile(x+1, y, blocking = True)
+                                map[x-1][y] = Tile(x-1, y, blocking = True)
 
                         # if (y == (self.point[1] + dy)):
 

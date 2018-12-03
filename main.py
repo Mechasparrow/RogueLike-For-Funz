@@ -62,10 +62,7 @@ def init_game(g):
     dungeon = Dungeon(g.map, [test_room,test_room2, test_room3])
     dungeon.push_dungeon_to_map()
     dungeon.connect_rooms(test_room, test_room2)
-
-    # TODO Edge case
-    #dungeon.connect_rooms(test_room2,test_room3)
-
+    dungeon.connect_rooms(test_room2,test_room3)
 
     # Room centre render
     room_center = GameObject(rm_x, rm_y, "Room Center A", "X", color = (255,255,0), entity= False, game = g)

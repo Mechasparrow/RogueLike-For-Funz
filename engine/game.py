@@ -35,7 +35,6 @@ class Game:
 
         # World map
         self.map = Game.gen_walkable_map(80,60)
-        self.map[2][0].blocking = True
 
         # Input handlers
         self.input_handlers = []

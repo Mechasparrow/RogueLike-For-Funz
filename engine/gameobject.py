@@ -23,7 +23,7 @@ class GameObject:
 
             tile = game_map[potential_x][potential_y]
 
-            if (tile.blocking == True):
+            if (tile.blocking == True or tile.walkable == False):
                 return
             else:
                 self.x = potential_x

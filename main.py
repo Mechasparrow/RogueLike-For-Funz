@@ -11,7 +11,9 @@ from engine.font import *
 from engine.input_handler import *
 
 # Mapping
-from engine.mapping.tile import *
+from engine.mapping.tile import Tile
+from engine.mapping.room import Room
+from engine.mapping.dungeon import Dungeon
 
 # Setup the font
 tcod.console_set_custom_font(
@@ -50,8 +52,24 @@ def core_logic(game):
     game.handle_inputs()
 
 def init_game(g):
+    # Add prelim room
+    test_room = Room.new_room(g.map, 10, 10, 9, 9)
+    (rm_x, rm_y) = test_room.rect.center()
+    test_room2 = Room.new_room(g.map, 10, 40, 9, 9)
+    test_room3 = Room.new_room(g.map, 40, 10, 19, 9)
+
+    # create dungeon
+    dungeon = Dungeon(g.map, [test_room,test_room2, test_room3])
+    dungeon.push_dungeon_to_map()
+
+    # Room centre render
+    room_center = GameObject(rm_x, rm_y, "Room Center A", "X", color = (255,255,0), entity= False, game = g)
+
     # Add a player
-    player = GameObject(0, 0, "Player", "@", color = (255, 255, 255), entity = True, game = g)
+    player = GameObject(rm_x, rm_y, "Player", "@", color = (255, 255, 255), entity = True, game = g)
+
+    # Add initial game objects
+    g.add_gameobject_to_game(room_center)
     g.add_gameobject_to_game(player)
 
     # input handlers
@@ -76,6 +94,7 @@ def init_game(g):
     # Add input handlers
     g.add_input_handler(player_input_handler)
     g.add_input_handler(general_game_input_handler)
+
 
 
 def run():

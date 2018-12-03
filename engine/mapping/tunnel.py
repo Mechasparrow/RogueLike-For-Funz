@@ -76,14 +76,37 @@ class Tunnel:
 
                 if (y == mid_way):
 
-                    map[x-1][y+1] = Tile(x-1, y+1, blocking =True)
+                    # Edge cases
+
+                    if (dx > 0):
+                        map[x-1][y+1] = Tile(x-1, y+1, blocking =True)
+                        map[x][y+1] = Tile(x, y+1, blocking =True)
+                        map[x+dx+1][y-1] = Tile(x+dx+1, y-1, blocking =True)
+                        map[x+dx+1][y] = Tile(x+dx+1, y, blocking =True)
+                    elif (dx < 0):
+                        map[x][y+1] = Tile(x, y+1, blocking = True)
+                        map[x+1][y+1] = Tile(x+1, y+1, blocking = True)
+                        map[x+dx-1][y] = Tile(x+dx-1, y, blocking = True)
+                        map[x+dx-1][y-1] = Tile(x+dx-1, y-1, blocking = True)
 
 
-                    for i in range(0, dx):
+                    for i in range(0, abs(dx)):
+
+
 
                         if (dx > 0):
                             x += 1
+
+                            if (x > self.point1[0] and x <= self.point2[0]):
+                                map[x][y+1] = Tile(x, y+1, blocking = True)
+                                map[x][y-1] = Tile(x, y-1, blocking = True)
+
                         if (dx < 0):
                             x -= 1
+
+                            if (x < self.point1[0] and x >= self.point2[0]):
+                                map[x][y+1] = Tile(x, y+1, blocking = True)
+                                map[x][y-1] = Tile(x, y-1, blocking = True)
+
 
                         map[x][y] = Tile(x, y, walkable = True)

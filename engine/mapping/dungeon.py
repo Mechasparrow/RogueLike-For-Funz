@@ -39,8 +39,8 @@ class Dungeon:
 
             print ("VERT")
 
-            room_a_x = room_a.left_edge() + 1
-            room_b_x = room_b.right_edge() -3
+            room_a_x = tcod.random_get_int(0,(room_a.left_edge() + 1), room_a.right_edge()) - 1
+            room_b_x = tcod.random_get_int(0,(room_b.left_edge() + 1), room_b.right_edge()) - 1
 
             if (room_a.top_edge() < room_b.bottom_edge()):
                 tunnel_point1 = (room_a_x, room_a.bottom_edge())

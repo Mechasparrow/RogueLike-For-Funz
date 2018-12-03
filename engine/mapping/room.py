@@ -9,6 +9,21 @@ class Room:
         self.rect = rect
         pass
 
+    # Get edges on top and bottom, y position of edge
+    def top_edge(self):
+        return self.rect.y
+
+    def bottom_edge(self):
+        return (self.rect.y + self.rect.h)
+
+    # Get edges on left and right, x position of edge
+    def left_edge(self):
+        return self.rect.x
+
+    def right_edge(self):
+        return (self.rect.x + self.rect.w)
+
+
     # create a new room with a position w/ width and height
     def new_room(map, x, y, w, h):
         new_rect = Rect(x,y,w,h)
@@ -45,5 +60,3 @@ class Room:
                     room_tile.blocking = False
 
                 self.map[x][y] = room_tile
-
-        

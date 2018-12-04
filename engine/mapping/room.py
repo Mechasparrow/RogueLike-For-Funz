@@ -55,11 +55,12 @@ class Room:
 
                 if (x == starting_x or x == ending_x or y == starting_y or y == ending_y):
                     room_tile.blocking = True
-
+                    room_tile.block_visibility = True
 
                     try:
                         if ((x == starting_x and self.map[x-1][y].walkable == True) or (y == starting_y and self.map[x][y-1].walkable == True) or (y == ending_y and self.map[x][y+1].walkable == True) or (x == ending_x and self.map[x+1][y].walkable == True)):
                             room_tile.blocking = False
+                            room_tile.block_visibility = False
                             room_tile.walkable = True
                     except:
                         pass

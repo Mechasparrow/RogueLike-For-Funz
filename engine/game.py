@@ -45,7 +45,7 @@ class Game:
 
         for x in range(0, 80):
             for y in range(0, 60):
-                self.fov_map.transparent[y, x] = not self.map[x][y].blocking
+                self.fov_map.transparent[y, x] = not (self.map[x][y].block_visibility)
                 self.fov_map.walkable[y,x] = self.map[x][y].walkable
 
         self.fov_map.transparent[30,30] = False

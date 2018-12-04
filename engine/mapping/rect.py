@@ -6,6 +6,10 @@ class Rect:
         self.w = w
         self.h = h
 
+    def __str__(self):
+        return ("Rect: " + str(self.x) + "," + str(self.y) + "," + str(self.w) + "," + str(self.h))
+
+
     # Gives us the center point
     def center(self):
         center_x = self.x + (self.w) // 2

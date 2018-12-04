@@ -2,7 +2,7 @@ import tcod
 from .rect import Rect
 from .room import Room
 from .tunnel import Tunnel
-
+import random
 
 class Dungeon:
 
@@ -10,11 +10,57 @@ class Dungeon:
         self.map = map
         self.rooms = rooms
 
+        # generate bsp
+        map_width =  len(map)
+        map_height = len(map[0])
+
+        self.bsp = tcod.bsp.BSP(x=0,y=0, width = map_width-1, height = map_height-1)
+        self.bsp.split_recursive(
+            depth=4,
+            min_width=9,
+            min_height=9,
+            max_horizontal_ratio=1.25,
+            max_vertical_ratio=1.25
+        )
+        self.traverse_bsp(self.bsp)
+
+    def traverse_bsp(self, node):
+
+        for child in node.children:
+            self.traverse_bsp(child)
+
+        if node.children:
+            self.bsp_connect_rooms(node)
+        else:
+            self.bsp_create_room(node)
+
+    def bsp_connect_rooms(self, node):
+        (node1, node2) = node.children
+        room1 = self.bsp_find_node_room(node1)
+        room2 = self.bsp_find_node_room(node2)
+        self.connect_rooms(room1, room2)
+
+    def bsp_create_room(self, node):
+        padding = 5
+        node_rect = Rect(node.x+padding, node.y+padding, node.width-padding, node.height-padding)
+        print (node_rect)
+        new_room = Room(self.map, node_rect)
+        self.add_room(new_room)
+
+    def bsp_find_node_room(self, node):
+
+        for room in self.rooms:
+            room_centre = room.rect.center()
+            if (node.contains(room_centre[0], room_centre[1])):
+                return room
+
+        print ("No room was found")
+        return
+
     def add_room(self, room):
         self.rooms.append(room)
 
     def connect_rooms(self,room_a, room_b):
-
 
         if (room_a.right_edge() < room_b.left_edge() or room_b.right_edge() < room_a.left_edge()):
 
@@ -68,6 +114,10 @@ class Dungeon:
     def add_room_by_rect(self, rect):
         new_room = Room(self.map, rect)
         self.add_room(new_room)
+
+    def grab_random_room(self):
+        random_room = random.choice(self.rooms)
+        return random_room
 
     def push_dungeon_to_map(self):
         for room in self.rooms:

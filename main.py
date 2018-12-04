@@ -52,26 +52,19 @@ def core_logic(game):
     game.handle_inputs()
 
 def init_game(g):
-    # Add prelim room
-    test_room = Room.new_room(g.map, 10, 10, 9, 9)
-    (rm_x, rm_y) = test_room.rect.center()
-    test_room2 = Room.new_room(g.map, 10, 40, 9, 9)
-    test_room3 = Room.new_room(g.map, 40, 10, 19, 9)
 
     # create dungeon
-    dungeon = Dungeon(g.map, [test_room,test_room2, test_room3])
+    dungeon = Dungeon(g.map, [])
     dungeon.push_dungeon_to_map()
-    dungeon.connect_rooms(test_room, test_room2)
-    dungeon.connect_rooms(test_room2,test_room3)
 
-    # Room centre render
-    room_center = GameObject(rm_x, rm_y, "Room Center A", "X", color = (255,255,0), entity= False, game = g)
+    # grab random room to spawn in
+    random_dungeon_room = dungeon.grab_random_room()
+    (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
 
     # Add a player
-    player = GameObject(rm_x, rm_y, "Player", "@", color = (255, 255, 255), entity = True, game = g)
+    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, game = g)
 
     # Add initial game objects
-    g.add_gameobject_to_game(room_center)
     g.add_gameobject_to_game(player)
 
     # input handlers

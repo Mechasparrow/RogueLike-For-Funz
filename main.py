@@ -54,7 +54,7 @@ def core_logic(game):
 
     player = game.find_gameobjects_by_name("Player")[0]
 
-    game.fov_map.compute_fov(player.x, player.y, radius = 8, light_walls = True, algorithm = 1)
+    game.fov_map.compute_fov(player.x, player.y, radius = 8, light_walls = True, algorithm = 0)
 
 
 def init_game(g):

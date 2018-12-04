@@ -101,7 +101,9 @@ class Game:
         for tile_column in self.map:
             for tile in tile_column:
                 if (self.fov_map.fov[tile.y][tile.x] == True):
-                    tile.draw(self.root_console)
+                    tile.draw(self.root_console, visible = True)
+                else:
+                    tile.draw(self.root_console, visible = False)
 
     def clear_render(self):
         for object in self.objects:

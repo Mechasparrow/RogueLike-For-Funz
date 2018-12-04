@@ -25,16 +25,28 @@ class Tile:
         self.walkable = walkable
         self.blocking = blocking
         self.block_visibility = block_visibility
-        self.explored = False
+        self.explored = explored
 
-    def draw(self, con):
+    def draw(self, con, visible):
 
-        if (self.blocking == True):
-            # Draw a wall tile
-            tcod.console_set_char_background(con, self.x, self.y, color_dark_wall, tcod.BKGND_SET)
-        elif (self.walkable == True and self.blocking == False):
-            # if not a blocking tile, draw a walkable tile
-            tcod.console_set_char_background(con, self.x, self.y, color_walkable_tile, tcod.BKGND_SET)
+        if (visible == True):
+            if (not self.explored == True):
+                self.explored = True
+
+            if (self.blocking == True):
+                # Draw a wall tile
+                tcod.console_set_char_background(con, self.x, self.y, color_light_wall, tcod.BKGND_SET)
+            elif (self.walkable == True and self.blocking == False):
+                # if not a blocking tile, draw a walkable tile
+                tcod.console_set_char_background(con, self.x, self.y, color_walkable_tile, tcod.BKGND_SET)
+        elif (visible == False):
+            if (self.explored == True):
+                if (self.blocking == True):
+                    # Draw a wall tile
+                    tcod.console_set_char_background(con, self.x, self.y, color_dark_wall, tcod.BKGND_SET)
+                elif (self.walkable == True and self.blocking == False):
+                    # if not a blocking tile, draw a walkable tile
+                    tcod.console_set_char_background(con, self.x, self.y, color_walkable_dark_tile, tcod.BKGND_SET)
 
         else:
             # if not any of those, draw an empty tile TODO

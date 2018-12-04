@@ -6,7 +6,8 @@ import random
 
 class Dungeon:
 
-    def __init__(self, map, rooms = []):
+    def __init__(self, game, map, rooms = []):
+        self.game = game
         self.map = map
         self.rooms = rooms
 
@@ -122,3 +123,5 @@ class Dungeon:
     def push_dungeon_to_map(self):
         for room in self.rooms:
             room.draw_room()
+
+        self.game.update_fov_map()

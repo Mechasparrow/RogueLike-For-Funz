@@ -37,3 +37,7 @@ class Tile:
         else:
             # if not any of those, draw an empty tile TODO
             return
+
+    def clear(self, con):
+
+        tcod.console_set_char_background(con, self.x, self.y, (0,0,0), tcod.BKGND_SET)

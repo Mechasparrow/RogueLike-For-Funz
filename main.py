@@ -43,6 +43,7 @@ def player_behavior(game, action):
     player.move(dx, dy)
 
 
+
 def general_game_behavior(game, action):
 
     if (action == 'exit'):
@@ -51,10 +52,15 @@ def general_game_behavior(game, action):
 def core_logic(game):
     game.handle_inputs()
 
+    player = game.find_gameobjects_by_name("Player")[0]
+
+    game.fov_map.compute_fov(player.x, player.y, radius = 8, light_walls = True, algorithm = 1)
+
+
 def init_game(g):
 
     # create dungeon
-    dungeon = Dungeon(g.map, [])
+    dungeon = Dungeon(g,g.map, [])
     dungeon.push_dungeon_to_map()
 
     # grab random room to spawn in

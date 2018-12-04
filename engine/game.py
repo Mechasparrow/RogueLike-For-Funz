@@ -35,9 +35,21 @@ class Game:
 
         # World map
         self.map = Game.gen_walkable_map(80,60)
+        self.fov_map = tcod.map.Map(80, 60)
 
         # Input handlers
         self.input_handlers = []
+
+    def update_fov_map(self):
+
+
+        for x in range(0, 80):
+            for y in range(0, 60):
+                self.fov_map.transparent[y, x] = not self.map[x][y].blocking
+                self.fov_map.walkable[y,x] = self.map[x][y].walkable
+
+        self.fov_map.transparent[30,30] = False
+
 
     def gen_walkable_map(width, height):
         walkable_map = []
@@ -88,11 +100,16 @@ class Game:
 
         for tile_column in self.map:
             for tile in tile_column:
-                tile.draw(self.root_console)
+                if (self.fov_map.fov[tile.y][tile.x] == True):
+                    tile.draw(self.root_console)
 
     def clear_render(self):
         for object in self.objects:
             object.clear(self.root_console)
+
+        for tile_column in self.map:
+            for tile in tile_column:
+                tile.clear(self.root_console)
 
 
     # Start the main game loop

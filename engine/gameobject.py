@@ -2,7 +2,7 @@ import tcod
 
 class GameObject:
 
-    def __init__(self, x, y, name, chr, color, entity = False, game = None):
+    def __init__(self, x, y, name, chr, color, entity = False, fighter = None, game = None):
         self.x = x
         self.y = y
         self.name = name
@@ -12,6 +12,11 @@ class GameObject:
 
         # modfiers
         self.entity = entity
+
+        # Fighter
+        self.fighter = fighter
+        if (self.fighter):
+            self.fighter.owner = self
 
     def move(self, dx, dy):
 

@@ -10,6 +10,9 @@ from engine.game import *
 from engine.font import *
 from engine.input_handler import *
 
+# Gameobject modifiers
+from engine.fighter import Fighter
+
 # Mapping
 from engine.mapping.tile import Tile
 from engine.mapping.room import Room
@@ -25,6 +28,7 @@ def player_behavior(game, action):
 
     # Grab the player object
     player = game.find_gameobjects_by_name("Player")[0]
+    turn_taken = False
 
     # Movement offset from current pos
     dx = 0
@@ -32,15 +36,25 @@ def player_behavior(game, action):
 
     if (action == "up"):
         dy = -1
+        turn_taken = True
     elif (action == "down"):
         dy = 1
+        turn_taken = True
     elif (action == "right"):
         dx = 1
+        turn_taken = True
     elif (action == "left"):
         dx = -1
+        turn_taken =True
 
     # Move the player
     player.move(dx, dy)
+
+    # Move the enemy
+    monster = game.find_gameobjects_by_name("Gobta")[0]
+
+    if (turn_taken == True):
+        monster.fighter.nav(player)
 
 
 
@@ -70,8 +84,13 @@ def init_game(g):
     # Add a player
     player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, game = g)
 
+    # Add a monter
+    monster_fighter = Fighter(20, 5, 4)
+    monster = GameObject(room_centre_x + 2, room_centre_y + 2, "Gobta", "G", color = (255,0, 0), entity = True, fighter = monster_fighter, game = g)
+
     # Add initial game objects
     g.add_gameobject_to_game(player)
+    g.add_gameobject_to_game(monster)
 
     # input handlers
     # ============== #

@@ -96,7 +96,14 @@ class Game:
     # Render the game objects and other components to screen
     def render(self):
         for object in self.objects:
-            object.draw(self.root_console)
+
+            if (object.entity == True):
+                in_fov = self.fov_map.fov[object.y][object.x]
+                if (in_fov):
+                    object.draw(self.root_console)
+            else:
+                object.draw(self.root_console)
+
 
         for tile_column in self.map:
             for tile in tile_column:

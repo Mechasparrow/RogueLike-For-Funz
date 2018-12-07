@@ -4,6 +4,10 @@ from .room import Room
 from .tunnel import Tunnel
 import random
 
+from ..ai.ai_monster import MonsterAI
+from ..fighter import Fighter
+from ..gameobject import GameObject
+
 class Dungeon:
 
     def __init__(self, game, map, rooms = []):
@@ -119,6 +123,26 @@ class Dungeon:
     def grab_random_room(self):
         random_room = random.choice(self.rooms)
         return random_room
+
+    def add_monsters_to_rooms(self, monster_target):
+
+        for room in self.rooms:
+            self.add_monsters_to_room(room, monster_target)
+
+
+    def add_monsters_to_room(self, room, monster_target):
+        monster_cnt = 2
+
+        for i in range(0, monster_cnt):
+            rando_x = tcod.random_get_int(0, room.rect.x, room.rect.x + room.rect.w)
+            rando_y = tcod.random_get_int(0, room.rect.y, room.rect.y + room.rect.h)
+
+            # Add a monter
+            monster_ai = MonsterAI(attack_target=monster_target)
+            monster_fighter = Fighter(20, 5, 20, ai = monster_ai)
+            monster = GameObject(rando_x, rando_y, "Gobta", "G", color = (255,0, 0), entity = True, fighter = monster_fighter, game = self.game)
+
+            self.game.add_gameobject_to_game(monster)
 
     def push_dungeon_to_map(self):
         for room in self.rooms:

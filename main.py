@@ -10,8 +10,9 @@ from engine.game import *
 from engine.font import *
 from engine.input_handler import *
 
-# Gameobject modifiers
+# Fighting
 from engine.fighter import Fighter
+from engine.ai.ai_monster import MonsterAI
 
 # Mapping
 from engine.mapping.tile import Tile
@@ -36,26 +37,48 @@ def player_behavior(game, action):
 
     if (action == "up"):
         dy = -1
-        turn_taken = True
     elif (action == "down"):
         dy = 1
-        turn_taken = True
     elif (action == "right"):
         dx = 1
-        turn_taken = True
     elif (action == "left"):
         dx = -1
-        turn_taken =True
+
+    if (dx != 0 or dy != 0):
+        turn_taken = True
+
+    (predicted_pos_x, predicted_pos_y) = (player.x + dx, player.y + dy)
+
+    gameobjects_at_next_position = game.find_gameobjects_at_point(predicted_pos_x, predicted_pos_y)
 
     # Move the player
-    player.move(dx, dy)
+    if (turn_taken == True and player.fighter.dead != True):
+        if not (len(gameobjects_at_next_position) > 0):
+            player.move(dx, dy)
+        else:
+            all_good = False
+            # if the next position as a gameobject, check if it is a fighter. If so, attack
+            for gameobject in gameobjects_at_next_position:
+                can_walk_over = False
+                if (gameobject.fighter):
+                    enemy_fighter = gameobject.fighter
+                    if (enemy_fighter.dead):
+                        can_walk_over = True
+                    else:
+                        player.fighter.attack(enemy_fighter)
+
+            if (can_walk_over):
+                player.move(dx, dy)
 
     # Move the enemy
-    monster = game.find_gameobjects_by_name("Gobta")[0]
 
-    if (turn_taken == True):
-        monster.fighter.nav(player)
+    if (turn_taken == True and player.fighter.dead != True):
 
+        for gameobject in game.objects:
+            fighter = gameobject.fighter
+            if (fighter):
+                if (fighter.ai):
+                    fighter.ai.perform_ai()
 
 
 def general_game_behavior(game, action):
@@ -82,15 +105,12 @@ def init_game(g):
     (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
 
     # Add a player
-    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, game = g)
+    player_fighter = Fighter(50, 2, 10)
+    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, fighter = player_fighter, game = g)
 
-    # Add a monter
-    monster_fighter = Fighter(20, 5, 4)
-    monster = GameObject(room_centre_x + 2, room_centre_y + 2, "Gobta", "G", color = (255,0, 0), entity = True, fighter = monster_fighter, game = g)
+    dungeon.add_monsters_to_rooms(player)
 
-    # Add initial game objects
     g.add_gameobject_to_game(player)
-    g.add_gameobject_to_game(monster)
 
     # input handlers
     # ============== #

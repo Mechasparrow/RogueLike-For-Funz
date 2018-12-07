@@ -93,6 +93,19 @@ class Game:
 
         return filtered_gameobjects
 
+    # return a list of game objects at a specific point
+    def find_gameobjects_at_point(self,x, y):
+
+        # filter function by object position
+        def filter_by_point(object):
+            if (object.x == x and object.y == y):
+                return True
+            else:
+                return False
+
+        filtered_gameobjects = list(filter(filter_by_point, self.objects))
+        return filtered_gameobjects
+
     # Render the game objects and other components to screen
     def render(self):
         for object in self.objects:

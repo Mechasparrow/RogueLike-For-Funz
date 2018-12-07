@@ -9,7 +9,7 @@ SCREEN_HEIGHT=80
 TITLE = "RogueBird"
 
 # Font
-FONT='font_images/arial10x10.png'
+FONT='font_images/arial12x12.png'
 FONT_FLAGS = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
 
 # Tile colors

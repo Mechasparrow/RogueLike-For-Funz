@@ -20,7 +20,6 @@ class FighterDashboard(DashboardBase):
         self.dash_console.print_(0,0, health_string)
         self.dash_console.print_(0,1, defense_string)
         self.dash_console.print_(0,2, damage_string)
-        self.dash_console.print_(0,3, xp_string)
 
 
     def draw(self, console_out):

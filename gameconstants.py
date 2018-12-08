@@ -17,3 +17,8 @@ color_walkable_tile = (102, 102, 255)
 color_walkable_dark_tile = (50,50,100)
 color_dark_wall = (153, 51, 102)
 color_light_wall = (255, 80, 80)
+
+# Monster colors
+monster_basic_color = (244, 223, 66)
+monster_itermediate_color = (244, 149, 65)
+monster_advanced = (244, 79, 65)

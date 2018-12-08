@@ -14,12 +14,18 @@ class MonsterAI(BaseAI):
         target = self.attack_target
         fighter = self.owner
 
+        fov_map = fighter.owner.game.fov_map
+
+        # Only trigger ai if in FOV
+        if (fov_map.fov[fighter.owner.y][fighter.owner.x] == False):
+            return
+
         # Dont do anything if no target
         if (target == None or fighter.dead):
             return
 
         map = fighter.owner.game.fov_map
-        path = tcod.path_new_using_map(map)
+        path = tcod.path_new_using_map(map, dcost = 0)
         tcod.path_compute(path, fighter.owner.x, fighter.owner.y, target.x, target.y)
 
         (next_x, next_y) = tcod.path_walk(path, recompute = True)
@@ -27,6 +33,7 @@ class MonsterAI(BaseAI):
         if (next_x and next_y):
             dx = next_x - fighter.owner.x
             dy = next_y - fighter.owner.y
+            print (str(dx) + "," + str(dy))
 
             predicted_pos_x = fighter.owner.x + dx
             predicted_pos_y = fighter.owner.y + dy

@@ -33,6 +33,9 @@ class Game:
         # Game objects
         self.objects = []
 
+        # Dashboards
+        self.dashboards = []
+
         # World map
         self.map = Game.gen_walkable_map(80,60)
         self.fov_map = tcod.map.Map(80, 60)
@@ -106,8 +109,18 @@ class Game:
         filtered_gameobjects = list(filter(filter_by_point, self.objects))
         return filtered_gameobjects
 
+    # Adds a dashboard to the game
+    def add_dashboard_to_game(self, dashboard):
+        self.dashboards.append(dashboard)
+
     # Render the game objects and other components to screen
     def render(self):
+
+        # Render the dashboards
+        for dashboard in self.dashboards:
+            dashboard.draw(self.root_console)
+
+        # Rendering the game objects
         for object in self.objects:
 
             if (object.entity == True):
@@ -117,7 +130,7 @@ class Game:
             else:
                 object.draw(self.root_console)
 
-
+        # Rendering the map
         for tile_column in self.map:
             for tile in tile_column:
                 if (self.fov_map.fov[tile.y][tile.x] == True):
@@ -126,9 +139,16 @@ class Game:
                     tile.draw(self.root_console, visible = False)
 
     def clear_render(self):
+
+        # Clear the dashboards
+        for dashboard in self.dashboards:
+            dashboard.clear(self.root_console)
+
+        # Clearing the gameobjects
         for object in self.objects:
             object.clear(self.root_console)
 
+        # Clearing the map
         for tile_column in self.map:
             for tile in tile_column:
                 tile.clear(self.root_console)

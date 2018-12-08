@@ -10,6 +10,9 @@ from engine.game import *
 from engine.font import *
 from engine.input_handler import *
 
+# Dashboards
+from engine.ui.fighter_dashboard import FighterDashboard
+
 # Fighting
 from engine.fighter import Fighter
 from engine.ai.ai_monster import MonsterAI
@@ -105,12 +108,15 @@ def init_game(g):
     (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
 
     # Add a player
-    player_fighter = Fighter(50, 2, 10)
+    player_fighter = Fighter(health = 100, defense = 2, damage = 20)
     player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, fighter = player_fighter, game = g)
+
+    player_dashboard = FighterDashboard(1,1, 60, 4, fighter = player_fighter)
 
     dungeon.add_monsters_to_rooms(player)
 
     g.add_gameobject_to_game(player)
+    g.add_dashboard_to_game(player_dashboard)
 
     # input handlers
     # ============== #

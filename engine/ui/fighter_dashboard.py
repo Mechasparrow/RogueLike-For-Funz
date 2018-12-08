@@ -4,8 +4,8 @@ from .dashboard import DashboardBase
 
 class FighterDashboard(DashboardBase):
 
-    def __init__(self, x, y, width, height, fighter):
-        DashboardBase.__init__(self, x, y, width, height)
+    def __init__(self, x, y, width, height, fighter, visible = True):
+        DashboardBase.__init__(self, x, y, width, height, visible)
         self.fighter = fighter
 
     def render_fighter_to_console(self):

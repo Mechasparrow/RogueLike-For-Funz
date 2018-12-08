@@ -118,8 +118,9 @@ class Game:
 
         # Render the dashboards
         for dashboard in self.dashboards:
-            dashboard.draw(self.root_console)
-
+            if (dashboard.visible):
+                dashboard.draw(self.root_console)
+                print (dashboard)
         # Rendering the game objects
         for object in self.objects:
 

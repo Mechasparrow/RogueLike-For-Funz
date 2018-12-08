@@ -12,6 +12,7 @@ from engine.input_handler import *
 
 # Dashboards
 from engine.ui.fighter_dashboard import FighterDashboard
+from engine.ui.custom_message_dashboard import CustomMessageDashboard
 
 # Fighting
 from engine.fighter import Fighter
@@ -90,14 +91,21 @@ def general_game_behavior(game, action):
         game.stop_loop()
 
 def core_logic(game):
+    global gameover_dashboard
+
     game.handle_inputs()
 
     player = game.find_gameobjects_by_name("Player")[0]
+
+    if (player.fighter.dead == True):
+        gameover_dashboard.show_dashboard()
 
     game.fov_map.compute_fov(player.x, player.y, radius = 8, light_walls = True, algorithm = 0)
 
 
 def init_game(g):
+
+    global gameover_dashboard
 
     # create dungeon
     dungeon = Dungeon(g,g.map, [])
@@ -112,11 +120,14 @@ def init_game(g):
     player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, fighter = player_fighter, game = g)
 
     player_dashboard = FighterDashboard(1,1, 60, 4, fighter = player_fighter)
+    gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
+    gameover_dashboard.hide_dashboard()
 
     dungeon.add_monsters_to_rooms(player)
 
     g.add_gameobject_to_game(player)
     g.add_dashboard_to_game(player_dashboard)
+    g.add_dashboard_to_game(gameover_dashboard)
 
     # input handlers
     # ============== #

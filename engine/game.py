@@ -1,6 +1,7 @@
 import tcod
 
 from .mapping.tile import *
+from .renderer.renderer import Renderer
 
 class Game:
 
@@ -42,6 +43,9 @@ class Game:
 
         # Input handlers
         self.input_handlers = []
+
+        #Renderer
+        self.game_renderer = Renderer(self)
 
     def update_fov_map(self):
 
@@ -113,48 +117,6 @@ class Game:
     def add_dashboard_to_game(self, dashboard):
         self.dashboards.append(dashboard)
 
-    # Render the game objects and other components to screen
-    def render(self):
-
-        # Render the dashboards
-        for dashboard in self.dashboards:
-            if (dashboard.visible):
-                dashboard.draw(self.root_console)
-                print (dashboard)
-        # Rendering the game objects
-        for object in self.objects:
-
-            if (object.entity == True):
-                in_fov = self.fov_map.fov[object.y][object.x]
-                if (in_fov):
-                    object.draw(self.root_console)
-            else:
-                object.draw(self.root_console)
-
-        # Rendering the map
-        for tile_column in self.map:
-            for tile in tile_column:
-                if (self.fov_map.fov[tile.y][tile.x] == True):
-                    tile.draw(self.root_console, visible = True)
-                else:
-                    tile.draw(self.root_console, visible = False)
-
-    def clear_render(self):
-
-        # Clear the dashboards
-        for dashboard in self.dashboards:
-            dashboard.clear(self.root_console)
-
-        # Clearing the gameobjects
-        for object in self.objects:
-            object.clear(self.root_console)
-
-        # Clearing the map
-        for tile_column in self.map:
-            for tile in tile_column:
-                tile.clear(self.root_console)
-
-
     # Start the main game loop
     def start_loop(self, logic):
         self.running = True
@@ -163,12 +125,11 @@ class Game:
         while(self.running):
             logic(self)
 
-            self.render()
+            # Render system
+            self.game_renderer.render_all()
+            self.game_renderer.update_console()
+            self.game_renderer.clear_all()
 
-            tcod.console_set_default_foreground(self.root_console, (255, 255, 255))
-
-            tcod.console_flush() # Show the console
-            self.clear_render()
 
     # Stop the loop
     def stop_loop(self):

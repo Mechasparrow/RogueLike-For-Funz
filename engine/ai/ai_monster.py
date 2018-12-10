@@ -48,7 +48,6 @@ class MonsterAI(BaseAI):
                         if (target.fighter):
                             target_fighter = target.fighter
                             print ("preparing to attack")
-                            print (target_fighter)
                             fighter.attack(target_fighter)
             else:
                 fighter.owner.move(dx, dy)

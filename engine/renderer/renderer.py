@@ -77,17 +77,20 @@ class Renderer:
 
     def render_map(self):
 
-        for tile_column in self.game.map:
-            for tile in tile_column:
-                Renderer.draw_tile(self.console, tile, visible = self.game.fov_map.fov[tile.y][tile.x])
+        for x in range(0, len(self.game.map)):
+            for y in range(0, len(self.game.map[x])):
+                tile = self.game.map[x][y]
+                Renderer.draw_tile(self.console, x, y, tile, visible = self.game.fov_map.fov[y][x])
 
     def clear_map(self):
 
-        for tile_column in self.game.map:
-            for tile in tile_column:
-                Renderer.clear_tile(self.console, tile)
 
-    def draw_tile(con, tile, visible = True):
+        for x in range(0, len(self.game.map)):
+            for y in range(0, len(self.game.map[x])):
+                tile = self.game.map[x][y]
+                Renderer.clear_tile(self.console, x, y, tile)
+
+    def draw_tile(con, x, y, tile, visible = True):
         if (visible == True):
             # TODO fov code?
             if (not tile.explored == True):
@@ -95,25 +98,25 @@ class Renderer:
 
             if (tile.blocking == True):
                 # Draw a wall tile
-                tcod.console_set_char_background(con, tile.x, tile.y, color_light_wall, tcod.BKGND_SET)
+                tcod.console_set_char_background(con, x, y, color_light_wall, tcod.BKGND_SET)
             elif (tile.walkable == True and tile.blocking == False):
                 # if not a blocking tile, draw a walkable tile
-                tcod.console_set_char_background(con, tile.x, tile.y, color_walkable_tile, tcod.BKGND_SET)
+                tcod.console_set_char_background(con, x, y, color_walkable_tile, tcod.BKGND_SET)
         elif (visible == False):
             if (tile.explored == True):
                 if (tile.blocking == True):
                     # Draw a wall tile
-                    tcod.console_set_char_background(con, tile.x, tile.y, color_dark_wall, tcod.BKGND_SET)
+                    tcod.console_set_char_background(con, x, y, color_dark_wall, tcod.BKGND_SET)
                 elif (tile.walkable == True and tile.blocking == False):
                     # if not a blocking tile, draw a walkable tile
-                    tcod.console_set_char_background(con, tile.x, tile.y, color_walkable_dark_tile, tcod.BKGND_SET)
+                    tcod.console_set_char_background(con, x, y, color_walkable_dark_tile, tcod.BKGND_SET)
 
         else:
             # if not any of those, draw an empty tile TODO
             return
 
-    def clear_tile(con, tile):
-        tcod.console_set_char_background(con, tile.x, tile.y, (0,0,0), tcod.BKGND_SET)
+    def clear_tile(con, x, y, tile):
+        tcod.console_set_char_background(con, x, y, (0,0,0), tcod.BKGND_SET)
 
     def render_dashboards(self):
         for dashboard in self.game.dashboards:

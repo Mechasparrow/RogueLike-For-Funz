@@ -64,7 +64,7 @@ class Game:
         for x in range(0,width):
             walkable_column = []
             for y in range (0,height):
-                walkable_column.append(Tile(x, y))
+                walkable_column.append(Tile())
 
             walkable_map.append(walkable_column)
 

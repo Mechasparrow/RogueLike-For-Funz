@@ -1,20 +1,4 @@
-
-# Code to expand relative imports
-import sys
-from pathlib import Path # if you haven't already done so
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
-
-# Additionally remove the current file's directory from sys.path
-try:
-    sys.path.remove(str(parent))
-except ValueError: # Already removed
-    pass
-
 import tcod
-
-from gameconstants import *
 
 class Tile:
 
@@ -26,32 +10,3 @@ class Tile:
         self.blocking = blocking
         self.block_visibility = block_visibility
         self.explored = explored
-
-    def draw(self, con, visible):
-
-        if (visible == True):
-            if (not self.explored == True):
-                self.explored = True
-
-            if (self.blocking == True):
-                # Draw a wall tile
-                tcod.console_set_char_background(con, self.x, self.y, color_light_wall, tcod.BKGND_SET)
-            elif (self.walkable == True and self.blocking == False):
-                # if not a blocking tile, draw a walkable tile
-                tcod.console_set_char_background(con, self.x, self.y, color_walkable_tile, tcod.BKGND_SET)
-        elif (visible == False):
-            if (self.explored == True):
-                if (self.blocking == True):
-                    # Draw a wall tile
-                    tcod.console_set_char_background(con, self.x, self.y, color_dark_wall, tcod.BKGND_SET)
-                elif (self.walkable == True and self.blocking == False):
-                    # if not a blocking tile, draw a walkable tile
-                    tcod.console_set_char_background(con, self.x, self.y, color_walkable_dark_tile, tcod.BKGND_SET)
-
-        else:
-            # if not any of those, draw an empty tile TODO
-            return
-
-    def clear(self, con):
-
-        tcod.console_set_char_background(con, self.x, self.y, (0,0,0), tcod.BKGND_SET)

@@ -72,6 +72,6 @@ class Monster:
         # Add a monter
         monster_ai = MonsterAI(attack_target=monster_target)
         monster_fighter = Fighter(monster_spec["health"], monster_spec["attack"], monster_spec["defense"], ai = monster_ai)
-        monster = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty], entity = True, fighter = monster_fighter)
+        monster = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty], fighter = monster_fighter)
 
         return monster

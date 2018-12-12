@@ -117,7 +117,7 @@ def init_game(g):
 
     # Add a player
     player_fighter = Fighter(health = 100, defense = 2, damage = 20)
-    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), entity = True, fighter = player_fighter, game = g)
+    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), fighter = player_fighter, game = g)
 
     player_dashboard = FighterDashboard(1,1, 60, 4, fighter = player_fighter)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")

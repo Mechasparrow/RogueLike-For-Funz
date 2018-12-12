@@ -2,16 +2,13 @@ import tcod
 
 class GameObject:
 
-    def __init__(self, x, y, name, chr, color, entity = False, fighter = None, game = None):
+    def __init__(self, x, y, name, chr, color, fighter = None, game = None):
         self.x = x
         self.y = y
         self.name = name
         self.chr = chr
         self.color = color
         self.game = game
-
-        # modfiers
-        self.entity = entity
 
         # Fighter
         self.fighter = fighter

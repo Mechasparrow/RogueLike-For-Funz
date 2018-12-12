@@ -14,7 +14,7 @@ class MonsterAI(BaseAI):
         target = self.attack_target
         fighter = self.owner
 
-        fov_map = fighter.owner.game.fov_map
+        fov_map = fighter.owner.game.map.fov_map
 
         # Only trigger ai if in FOV
         if (fov_map.fov[fighter.owner.y][fighter.owner.x] == False):
@@ -24,7 +24,7 @@ class MonsterAI(BaseAI):
         if (target == None or fighter.dead):
             return
 
-        map = fighter.owner.game.fov_map
+        map = fighter.owner.game.map.fov_map
         path = tcod.path_new_using_map(map, dcost = 0)
         tcod.path_compute(path, fighter.owner.x, fighter.owner.y, target.x, target.y)
 

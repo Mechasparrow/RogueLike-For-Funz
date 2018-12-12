@@ -26,7 +26,7 @@ class GameObject:
             potential_x = self.x + dx
             potential_y = self.y + dy
 
-            tile = game_map[potential_x][potential_y]
+            tile = game_map.tiles[potential_x][potential_y]
 
             if (tile.blocking == True or tile.walkable == False):
                 return

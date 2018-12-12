@@ -49,7 +49,7 @@ class Renderer:
     def render_gameobjects(self):
         for object in self.game.objects:
             if (object.entity == True):
-                in_fov = self.game.fov_map.fov[object.y][object.x]
+                in_fov = self.game.map.fov_map.fov[object.y][object.x]
                 if (in_fov):
                     Renderer.render_gameobject(self.console, object)
             else:
@@ -77,17 +77,17 @@ class Renderer:
 
     def render_map(self):
 
-        for x in range(0, len(self.game.map)):
-            for y in range(0, len(self.game.map[x])):
-                tile = self.game.map[x][y]
-                Renderer.draw_tile(self.console, x, y, tile, visible = self.game.fov_map.fov[y][x])
+        for x in range(0, self.game.map.width):
+            for y in range(0, self.game.map.height):
+                tile = self.game.map.getTile(x, y)
+                Renderer.draw_tile(self.console, x, y, tile, visible = self.game.map.fov_map.fov[y][x])
 
     def clear_map(self):
 
 
-        for x in range(0, len(self.game.map)):
-            for y in range(0, len(self.game.map[x])):
-                tile = self.game.map[x][y]
+        for x in range(0, self.game.map.width):
+            for y in range(0, self.game.map.height):
+                tile = self.game.map.getTile(x, y)
                 Renderer.clear_tile(self.console, x, y, tile)
 
     def draw_tile(con, x, y, tile, visible = True):

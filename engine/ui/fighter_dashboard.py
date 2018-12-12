@@ -21,7 +21,6 @@ class FighterDashboard(DashboardBase):
         self.dash_console.print_(0,1, defense_string)
         self.dash_console.print_(0,2, damage_string)
 
-
-    def draw(self, console_out):
+    def update_dash_console(self):
         self.render_fighter_to_console()
-        DashboardBase.draw(self, console_out)
+        pass

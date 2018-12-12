@@ -17,9 +17,7 @@ class DashboardBase:
     def show_dashboard(self):
         self.visible = True
 
-    def draw(self, console_out):
-        tcod.console_blit(self.dash_console, 0, 0, self.width, self.height, console_out, self.x, self.y)
+    # Abstract method
+    def update_dash_console(self):
 
-    def clear(self, console_out):
-        self.dash_console.clear()
-        tcod.console_blit(self.dash_console, 0, 0, self.width, self.height, console_out, self.x, self.y)
+        pass

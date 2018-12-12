@@ -6,8 +6,12 @@ class Entity:
     def __init__(self, name, gameobject, combatBehavior = None, game = None):
         self.name = name
         self.game = game
-        self.gameobject = gameobject
 
-    def simple_entity():
+        # Add the gameobject
+        if (gameobject):
+            self.gameobject = gameobject
+        else:
+            self.gameobject = Entity.base_gameobject(self.name, (255, 255, 255))
 
-        pass
+    def base_gameobject(name, color):
+        return GameObject(0, 0, name, "X", color)

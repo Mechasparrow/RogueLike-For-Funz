@@ -1,7 +1,12 @@
 import tcod
 
+# Map
 from .mapping.tile import *
+from .mapping.game_map import GameMap
+
+# Renderer
 from .renderer.renderer import Renderer
+
 
 class Game:
 
@@ -38,37 +43,13 @@ class Game:
         self.dashboards = []
 
         # World map
-        self.map = Game.gen_walkable_map(80,60)
-        self.fov_map = tcod.map.Map(80, 60)
+        self.map = GameMap(60, 80)
 
         # Input handlers
         self.input_handlers = []
 
         #Renderer
         self.game_renderer = Renderer(self)
-
-    def update_fov_map(self):
-
-
-        for x in range(0, 80):
-            for y in range(0, 60):
-                self.fov_map.transparent[y, x] = not (self.map[x][y].block_visibility)
-                self.fov_map.walkable[y,x] = self.map[x][y].walkable
-
-        self.fov_map.transparent[30,30] = False
-
-
-    def gen_walkable_map(width, height):
-        walkable_map = []
-
-        for x in range(0,width):
-            walkable_column = []
-            for y in range (0,height):
-                walkable_column.append(Tile(x, y))
-
-            walkable_map.append(walkable_column)
-
-        return walkable_map
 
     def add_input_handler(self, input_handler):
         self.input_handlers.append(input_handler)

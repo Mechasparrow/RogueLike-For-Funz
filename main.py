@@ -100,7 +100,7 @@ def core_logic(game):
     if (player.fighter.dead == True):
         gameover_dashboard.show_dashboard()
 
-    game.fov_map.compute_fov(player.x, player.y, radius = 8, light_walls = True, algorithm = 0)
+    game.map.compute_fov_map(player.x, player.y, radius = 8)
 
 
 def init_game(g):

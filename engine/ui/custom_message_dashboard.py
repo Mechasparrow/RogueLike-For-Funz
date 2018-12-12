@@ -14,6 +14,5 @@ class CustomMessageDashboard(DashboardBase):
     def render_message(self):
         self.dash_console.print_(0,0, self.message)
 
-    def draw(self, console_out):
+    def update_dash_console(self):
         self.render_message()
-        DashboardBase.draw(self, console_out)

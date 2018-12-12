@@ -20,8 +20,8 @@ class Dungeon:
         self.rooms = rooms
 
         # generate bsp
-        map_width =  len(map)
-        map_height = len(map[0])
+        map_width =  map.width
+        map_height = map.height
 
         self.bsp = tcod.bsp.BSP(x=0,y=0, width = map_width-1, height = map_height-1)
         self.bsp.split_recursive(
@@ -53,7 +53,7 @@ class Dungeon:
         padding = 5
         node_rect = Rect(node.x+padding, node.y+padding, node.width-padding, node.height-padding)
         print (node_rect)
-        new_room = Room(self.map, node_rect)
+        new_room = Room(self.map.tiles, node_rect)
         self.add_room(new_room)
 
     def bsp_find_node_room(self, node):
@@ -87,7 +87,7 @@ class Dungeon:
 
             horiz_tunnel = Tunnel(tunnel_point1, tunnel_point2, "h")
 
-            horiz_tunnel.draw_tunnel(self.map)
+            horiz_tunnel.draw_tunnel(self.map.tiles)
 
             # Horiz tunnel
         elif (room_a.top_edge() < room_b.bottom_edge() or room_b.top_edge() < room_a.bottom_edge()):
@@ -107,7 +107,7 @@ class Dungeon:
                 print ("b")
 
             vert_tunnel = Tunnel(tunnel_point1, tunnel_point2, "v")
-            vert_tunnel.draw_tunnel(self.map)
+            vert_tunnel.draw_tunnel(self.map.tiles)
 
         else:
             print ("Intersecting")
@@ -117,11 +117,11 @@ class Dungeon:
 
     def add_room_by_position_and_width(self, x, y, w, h):
         new_rect = Rect(x,y,w,h)
-        new_room = Room(self.map, new_rect)
+        new_room = Room(self.map.tiles, new_rect)
         self.add_room(new_room)
 
     def add_room_by_rect(self, rect):
-        new_room = Room(self.map, rect)
+        new_room = Room(self.map.tiles, rect)
         self.add_room(new_room)
 
     def grab_random_room(self):
@@ -156,4 +156,4 @@ class Dungeon:
         for room in self.rooms:
             room.draw_room()
 
-        self.game.update_fov_map()
+        self.game.map.update_fov_map()

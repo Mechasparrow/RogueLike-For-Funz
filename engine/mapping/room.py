@@ -51,7 +51,7 @@ class Room:
         for x in range (starting_x, ending_x + 1):
             for y in range(starting_y, ending_y + 1):
 
-                room_tile = Tile(x,y)
+                room_tile = Tile()
 
                 if (x == starting_x or x == ending_x or y == starting_y or y == ending_y):
                     room_tile.blocking = True

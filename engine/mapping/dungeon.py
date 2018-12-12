@@ -6,7 +6,7 @@ import random
 
 from ..ai.ai_monster import MonsterAI
 from ..fighter import Fighter
-from ..gameobject import GameObject
+from ..gameobjects.gameobject import GameObject
 
 from ..hostiles.monster import Monster
 

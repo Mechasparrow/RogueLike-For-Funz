@@ -1,25 +1,8 @@
 from ..fighter import Fighter
-from ..gameobject import GameObject
-
-# Code to expand relative imports
-import sys
-from pathlib import Path # if you haven't already done so
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
-
-# Additionally remove the current file's directory from sys.path
-try:
-    sys.path.remove(str(parent))
-except ValueError: # Already removed
-    pass
-
+from ..gameobjects.gameobject import GameObject
 from ..ai.ai_monster import MonsterAI
-from ..fighter import Fighter
-from ..gameobject import GameObject
 
-
-from gameconstants import monster_basic_color, monster_itermediate_color, monster_advanced
+from .hostile_colors import *
 
 class Monster:
 

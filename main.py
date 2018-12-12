@@ -5,7 +5,7 @@ from gameconstants import *
 from keycodes import *
 
 # Game engine
-from engine.gameobject import *
+from engine.gameobjects.gameobject import *
 from engine.game import *
 from engine.font import *
 from engine.input_handler import *

@@ -7,7 +7,7 @@ from ..game import *
 class MonsterAgent(IntelligentAgent):
 
     def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, ai_target = None):
-        IntelligentAgent.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = None)
+        IntelligentAgent.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = game)
         self.ai_target = ai_target
 
     def from_gameobject(gameobject, combat_behavior = None):

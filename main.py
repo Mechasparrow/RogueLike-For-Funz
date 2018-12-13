@@ -10,6 +10,7 @@ from engine.gameobjects.entity import Entity
 from engine.game import *
 from engine.font import *
 from engine.input_handler import *
+from engine.controllable_entity import TurnBasedPlayer
 
 # Dashboards
 from engine.ui.combat_dashboard import CombatDashboard
@@ -23,53 +24,9 @@ from engine.mapping.dungeon import Dungeon
 
 
 def player_behavior(game, action):
-
     # Grab the player object
     player = find_gameobjects_by_name(game, "Player")[0]
-    turn_taken = False
-
-    # Movement offset from current pos
-    dx = 0
-    dy = 0
-
-    if (action == "up"):
-        dy = -1
-    elif (action == "down"):
-        dy = 1
-    elif (action == "right"):
-        dx = 1
-    elif (action == "left"):
-        dx = -1
-
-    if (dx != 0 or dy != 0):
-        turn_taken = True
-
-    (potential_x, potential_y) = player.anticipate_move(dx, dy)
-
-
-    #FIXME Turn based behavior
-    if not (player.combat_behavior.dead):
-        safe_to_move = True
-        for object in game.objects:
-            if (object.x == potential_x and object.y == potential_y):
-                safe_to_move = False
-                if (object.combat_behavior):
-                    if (object.combat_behavior.dead):
-                        safe_to_move = True
-
-                if object in get_game_agents(game):
-                    agent = object
-                    if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
-                        player.combat_behavior.attack(agent.combat_behavior)
-
-        if (safe_to_move):
-            player.move(dx, dy)
-
-        if (turn_taken):
-            agents = get_game_agents(game)
-            for agent in agents:
-                agent.ai_behavior()
-
+    player.control_entity(action)
 
 def general_game_behavior(game, action):
 
@@ -109,9 +66,12 @@ def init_game(g):
     random_dungeon_room = dungeon.grab_random_room()
     (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
 
+    # Turn based handler for game
+    game_turn_handler = GameTurnHandler(g)
+
     # Add a player
     player_combat = CombatBehavior(max_health = 100, defense = 2, attack = 20)
-    player = Entity(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, game = g)
+    player = TurnBasedPlayer(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
     player_dashboard = CombatDashboard(1,1, 60, 4, combat_behavior = player_combat)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")

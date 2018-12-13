@@ -28,6 +28,11 @@ def player_behavior(game, action):
     player = find_gameobjects_by_name(game, "Player")[0]
     player.control_entity(action)
 
+    if (player.combat_behavior.dead):
+        gameover_dashboard.show_dashboard()
+
+    game.map.compute_fov_map(player.x, player.y, radius = 8)
+
 def general_game_behavior(game, action):
 
     if (action == 'exit'):
@@ -46,12 +51,6 @@ def core_logic(game):
                 object.chr = "%"
 
     player = find_gameobjects_by_name(game, "Player")[0]
-
-    # DEBUG
-    if (player.combat_behavior.dead):
-        gameover_dashboard.show_dashboard()
-
-    game.map.compute_fov_map(player.x, player.y, radius = 8)
 
 
 def init_game(g):

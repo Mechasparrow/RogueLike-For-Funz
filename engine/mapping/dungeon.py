@@ -4,13 +4,14 @@ from .room import Room
 from .tunnel import Tunnel
 import random
 
-from ..ai.ai_monster import MonsterAI
-from ..fighter import Fighter
 from ..gameobjects.gameobject import GameObject
 
 from ..hostiles.monster import Monster
 
 from .monsters import monsters
+
+#game utils
+from ..game import *
 
 class Dungeon:
 
@@ -150,7 +151,7 @@ class Dungeon:
             monster.game = self.game
             monster.x = rando_x
             monster.y = rando_y
-            self.game.add_agent_to_game(monster)
+            add_agent_to_game(self.game, monster)
 
     def push_dungeon_to_map(self):
         for room in self.rooms:

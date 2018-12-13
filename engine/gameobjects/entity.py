@@ -5,9 +5,10 @@ from .gameobject import GameObject
 # A GameObject in the game's world that interacts with other things
 class Entity(GameObject):
 
-    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None):
-        GameObject.__init__(self, x, y, name, chr, color, game)
+    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, entity_type = "base"):
+        GameObject.__init__(self, x, y, name, chr, color, game, type = "Entity")
         self.combat_behavior = combat_behavior
+        self.entity_type = entity_type
 
         if (self.combat_behavior):
             self.combat_behavior.fighter_name = self.name

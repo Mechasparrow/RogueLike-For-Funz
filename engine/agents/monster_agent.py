@@ -2,6 +2,8 @@ import tcod
 
 from .intelligent_agent import IntelligentAgent
 
+from ..game import *
+
 class MonsterAgent(IntelligentAgent):
 
     def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, ai_target = None):
@@ -10,7 +12,6 @@ class MonsterAgent(IntelligentAgent):
 
     def from_gameobject(gameobject, combat_behavior = None):
         gameobject_monster_agent = MonsterAgent(gameobject.x, gameobject.y, gameobject.name, gameobject.chr, gameobject.color, combat_behavior = combat_behavior, game = gameobject.game)
-        print (combat_behavior)
         return gameobject_monster_agent
 
     # pathfinding for monster + attacking TODO
@@ -40,7 +41,7 @@ class MonsterAgent(IntelligentAgent):
             predicted_pos_x = self.x + dx
             predicted_pos_y = self.y + dy
 
-            gameobjects_at_next_position = self.game.find_gameobjects_at_point(predicted_pos_x, predicted_pos_y)
+            gameobjects_at_next_position = find_gameobjects_at_point(self.game, predicted_pos_x, predicted_pos_y)
 
             if (len(gameobjects_at_next_position) > 0):
 

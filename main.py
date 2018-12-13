@@ -19,20 +19,13 @@ from engine.ui.custom_message_dashboard import CustomMessageDashboard
 from engine.combat.combat_behavior import CombatBehavior
 
 # Mapping
-from engine.mapping.tile import Tile
-from engine.mapping.room import Room
 from engine.mapping.dungeon import Dungeon
 
-# Setup the font
-tcod.console_set_custom_font(
-    FONT,
-    FONT_FLAGS,
-)
 
 def player_behavior(game, action):
 
     # Grab the player object
-    player = game.find_gameobjects_by_name("Player")[0]
+    player = find_gameobjects_by_name(game, "Player")[0]
     turn_taken = False
 
     # Movement offset from current pos
@@ -64,15 +57,16 @@ def player_behavior(game, action):
                     if (object.combat_behavior.dead):
                         safe_to_move = True
 
-        for agent in game.agents:
-            if (agent.x == potential_x and agent.y == potential_y):
-                player.combat_behavior.attack(agent.combat_behavior)
+                if object in get_game_agents(game):
+                    agent = object
+                    if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
+                        player.combat_behavior.attack(agent.combat_behavior)
 
         if (safe_to_move):
             player.move(dx, dy)
 
         if (turn_taken):
-            agents = game.agents
+            agents = get_game_agents(game)
             for agent in agents:
                 agent.ai_behavior()
 
@@ -85,7 +79,7 @@ def general_game_behavior(game, action):
 def core_logic(game):
     global gameover_dashboard
 
-    game.handle_inputs()
+    handle_inputs(game)
 
     #handle death NOTE delegated to game class
     objects = game.objects
@@ -94,7 +88,7 @@ def core_logic(game):
             if (object.combat_behavior.dead == True and object.chr != "%"):
                 object.chr = "%"
 
-    player = game.find_gameobjects_by_name("Player")[0]
+    player = find_gameobjects_by_name(game, "Player")[0]
 
     # DEBUG
     if (player.combat_behavior.dead):
@@ -119,16 +113,15 @@ def init_game(g):
     player_combat = CombatBehavior(max_health = 100, defense = 2, attack = 20)
     player = Entity(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, game = g)
 
-    # FIXME stat dashboard
     player_dashboard = CombatDashboard(1,1, 60, 4, combat_behavior = player_combat)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()
 
     dungeon.add_monsters_to_rooms(player)
 
-    g.add_gameobject_to_game(player)
-    g.add_dashboard_to_game(player_dashboard)
-    g.add_dashboard_to_game(gameover_dashboard)
+    add_gameobject_to_game(g, player)
+    add_dashboard_to_game(g, player_dashboard)
+    add_dashboard_to_game(g, gameover_dashboard)
 
     # input handlers
     # ============== #
@@ -150,8 +143,8 @@ def init_game(g):
     general_game_input_handler.add_behavior(general_game_behavior)
 
     # Add input handlers
-    g.add_input_handler(player_input_handler)
-    g.add_input_handler(general_game_input_handler)
+    add_input_handler(g, player_input_handler)
+    add_input_handler(g, general_game_input_handler)
 
 
 

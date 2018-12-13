@@ -2,16 +2,16 @@ import tcod
 
 from .dashboard import DashboardBase
 
-class FighterDashboard(DashboardBase):
+class CombatDashboard(DashboardBase):
 
-    def __init__(self, x, y, width, height, fighter, visible = True):
+    def __init__(self, x, y, width, height, combat_behavior, visible = True):
         DashboardBase.__init__(self, x, y, width, height, visible)
-        self.fighter = fighter
+        self.combat_behavior = combat_behavior
 
-    def render_fighter_to_console(self):
-        health = self.fighter.health
-        defense = self.fighter.defense
-        damage = self.fighter.damage
+    def render_stats_to_console(self):
+        health = self.combat_behavior.current_health
+        defense = self.combat_behavior.get_combat_stats().defense
+        damage = self.combat_behavior.get_combat_stats().defense
 
         health_string = "Health: " + str(health)
         defense_string = "Defense: " + str(defense)
@@ -22,5 +22,5 @@ class FighterDashboard(DashboardBase):
         self.dash_console.print_(0,2, damage_string)
 
     def update_dash_console(self):
-        self.render_fighter_to_console()
+        self.render_stats_to_console()
         pass

@@ -5,18 +5,18 @@ from gameconstants import *
 from keycodes import *
 
 # Game engine
-from engine.gameobjects.gameobject import *
+from engine.gameobjects.gameobject import GameObject
+from engine.gameobjects.entity import Entity
 from engine.game import *
 from engine.font import *
 from engine.input_handler import *
 
 # Dashboards
-from engine.ui.fighter_dashboard import FighterDashboard
+from engine.ui.combat_dashboard import CombatDashboard
 from engine.ui.custom_message_dashboard import CustomMessageDashboard
 
 # Fighting
-from engine.fighter import Fighter
-from engine.ai.ai_monster import MonsterAI
+from engine.combat.combat_behavior import CombatBehavior
 
 # Mapping
 from engine.mapping.tile import Tile
@@ -51,38 +51,30 @@ def player_behavior(game, action):
     if (dx != 0 or dy != 0):
         turn_taken = True
 
-    (predicted_pos_x, predicted_pos_y) = (player.x + dx, player.y + dy)
+    (potential_x, potential_y) = player.anticipate_move(dx, dy)
 
-    gameobjects_at_next_position = game.find_gameobjects_at_point(predicted_pos_x, predicted_pos_y)
 
-    # Move the player
-    if (turn_taken == True and player.fighter.dead != True):
-        if not (len(gameobjects_at_next_position) > 0):
+    #FIXME Turn based behavior
+    if not (player.combat_behavior.dead):
+        safe_to_move = True
+        for object in game.objects:
+            if (object.x == potential_x and object.y == potential_y):
+                safe_to_move = False
+                if (object.combat_behavior):
+                    if (object.combat_behavior.dead):
+                        safe_to_move = True
+
+        for agent in game.agents:
+            if (agent.x == potential_x and agent.y == potential_y):
+                player.combat_behavior.attack(agent.combat_behavior)
+
+        if (safe_to_move):
             player.move(dx, dy)
-        else:
-            all_good = False
-            # if the next position as a gameobject, check if it is a fighter. If so, attack
-            for gameobject in gameobjects_at_next_position:
-                can_walk_over = False
-                if (gameobject.fighter):
-                    enemy_fighter = gameobject.fighter
-                    if (enemy_fighter.dead):
-                        can_walk_over = True
-                    else:
-                        player.fighter.attack(enemy_fighter)
 
-            if (can_walk_over):
-                player.move(dx, dy)
-
-    # Move the enemy
-
-    if (turn_taken == True and player.fighter.dead != True):
-
-        for gameobject in game.objects:
-            fighter = gameobject.fighter
-            if (fighter):
-                if (fighter.ai):
-                    fighter.ai.perform_ai()
+        if (turn_taken):
+            agents = game.agents
+            for agent in agents:
+                agent.ai_behavior()
 
 
 def general_game_behavior(game, action):
@@ -95,9 +87,17 @@ def core_logic(game):
 
     game.handle_inputs()
 
+    #handle death
+    objects = game.objects
+    for object in objects:
+        if (object.combat_behavior):
+            if (object.combat_behavior.dead == True and object.chr != "%"):
+                object.chr = "%"
+
     player = game.find_gameobjects_by_name("Player")[0]
 
-    if (player.fighter.dead == True):
+    # DEBUG
+    if (player.combat_behavior.dead):
         gameover_dashboard.show_dashboard()
 
     game.map.compute_fov_map(player.x, player.y, radius = 8)
@@ -116,10 +116,11 @@ def init_game(g):
     (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
 
     # Add a player
-    player_fighter = Fighter(health = 100, defense = 2, damage = 20)
-    player = GameObject(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), fighter = player_fighter, game = g)
+    player_combat = CombatBehavior(max_health = 100, defense = 2, attack = 20)
+    player = Entity(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, game = g)
 
-    player_dashboard = FighterDashboard(1,1, 60, 4, fighter = player_fighter)
+    # FIXME stat dashboard
+    player_dashboard = CombatDashboard(1,1, 60, 4, combat_behavior = player_combat)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()
 

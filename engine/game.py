@@ -38,6 +38,7 @@ class Game:
 
         # Game objects
         self.objects = []
+        self.agents = []
 
         # Dashboards
         self.dashboards = []
@@ -65,6 +66,10 @@ class Game:
     # Adds a gameobject to the game
     def add_gameobject_to_game(self,gb):
         self.objects.append(gb)
+
+    def add_agent_to_game(self, agent):
+        self.agents.append(agent)
+        self.add_gameobject_to_game(agent)
 
     # returns a list of game objects by their name
     def find_gameobjects_by_name(self, name):

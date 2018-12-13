@@ -150,7 +150,7 @@ class Dungeon:
             monster.game = self.game
             monster.x = rando_x
             monster.y = rando_y
-            self.game.add_gameobject_to_game(monster)
+            self.game.add_agent_to_game(monster)
 
     def push_dungeon_to_map(self):
         for room in self.rooms:

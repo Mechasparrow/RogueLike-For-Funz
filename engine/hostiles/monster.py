@@ -1,6 +1,11 @@
-from ..fighter import Fighter
+from ..combat.combat_behavior import CombatBehavior
+
+# AI Agent
+from ..agents.monster_agent import MonsterAgent
+
+# GameObject
 from ..gameobjects.gameobject import GameObject
-from ..ai.ai_monster import MonsterAI
+
 
 from .hostile_colors import *
 
@@ -53,8 +58,10 @@ class Monster:
         monster_spec = self.monster_stats[monster_difficulty]
 
         # Add a monter
-        monster_ai = MonsterAI(attack_target=monster_target)
-        monster_fighter = Fighter(monster_spec["health"], monster_spec["attack"], monster_spec["defense"], ai = monster_ai)
-        monster = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty], fighter = monster_fighter)
+        #monster_ai = MonsterAI(attack_target=monster_target)
+        monster_combat = CombatBehavior(monster_spec["health"], monster_spec["attack"], monster_spec["defense"])
+        monster_object = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty])
+        monster = MonsterAgent.from_gameobject(monster_object, combat_behavior = monster_combat)
+        monster.ai_target = monster_target
 
         return monster

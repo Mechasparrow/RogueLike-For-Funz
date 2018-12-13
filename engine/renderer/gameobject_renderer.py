@@ -13,7 +13,6 @@ def clear_gameobjects(con, objects):
     for object in objects:
         clear_gameobject(con, object)
 
-
 def render_gameobject(con, object):
     # Set the color
     tcod.console_set_default_foreground(con, object.color)

@@ -87,7 +87,7 @@ def core_logic(game):
 
     game.handle_inputs()
 
-    #handle death
+    #handle death NOTE delegated to game class
     objects = game.objects
     for object in objects:
         if (object.combat_behavior):

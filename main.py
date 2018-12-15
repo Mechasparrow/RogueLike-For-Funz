@@ -60,7 +60,7 @@ def init_game(g):
     player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20)
     player = TurnBasedPlayer(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
-    player_dashboard = CombatDashboard(1,1, 60, 4, combat_behavior = player_combat)
+    player_dashboard = CombatDashboard(1,1, 60, 5, combat_behavior = player_combat)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()
 

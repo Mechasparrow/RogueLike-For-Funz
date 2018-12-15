@@ -1,10 +1,14 @@
 import tcod
 
+# polyfill
+import sys
+sys.path.append("..")
+
 # Map
 from engine.mapping.game_map import GameMap
 
 # Renderer
-from engine.renderer.renderer import Renderer
+from renderer.renderer import Renderer
 
 
 class Game:

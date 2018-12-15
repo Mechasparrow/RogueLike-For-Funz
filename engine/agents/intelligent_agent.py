@@ -1,5 +1,9 @@
 import tcod
 
+# polyfill
+import sys
+sys.path.append("..")
+
 from engine.gameobjects import Entity
 
 class IntelligentAgent(Entity):

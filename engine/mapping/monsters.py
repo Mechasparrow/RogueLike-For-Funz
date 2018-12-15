@@ -1,4 +1,8 @@
-from ..hostiles.monster import Monster
+# polyfill
+import sys
+sys.path.append("..")
+
+from engine.hostiles import Monster
 
 goblin = Monster("Goblin", "G")
 druid = Monster("Druid", "D")

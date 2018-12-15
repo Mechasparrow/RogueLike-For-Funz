@@ -5,8 +5,8 @@ from gameconstants import *
 from keycodes import *
 
 # Game engine
-from engine.ui import *
 from engine.game import *
+from engine.ui import *
 from engine.mapping import *
 from engine.combat import *
 from engine.controllable_entity import *

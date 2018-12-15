@@ -1,6 +1,6 @@
 from .controllable_entity import ControllableEntity
 
-from ..game import *
+from game import *
 
 class TurnBasedPlayer(ControllableEntity):
 

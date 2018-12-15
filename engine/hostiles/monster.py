@@ -1,11 +1,15 @@
-from ..combat import CombatBehavior
+# polyfill
+import sys
+sys.path.append("..")
 
-# AI Agent
-from agents import MonsterAgent
+from engine.combat import CombatBehavior
+
+def grab_agent():
+    from engine.agents import MonsterAgent
+    return MonsterAgent
 
 # GameObject
 from engine.gameobjects import GameObject
-
 
 from .hostile_colors import *
 
@@ -61,6 +65,7 @@ class Monster:
         #monster_ai = MonsterAI(attack_target=monster_target)
         monster_combat = CombatBehavior(monster_spec["health"], monster_spec["attack"], monster_spec["defense"])
         monster_object = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty])
+        MonsterAgent = grab_agent()
         monster = MonsterAgent.from_gameobject(monster_object, combat_behavior = monster_combat)
         monster.ai_target = monster_target
 

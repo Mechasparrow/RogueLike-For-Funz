@@ -2,7 +2,11 @@ import tcod
 
 from .intelligent_agent import IntelligentAgent
 
-from game import *
+# polyfill
+import sys
+sys.path.append("..")
+
+from engine.game import *
 
 class MonsterAgent(IntelligentAgent):
 

@@ -4,14 +4,18 @@ from .room import Room
 from .tunnel import Tunnel
 import random
 
-from engine.gameobjects.gameobject import GameObject
+# polyfill
+import sys
+sys.path.append("..")
 
-from engine.hostiles.monster import Monster
+from engine.gameobjects import GameObject
+
+from engine.hostiles import *
 
 from .monsters import monsters
 
 #game utils
-from game/engine import *
+from game import *
 
 class Dungeon:
 

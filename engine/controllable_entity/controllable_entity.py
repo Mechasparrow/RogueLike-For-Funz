@@ -1,4 +1,4 @@
-from ..gameobjects import Entity
+from ..gameobjects.entity import Entity
 
 class ControllableEntity(Entity):
 

@@ -53,3 +53,10 @@ class CombatBehavior:
     def gain_xp(self, xp):
         self.current_xp = self.current_xp + xp
         print (self.fighter_name + " has gained " + str(xp) + " xp")
+
+    def gain_health(self, health):
+        self.current_health = self.current_health + health
+        if (self.current_health > self.combat_stats.max_health):
+            self.current_health = self.combat_stats.max_health
+
+        print (self.fighter_name + " has gained " + str(health) + " health")

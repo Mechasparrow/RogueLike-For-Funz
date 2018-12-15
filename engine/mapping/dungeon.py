@@ -15,7 +15,10 @@ from engine.hostiles import *
 from .monsters import monsters
 
 #game utils
-from game import *
+from engine.game import *
+
+# drops
+from engine.pickups import *
 
 class Dungeon:
 
@@ -137,6 +140,23 @@ class Dungeon:
 
         for room in self.rooms:
             self.add_monsters_to_room(room, monster_target)
+
+    def add_health_to_rooms(self, chance):
+        for room in self.rooms:
+            chnce = tcod.random_get_int(0, 0, 100)
+            if (chnce <= (chance * 100)):
+                self.add_health_to_room(room)
+
+    def add_health_to_room(self, room):
+
+        rando_x = tcod.random_get_int(0, room.rect.x, room.rect.x + room.rect.w - 1)
+        rando_y = tcod.random_get_int(0, room.rect.y, room.rect.y + room.rect.h - 1)
+
+        # Add health pickup
+
+        pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
+        add_gameobject_to_game(self.game, pickup)
+        print("spawned")
 
 
     def add_monsters_to_room(self, room, monster_target):

@@ -65,6 +65,7 @@ def init_game(g):
     gameover_dashboard.hide_dashboard()
 
     dungeon.add_monsters_to_rooms(player)
+    dungeon.add_health_to_rooms(chance = 0.5)
 
     add_gameobject_to_game(g, player)
     add_dashboard_to_game(g, player_dashboard)

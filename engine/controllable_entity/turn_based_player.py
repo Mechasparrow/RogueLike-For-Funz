@@ -67,10 +67,11 @@ class TurnBasedPlayer(ControllableEntity):
 
         # Pickup behavior
         for gameobject in self.game.objects:
-            if (gameobject.entity_type == "pickup"):
-                pickup = gameobject
-                pickup.pickup_behavior(self)
-                remove_gameobject_from_game(self.game, pickup)
+            if (gameobject.x == potential_x and gameobject.y == potential_y):
+                if (gameobject.entity_type == "pickup"):
+                    pickup = gameobject
+                    pickup.pickup_behavior(self)
+                    remove_gameobject_from_game(self.game, pickup)
 
         # Let the game now take a turn
         if (turn_taken and self.turn_handler):

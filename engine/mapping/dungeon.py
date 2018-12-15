@@ -4,14 +4,14 @@ from .room import Room
 from .tunnel import Tunnel
 import random
 
-from ..gameobjects.gameobject import GameObject
+from engine.gameobjects.gameobject import GameObject
 
-from ..hostiles.monster import Monster
+from engine.hostiles.monster import Monster
 
 from .monsters import monsters
 
 #game utils
-from ..game import *
+from game/engine import *
 
 class Dungeon:
 

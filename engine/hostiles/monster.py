@@ -1,10 +1,10 @@
-from ..combat.combat_behavior import CombatBehavior
+from ..combat import CombatBehavior
 
 # AI Agent
-from ..agents.monster_agent import MonsterAgent
+from agents import MonsterAgent
 
 # GameObject
-from ..gameobjects.gameobject import GameObject
+from engine.gameobjects import GameObject
 
 
 from .hostile_colors import *

@@ -1,6 +1,6 @@
 import tcod
 
-from ..gameobjects.entity import Entity
+from engine.gameobjects import Entity
 
 class IntelligentAgent(Entity):
 

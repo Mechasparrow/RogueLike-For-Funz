@@ -5,23 +5,11 @@ from gameconstants import *
 from keycodes import *
 
 # Game engine
-from engine.gameobjects.gameobject import GameObject
-from engine.gameobjects.entity import Entity
+from engine.ui import *
 from engine.game import *
-from engine.font import *
-from engine.input_handler import *
-from engine.controllable_entity import TurnBasedPlayer
-
-# Dashboards
-from engine.ui.combat_dashboard import CombatDashboard
-from engine.ui.custom_message_dashboard import CustomMessageDashboard
-
-# Fighting
-from engine.combat.combat_behavior import CombatBehavior
-
-# Mapping
-from engine.mapping.dungeon import Dungeon
-
+from engine.mapping import *
+from engine.combat import *
+from engine.controllable_entity import *
 
 def player_behavior(game, action):
     # Grab the player object

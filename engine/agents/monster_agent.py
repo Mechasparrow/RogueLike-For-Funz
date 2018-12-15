@@ -2,7 +2,7 @@ import tcod
 
 from .intelligent_agent import IntelligentAgent
 
-from ..game import *
+from game import *
 
 class MonsterAgent(IntelligentAgent):
 

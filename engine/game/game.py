@@ -1,10 +1,10 @@
 import tcod
 
 # Map
-from ..mapping.game_map import GameMap
+from engine.mapping.game_map import GameMap
 
 # Renderer
-from ..renderer.renderer import Renderer
+from engine.renderer.renderer import Renderer
 
 
 class Game:

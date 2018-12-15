@@ -2,7 +2,7 @@
 import sys
 sys.path.append("..")
 
-from engine.combat import CombatBehavior
+from engine.combat import CombatBehavior, CombatStats
 
 def grab_agent():
     from engine.agents import MonsterAgent
@@ -27,31 +27,27 @@ class Monster:
         }
 
         self.monster_stats = {
-            "basic": Monster.stat_dictionary(
+            "basic": CombatStats(
                 10,
                 5,
-                4
+                4,
+                xp_drop = 4
             ),
-            "intermediary": Monster.stat_dictionary(
+            "intermediary": CombatStats(
                 15,
                 7,
-                6
+                6,
+                xp_drop = 6
             ),
 
-            "advanced": Monster.stat_dictionary(
+            "advanced": CombatStats(
                 25,
                 12,
-                9
+                9,
+                xp_drop = 10
             )
         }
 
-    def stat_dictionary(health, attack, defense):
-
-        return {
-            "health": health,
-            "attack": attack,
-            "defense": defense
-        }
 
     def add_monster_stats_for_evolution(self,monster_difficulty, stat_dictionary):
         if monster_difficulty in self.monster_stats:
@@ -63,7 +59,7 @@ class Monster:
 
         # Add a monter
         #monster_ai = MonsterAI(attack_target=monster_target)
-        monster_combat = CombatBehavior(monster_spec["health"], monster_spec["attack"], monster_spec["defense"])
+        monster_combat = CombatBehavior(combat_stats = monster_spec)
         monster_object = GameObject(0, 0, self.monster_name, self.chr, color = self.colors_for_difficulty[monster_difficulty])
         MonsterAgent = grab_agent()
         monster = MonsterAgent.from_gameobject(monster_object, combat_behavior = monster_combat)

@@ -47,9 +47,14 @@ class TurnBasedPlayer(ControllableEntity):
         for object in self.game.objects:
             if (object.x == potential_x and object.y == potential_y):
                 safe_to_move = False
+
+                if (object.entity_type == "dead_body" or object.entity_type == "pickup"):
+                    safe_to_move = True
+
                 if (object.combat_behavior):
                     if (object.combat_behavior.dead):
                         safe_to_move = True
+
 
         # Check if the player can actually move
         if (safe_to_move):
@@ -60,7 +65,20 @@ class TurnBasedPlayer(ControllableEntity):
             if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
                 self.combat_behavior.attack(agent.combat_behavior)
 
+        # Pickup behavior
+        for gameobject in self.game.objects:
+            if (gameobject.entity_type == "pickup"):
+                pickup = gameobject
+                pickup.pickup_behavior(self)
+                remove_gameobject_from_game(self.game, pickup)
+
         # Let the game now take a turn
         if (turn_taken and self.turn_handler):
             print ("taking turn")
             self.turn_handler.take_turn()
+
+        # Place player back at top
+        if self in self.game.objects:
+            player = self
+            remove_gameobject_from_game(self.game, player)
+            add_gameobject_to_game(self.game, player)

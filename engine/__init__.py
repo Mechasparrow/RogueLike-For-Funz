@@ -1,4 +1,5 @@
 from . import gameobjects
+from . import pickups
 from . import agents
 from . import game
 from . import hostiles

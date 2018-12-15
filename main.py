@@ -57,7 +57,7 @@ def init_game(g):
     game_turn_handler = GameTurnHandler(g)
 
     # Add a player
-    player_combat = CombatBehavior(max_health = 100, defense = 2, attack = 20)
+    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20)
     player = TurnBasedPlayer(room_centre_x, room_centre_y, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
     player_dashboard = CombatDashboard(1,1, 60, 4, combat_behavior = player_combat)

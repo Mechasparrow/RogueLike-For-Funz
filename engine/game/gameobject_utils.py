@@ -1,5 +1,9 @@
-def add_gameobject_to_game(game,gb):
+def add_gameobject_to_game(game,gb, bottom = False):
     game.objects.append(gb)
+
+
+def remove_gameobject_from_game(game, gb):
+    game.objects.remove(gb)
 
 # returns a list of game objects by their name
 def find_gameobjects_by_name(game, name):

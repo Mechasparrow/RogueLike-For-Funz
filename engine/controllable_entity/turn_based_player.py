@@ -1,10 +1,21 @@
+# Provides Base Controllable Entity that is controlled through a series of actions
+# controllable_entity.py
+# Author: Michael Navazhylau
+
 from .controllable_entity import ControllableEntity
 
-from game import *
+# import polyfill
+import sys
+sys.path.append("..")
 
+# Game utils
+from engine.game import *
+
+# Uses Controllable Entity as Base
 class TurnBasedPlayer(ControllableEntity):
 
     def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, turn_handler = None):
+        # predetermined list of action for a turn based player entity
         available_actions = [
             "left",
             "right",
@@ -13,21 +24,25 @@ class TurnBasedPlayer(ControllableEntity):
         ]
 
         ControllableEntity.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, available_actions = available_actions, game = game)
+
+        # turn handler param to tell the game world to take its turn after the player does
         self.turn_handler = turn_handler
 
+    # controls the entity based on the actions passed to it
     def control_entity(self, action, callback = None):
 
         # if player dead dont do anything else
         if (self.combat_behavior.dead or (action not in self.get_actions_available())):
             return
 
-        # By default no turn taken
+        # By default no has been taken
         turn_taken = False
 
         # Movement offset from current pos
         dx = 0
         dy = 0
 
+        # update dx + dy accordingly based off of action
         if (action == "up"):
             dy = -1
         elif (action == "down"):
@@ -37,12 +52,16 @@ class TurnBasedPlayer(ControllableEntity):
         elif (action == "left"):
             dx = -1
 
+        # turn taken if dx or dy is not zero
         if (dx != 0 or dy != 0):
             turn_taken = True
 
+        # anticipate the next position for collision checking
         (potential_x, potential_y) = self.anticipate_move(dx, dy)
 
         # Limiting behavior
+        # Can't move if another gameobject is in the way
+        # But if its dead or a pickup, then yeah, we can move
         safe_to_move = True
         for object in self.game.objects:
             if (object.x == potential_x and object.y == potential_y):
@@ -61,11 +80,13 @@ class TurnBasedPlayer(ControllableEntity):
             self.move(dx, dy)
 
         # Attack Behavior
+        # TODO generalize to any gameobject
         for agent in get_game_agents(self.game):
             if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
                 self.combat_behavior.attack(agent.combat_behavior)
 
         # Pickup behavior
+        # If the gameobject at the next position is a pickup, pick it up
         for gameobject in self.game.objects:
             if (gameobject.x == potential_x and gameobject.y == potential_y):
                 if (gameobject.entity_type == "pickup"):
@@ -78,7 +99,7 @@ class TurnBasedPlayer(ControllableEntity):
             print ("taking turn")
             self.turn_handler.take_turn()
 
-        # Place player back at top
+        # Place player back at top of the game console
         if self in self.game.objects:
             player = self
             remove_gameobject_from_game(self.game, player)

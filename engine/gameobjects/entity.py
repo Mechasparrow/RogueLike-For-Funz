@@ -1,10 +1,16 @@
-import tcod
+# Purpose: GameObject with additional behavior and interactivity
+# entity.py
+# Author: Michael Navazhylau
 
+# import libs
+import tcod
 from .gameobject import GameObject
 
-# A GameObject in the game's world that interacts with other things
+# A GameObject in the game's world that interacts with other things with additional behavior
+# Extends from GameObject
 class Entity(GameObject):
 
+    # position, name, character, a color, reference to game world, combat behavior for combat, etype of entity
     def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, entity_type = "base"):
         GameObject.__init__(self, x, y, name, chr, color, game, type = "Entity")
         self.combat_behavior = combat_behavior
@@ -13,6 +19,8 @@ class Entity(GameObject):
         if (self.combat_behavior):
             self.combat_behavior.fighter_name = self.name
 
+    # move the entity a certain dx and dy
+    # can only move on walkable tiles
     def move(self, dx, dy):
 
         game_map = self.game.map

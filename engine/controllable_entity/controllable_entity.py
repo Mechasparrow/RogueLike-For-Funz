@@ -9,6 +9,8 @@ class ControllableEntity(Entity):
     def get_actions_available(self):
         return self.available_actions
 
+    # TODO consider dropping bodies
+
     def control_entity(self, action, callback=None):
 
         pass

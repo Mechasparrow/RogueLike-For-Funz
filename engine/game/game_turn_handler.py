@@ -1,3 +1,8 @@
+# Purpose: Turn Handler for the Game in turn based games
+# game_turn_handler.py
+# Author: Michael Navazhylau
+
+# Utilize additional utils
 from .agent_utils import *
 from .gameobject_utils import *
 
@@ -5,31 +10,31 @@ from .gameobject_utils import *
 import sys
 sys.path.append("..")
 
+# Game pickups
 from engine.pickups import XPDrop
 
 class GameTurnHandler:
     def __init__(self, game):
         self.game = game
 
+    # Execute the game's/computer's turn for turn based games
     def take_turn(self):
 
-
+        # run all the agent ai behavior
+        # check if any agents are dead, drop their body + pickups
         agents = get_game_agents(self.game)
+        # iterate through all the agents
         for agent in agents:
-
-
-            # TODO check if agent is ded
             if (agent.combat_behavior.dead):
-                print ("DEAD")
 
-                dead_body = agent.drop_body()
-
-                # remove the agent
+                # remove the agent from the game
                 remove_gameobject_from_game(self.game, agent)
 
-                # push the new entities
-                add_gameobject_to_game(self.game, dead_body)
+                # Drop a dead body
+                dead_body = agent.drop_body()
 
+                # add the dead body to the game
+                add_gameobject_to_game(self.game, dead_body)
 
                 # drop the xp
                 if (agent.combat_behavior):
@@ -37,11 +42,5 @@ class GameTurnHandler:
                         dropped_xp = XPDrop(agent.x, agent.y, xp = agent.combat_behavior.get_combat_stats().xp_drop, game = self.game)
                         add_gameobject_to_game(self.game, dropped_xp)
 
-            #
-
-            # TODO if agent is dead drop xp
-
-
-            #
-
+            # AI agent behavior
             agent.ai_behavior()

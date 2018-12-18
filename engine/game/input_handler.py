@@ -1,17 +1,26 @@
+# Purpose: Handler for User Input and associated behavior typed to input actions
+# input_handler.py
+# Author: Michael Navazhylau
+
 class InputHandler:
     # Single input checker.. no combos
 
     # @param actions is a hash table like so
-    # {"keycode": "action":} etc etc
+    # {"action": "keycode":} etc etc
+
+    # behaviors
+    # functions to run when the input handler is triggered
 
     def __init__(self, game, actions):
         self.game = game
         self.actions = actions
         self.behaviors = []
 
+    # add an behavior function to run
     def add_behavior(self, behavior):
         self.behaviors.append(behavior)
 
+    # Handle user input based on key code passed
     def handle_input(self,key_code):
 
         input_action = None

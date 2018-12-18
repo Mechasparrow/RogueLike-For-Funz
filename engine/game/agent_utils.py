@@ -1,8 +1,15 @@
+# Purpose: Utils for interacting specifically with agent gameobjects
+# agent_utils.py
+# Author: Michael Navazhylau
+
+# Utilize gameobject utils
 from .gameobject_utils import *
 
+# Add a agent entity to the game
 def add_agent_to_game(game, agent):
     add_gameobject_to_game(game, agent)
 
+# Retrieve all agent entities from the game
 def get_game_agents(game):
 
     def filter_agents(object):

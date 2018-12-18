@@ -1,7 +1,12 @@
+# Purpose: Turn Handler for the Game in turn based games
+# gameobject_utils.py
+# Author: Michael Navazhylau
+
+# Add a gameobject to the game
 def add_gameobject_to_game(game,gb, bottom = False):
     game.objects.append(gb)
 
-
+# remove a gameobject from the game
 def remove_gameobject_from_game(game, gb):
     game.objects.remove(gb)
 

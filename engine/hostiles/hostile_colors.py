@@ -1,14 +1,11 @@
-# Code to expand relative imports
+# Purpose: Bring color constants up to the hostiles scripts
+# hostile_colors.py
+# Author: Michael Navazhylau
+
+# import polyfill
+# NOTE not really needed...
 import sys
-from pathlib import Path # if you haven't already done so
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+sys.path.append("../..")
 
-# Additionally remove the current file's directory from sys.path
-try:
-    sys.path.remove(str(parent))
-except ValueError: # Already removed
-    pass
-
+# import constants
 from gameconstants import monster_basic_color, monster_itermediate_color, monster_advanced

@@ -13,7 +13,7 @@ sys.path.append("..")
 from engine.mapping.game_map import GameMap
 
 # Renderer
-from renderer.renderer import Renderer
+from engine.renderer import Renderer
 
 class Game:
 

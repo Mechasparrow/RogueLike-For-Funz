@@ -1,9 +1,16 @@
+# Purpose: Monster model for monster class of different types
+# i.e Goblins, Serpents
+# monster.py
+# Author: Michael Navazhylau
+
 # polyfill
 import sys
 sys.path.append("..")
 
+# import combat
 from engine.combat import CombatBehavior, CombatStats
 
+# import agent when needed
 def grab_agent():
     from engine.agents import MonsterAgent
     return MonsterAgent
@@ -11,21 +18,28 @@ def grab_agent():
 # GameObject
 from engine.gameobjects import GameObject
 
+# constants
 from .hostile_colors import *
 
 class Monster:
+
+    # params
+    # name of monster
+    # character of monster
 
     def __init__(self, monster_name, chr):
 
         self.monster_name = monster_name
         self.chr = chr
 
+        # difficulty colors
         self.colors_for_difficulty = {
             "basic": monster_basic_color,
             "intermediary": monster_itermediate_color,
             "advanced": monster_advanced
         }
 
+        # generate basic stats for different levels
         self.monster_stats = {
             "basic": CombatStats(
                 10,
@@ -49,10 +63,12 @@ class Monster:
         }
 
 
+    # add a monster stat for specific difficulty
     def add_monster_stats_for_evolution(self,monster_difficulty, stat_dictionary):
         if monster_difficulty in self.monster_stats:
             self[monster_difficulty] = stat_dictionary
 
+    # spawn a specific version of the monster of specified difficulty
     def spawn_instance(self, monster_difficulty, monster_target):
 
         monster_spec = self.monster_stats[monster_difficulty]

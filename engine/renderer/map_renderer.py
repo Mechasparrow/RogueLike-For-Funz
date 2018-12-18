@@ -1,21 +1,18 @@
+# Purpose: Util functions for rendering a map
+# map_renderer.py
+# Author: Michael Navazhylau
+
+# import lib
 import tcod
 
-
-# Code to expand relative imports
+# NOTE not really needed...
 import sys
-from pathlib import Path # if you haven't already done so
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+sys.path.append("../..")
 
-# Additionally remove the current file's directory from sys.path
-try:
-    sys.path.remove(str(parent))
-except ValueError: # Already removed
-    pass
-
+# import constants
 from gameconstants import *
 
+# Render a map onto the console
 def render_map(con, map):
 
     for x in range(0, map.width):
@@ -23,6 +20,7 @@ def render_map(con, map):
             tile = map.getTile(x, y)
             draw_tile(con, x, y, tile, visible = map.fov_map.fov[y][x])
 
+# Clear a map from the console
 def clear_map(con, map):
 
     for x in range(0, map.width):
@@ -30,6 +28,7 @@ def clear_map(con, map):
             tile = map.getTile(x, y)
             clear_tile(con, x, y, tile)
 
+# Draw a tile to a console at a x, y position
 def draw_tile(con, x, y, tile, visible = True):
     if (visible == True):
         # TODO fov code?
@@ -55,5 +54,6 @@ def draw_tile(con, x, y, tile, visible = True):
         # if not any of those, draw an empty tile TODO
         return
 
+# Clear a tile at a x,y position
 def clear_tile(con, x, y, tile):
     tcod.console_set_char_background(con, x, y, (0,0,0), tcod.BKGND_SET)

@@ -1,33 +1,41 @@
+# Purpose: Model/Class for Dungeon generation
+# dungeon.py
+# Author: Michael Navazhylau
+
+# import libs
 import tcod
+import random
+
+# import dungeon utils
 from .rect import Rect
 from .room import Room
 from .tunnel import Tunnel
-import random
 
 # polyfill
 import sys
 sys.path.append("..")
 
+# Engine imports
 from engine.gameobjects import GameObject
-
 from engine.hostiles import *
-
-from .monsters import monsters
-
-#game utils
 from engine.game import *
-
-# drops
 from engine.pickups import *
+
+# Monsters to spawn
+from .monsters import monsters
 
 class Dungeon:
 
+    # params
+    # ref to game
+    # ref to map
+    # list of rooms for dungeon
     def __init__(self, game, map, rooms = []):
         self.game = game
         self.map = map
         self.rooms = rooms
 
-        # generate bsp
+        # generate dungeon bsp
         map_width =  map.width
         map_height = map.height
 
@@ -41,6 +49,7 @@ class Dungeon:
         )
         self.traverse_bsp(self.bsp)
 
+    # traverse the dungeon bsp
     def traverse_bsp(self, node):
 
         for child in node.children:
@@ -51,12 +60,14 @@ class Dungeon:
         else:
             self.bsp_create_room(node)
 
+    # connect bsp dungeon rooms
     def bsp_connect_rooms(self, node):
         (node1, node2) = node.children
         room1 = self.bsp_find_node_room(node1)
         room2 = self.bsp_find_node_room(node2)
         self.connect_rooms(room1, room2)
 
+    # create a room for the bsp
     def bsp_create_room(self, node):
         padding = 5
         node_rect = Rect(node.x+padding, node.y+padding, node.width-padding, node.height-padding)
@@ -64,6 +75,7 @@ class Dungeon:
         new_room = Room(self.map.tiles, node_rect)
         self.add_room(new_room)
 
+    # find a specific room in a bsp node tree
     def bsp_find_node_room(self, node):
 
         for room in self.rooms:
@@ -74,9 +86,11 @@ class Dungeon:
         print ("No room was found")
         return
 
+    # add a room to a dungeon
     def add_room(self, room):
         self.rooms.append(room)
 
+    # connect 2 rooms together by tunnel
     def connect_rooms(self,room_a, room_b):
 
         if (room_a.right_edge() < room_b.left_edge() or room_b.right_edge() < room_a.left_edge()):
@@ -122,31 +136,36 @@ class Dungeon:
             # Already connected
             return
 
-
+    # add a room to the dungeon at a specific position
     def add_room_by_position_and_width(self, x, y, w, h):
         new_rect = Rect(x,y,w,h)
         new_room = Room(self.map.tiles, new_rect)
         self.add_room(new_room)
 
+    # add a room by a rectangle
     def add_room_by_rect(self, rect):
         new_room = Room(self.map.tiles, rect)
         self.add_room(new_room)
 
+    # grab a random room from the list of rooms
     def grab_random_room(self):
         random_room = random.choice(self.rooms)
         return random_room
 
+    # add monsters to all the rooms
     def add_monsters_to_rooms(self, monster_target):
 
         for room in self.rooms:
             self.add_monsters_to_room(room, monster_target)
 
+    # add health pickups to the rooms with a specified chance
     def add_health_to_rooms(self, chance):
         for room in self.rooms:
             chnce = tcod.random_get_int(0, 0, 100)
             if (chnce <= (chance * 100)):
                 self.add_health_to_room(room)
 
+    # add health drop to a specific room
     def add_health_to_room(self, room):
 
         rando_x = tcod.random_get_int(0, room.rect.x, room.rect.x + room.rect.w - 1)
@@ -158,7 +177,7 @@ class Dungeon:
         add_gameobject_to_game(self.game, pickup)
         print("spawned")
 
-
+    # add monsters to a room
     def add_monsters_to_room(self, room, monster_target):
         monster_cnt = 2
 
@@ -177,6 +196,7 @@ class Dungeon:
             monster.y = rando_y
             add_agent_to_game(self.game, monster)
 
+    # push the dungeon to the game map
     def push_dungeon_to_map(self):
         for room in self.rooms:
             room.draw_room()

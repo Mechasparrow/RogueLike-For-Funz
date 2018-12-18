@@ -1,3 +1,7 @@
+# Purpose: Simple Rect Util Class
+# rect.py
+# Author: Michael Navazhylau
+
 class Rect:
     # initliaze the rectangle
     def __init__(self, x, y, w, h):

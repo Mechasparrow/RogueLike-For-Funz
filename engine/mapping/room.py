@@ -1,3 +1,8 @@
+# Purpose: Model for a room
+# room.py
+# Author: Michael Navazhylau
+
+# import mapping utils
 from .rect import Rect
 from .tile import Tile
 
@@ -23,7 +28,6 @@ class Room:
     def right_edge(self):
         return (self.rect.x + self.rect.w)
 
-
     # create a new room with a position w/ width and height
     def new_room(map, x, y, w, h):
         new_rect = Rect(x,y,w,h)
@@ -48,16 +52,19 @@ class Room:
         ending_x = room_rect.x+room_rect.w
         ending_y = room_rect.y+room_rect.h
 
+        # nested loop to render the room
+        # no walls rendered if there is tunnel drawn next to it
         for x in range (starting_x, ending_x + 1):
             for y in range(starting_y, ending_y + 1):
 
                 room_tile = Tile()
 
+                # if edge of rectangle, draw a wall
                 if (x == starting_x or x == ending_x or y == starting_y or y == ending_y):
                     room_tile.blocking = True
                     room_tile.block_visibility = True
 
-                    try:
+                    try: # if special case regarding tunnels, dont place a wall
                         if ((x == starting_x and self.map[x-1][y].walkable == True) or (y == starting_y and self.map[x][y-1].walkable == True) or (y == ending_y and self.map[x][y+1].walkable == True) or (x == ending_x and self.map[x+1][y].walkable == True)):
                             room_tile.blocking = False
                             room_tile.block_visibility = False
@@ -66,8 +73,9 @@ class Room:
                         pass
 
                 else:
-
+                    # if inside rectangle just place walkable tile
                     room_tile.walkable = True
                     room_tile.blocking = False
 
+                # place tile on map
                 self.map[x][y] = room_tile

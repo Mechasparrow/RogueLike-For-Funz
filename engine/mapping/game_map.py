@@ -1,15 +1,29 @@
+# Purpose: Game Map with optional fov system
+# game_map.py
+# Author: Michael Navazhylau
+
+# import libs
 import tcod
 
+# Tile object
 from .tile import Tile
 
 class GameMap:
+
+    # params
+    # width of map
+    # height of map
+    # boolean as to whether fov is enabled
 
     def __init__(self, width, height, fov = True):
 
         self.width = width
         self.height = height
+
+        # 2d array of empty tiles to start
         self.tiles = GameMap.generate_empty_tiles(self.width, self.height)
 
+        # generate fov based off tile 2d array if enabled
         if (fov == True):
             self.fov_map = GameMap.generate_starting_fov_map(self.width, self.height)
             self.update_fov_map()
@@ -51,7 +65,6 @@ class GameMap:
 
     # Gets a tile from the map
     def getTile(self,x, y):
-
         return self.tiles[x][y]
 
     # Updates a tile on the map

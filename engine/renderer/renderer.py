@@ -15,7 +15,9 @@ class Renderer:
     # Takes in ref to game
     def __init__(self, game):
 
+        # Ref to root game console
         self.console = game.root_console
+
         self.game = game
 
     # Render everything to the root game console

@@ -45,12 +45,27 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
-    #handle death TODO delegated to game class
-    objects = game.objects
-    for object in objects:
-        if (object.combat_behavior):
-            if (object.combat_behavior.dead == True and object.chr != "%"):
-                object.chr = "%"
+# Generates the next floor of the game
+def generate_next_floor():
+    global player
+    global dungeon
+
+    dungeon.gen_dungeon()
+    dungeon.push_dungeon_to_map()
+
+    # grab random room to spawn in TODO make into dungeon function
+    random_dungeon_room = dungeon.grab_random_room()
+    (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
+
+    # Put Player in random dungeon
+    player.x = room_centre_x
+    player.y = room_centre_y
+
+    dungeon.add_monsters_to_rooms(player)
+    dungeon.add_health_to_rooms(chance = 0.5)
+    dungeon.add_stairs_to_dungeon(chance = 0.3)
+
+    print ("Next Floor")
 
 # Initialize the game world + constituents
 def init_game(g):
@@ -58,6 +73,8 @@ def init_game(g):
     # TODO seperate into more functions for kicks and giggles
     # TODO don't make this GLOBAL!!!!
     global gameover_dashboard
+    global dungeon
+    global player
 
     # Turn based handler for game
     game_turn_handler = GameTurnHandler(g)
@@ -67,7 +84,7 @@ def init_game(g):
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
     # create dungeon
-    dungeon = Dungeon(g,g.map, [])
+    dungeon = Dungeon(g,g.map, [], generate_floor = generate_next_floor)
     dungeon.push_dungeon_to_map()
 
     # grab random room to spawn in TODO make into dungeon function

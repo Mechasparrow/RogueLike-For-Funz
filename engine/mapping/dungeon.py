@@ -31,24 +31,60 @@ class Dungeon:
     # ref to game
     # ref to map
     # list of rooms for dungeon
-    def __init__(self, game, map, rooms = []):
+    # function for generating next floor
+    def __init__(self, game, map, rooms = [], generate_floor = None):
         self.game = game
         self.map = map
         self.rooms = rooms
+        self.generate_floor = generate_floor
+
+        # list of dungeon spawns
+        self.pickups = []
+        self.hostiles = []
+        self.stairs = []
+
+        # generate the dungeon
+        self.gen_dungeon()
+
+    # clear the spawns from the dungeon
+    def clear_dungeon_spawns(self):
+
+        for item in (self.pickups + self.hostiles + self.stairs):
+            if (item in self.game.objects):
+                remove_gameobject_from_game(self.game, item)
+
+        self.pickups = []
+        self.hostiles = []
+        self.stairs = []
+
+    # removes dead bodies from dungeon
+    def remove_dead_bodies(self):
+        for object in (self.game.objects):
+            if (object.entity_type == "dead_body"):
+                remove_gameobject_from_game(self.game, object)
+
+
+    def gen_dungeon(self):
+
+        # Clear the map
+        self.rooms = []
+        self.map.clear_tiles()
+        self.clear_dungeon_spawns()
+        self.remove_dead_bodies()
 
         # generate dungeon bsp
-        map_width =  map.width
-        map_height = map.height
+        map_width =  self.map.width
+        map_height = self.map.height
 
-        self.bsp = tcod.bsp.BSP(x=0,y=0, width = map_width-1, height = map_height-1)
-        self.bsp.split_recursive(
+        bsp = tcod.bsp.BSP(x=0,y=0, width = map_width-1, height = map_height-1)
+        bsp.split_recursive(
             depth=4,
             min_width=9,
             min_height=9,
             max_horizontal_ratio=1.25,
             max_vertical_ratio=1.25
         )
-        self.traverse_bsp(self.bsp)
+        self.traverse_bsp(bsp)
 
     # traverse the dungeon bsp
     def traverse_bsp(self, node):
@@ -176,6 +212,7 @@ class Dungeon:
 
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
         add_gameobject_to_game(self.game, pickup)
+        self.pickups.append(pickup)
         print("spawned")
 
     # add monsters to a room
@@ -195,7 +232,9 @@ class Dungeon:
             monster.game = self.game
             monster.x = rando_x
             monster.y = rando_y
+
             add_agent_to_game(self.game, monster)
+            self.hostiles.append(monster)
 
     # add stairs to a random room
     def add_stairs_to_dungeon(self, chance, one_room = False):
@@ -207,18 +246,20 @@ class Dungeon:
                 random_room = self.grab_random_room()
                 (room_centre_x, room_centre_y) = random_room.rect.center()
 
-                stairs = Stairs(room_centre_x, room_centre_y, name = "dungeon_stairs", game = self.game)
+                stairs = Stairs(room_centre_x, room_centre_y, name = "dungeon_stairs", game = self.game, stairs_behavior = self.generate_floor)
 
                 gameobjects_at_point = find_gameobjects_at_point(self.game, room_centre_x, room_centre_y)
 
                 # place stair at room center if no other object is there
                 if (len(gameobjects_at_point) == 0):
+                    self.stairs.append(stairs)
                     add_gameobject_to_game(self.game, stairs)
                     print (str(stairs) + " placed.")
 
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):
+
         for room in self.rooms:
             room.draw_room()
 

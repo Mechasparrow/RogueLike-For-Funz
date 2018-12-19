@@ -31,6 +31,11 @@ class GameMap:
             self.fov_map = None
 
 
+    def clear_tiles(self):
+        for x in range(0, self.width):
+            for y in range(0, self.height):
+                self.tiles[x][y] = Tile()
+
     # Generates a 2d list of basic tiles
     def generate_empty_tiles(width, height):
 

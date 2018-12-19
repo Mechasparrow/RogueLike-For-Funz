@@ -45,20 +45,20 @@ class Monster:
                 10,
                 5,
                 4,
-                xp_drop = 4
+                xp_drop = 10
             ),
             "intermediary": CombatStats(
                 15,
                 7,
                 6,
-                xp_drop = 6
+                xp_drop = 20
             ),
 
             "advanced": CombatStats(
                 25,
                 12,
                 9,
-                xp_drop = 10
+                xp_drop = 30
             )
         }
 

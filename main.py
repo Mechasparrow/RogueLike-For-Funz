@@ -86,7 +86,7 @@ def init_game(g):
     dungeon.add_health_to_rooms(chance = 0.5)
 
     # Create UI dashboards
-    player_dashboard = CombatDashboard(1,1, 60, 5, combat_behavior = player_combat)
+    player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()
 

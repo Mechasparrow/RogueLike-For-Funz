@@ -9,7 +9,13 @@ from .combat_stats import CombatStats
 class CombatBehavior:
 
     # initialization
-    def __init__(self, combat_stats = None, fighter_name = None):
+    # params
+    # combat stats of the combat behavior (max_health, attack, defense, etc)
+    # name of fighter
+    # current level of combatant
+
+    # NOTE level up options
+    def __init__(self, combat_stats = None, fighter_name = None, level = 1, level_up_threshold = 100, restore_health_on_level_up = True):
 
         if (fighter_name):
             self.fighter_name = fighter_name
@@ -24,6 +30,11 @@ class CombatBehavior:
             self.current_health = 0
 
         self.current_xp = 0
+
+        # Combat Behavior normally initialized with level 1
+        self.level = level
+        self.level_up_threshold = level_up_threshold
+        self.restore_health_on_level_up = restore_health_on_level_up
 
         # initially the combatant is not dead
         self.dead = False
@@ -64,10 +75,21 @@ class CombatBehavior:
         if (self.current_health <= 0):
             self.die()
 
+    # levels up the combatant
+    def level_up(self):
+        self.level += 1
+        self.current_xp = self.current_xp - self.level_up_threshold
+        if (self.restore_health_on_level_up):
+            self.current_health = self.combat_stats.max_health
+
     # gain xp
     def gain_xp(self, xp):
         self.current_xp = self.current_xp + xp
         print (self.fighter_name + " has gained " + str(xp) + " xp")
+
+        # level up system
+        if (self.current_xp >= self.level_up_threshold):
+            self.level_up()
 
     # gain health
     def gain_health(self, health):

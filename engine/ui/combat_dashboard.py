@@ -22,16 +22,19 @@ class CombatDashboard(DashboardBase):
         defense = self.combat_behavior.get_combat_stats().defense
         damage = self.combat_behavior.get_combat_stats().defense
         current_xp = self.combat_behavior.current_xp
+        current_level = self.combat_behavior.level
 
         health_string = "Health: " + str(health)
         defense_string = "Defense: " + str(defense)
         damage_string = "Damage: " + str(damage)
+        level_string = "Level: " + str(current_level)
         xp_string = "XP: " + str(current_xp)
 
         self.dash_console.print_(0,0, health_string)
         self.dash_console.print_(0,1, defense_string)
         self.dash_console.print_(0,2, damage_string)
-        self.dash_console.print_(0,3, xp_string)
+        self.dash_console.print_(0,3, level_string)
+        self.dash_console.print_(0,4, xp_string)
 
     # update the dash console with combat information
     def update_dash_console(self):

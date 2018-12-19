@@ -25,10 +25,13 @@ def player_behavior(game, action):
     player = find_gameobjects_by_name(game, "Player")[0]
     player.control_entity(action)
 
+    # If dead drop a body TODO
+
     if (player.combat_behavior.dead):
         gameover_dashboard.show_dashboard()
 
     game.map.compute_fov_map(player.x, player.y, radius = 8)
+
 
 # Generate game behavior
 # includes exitting the game, pausing, etc

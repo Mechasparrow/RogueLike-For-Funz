@@ -85,6 +85,12 @@ class TurnBasedPlayer(ControllableEntity):
             if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
                 self.combat_behavior.attack(agent.combat_behavior)
 
+        # Stair Behavior
+        for object in self.game.objects:
+            if (object.entity_type == "stairs" and object.x == potential_x and object.y == potential_y):
+                stairs = object
+                stairs.use_stairs()
+
         # Pickup behavior
         # If the gameobject at the next position is a pickup, pick it up
         for gameobject in self.game.objects:

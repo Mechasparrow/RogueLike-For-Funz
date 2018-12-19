@@ -10,6 +10,7 @@ import random
 from .rect import Rect
 from .room import Room
 from .tunnel import Tunnel
+from .stairs import Stairs
 
 # polyfill
 import sys
@@ -195,6 +196,26 @@ class Dungeon:
             monster.x = rando_x
             monster.y = rando_y
             add_agent_to_game(self.game, monster)
+
+    # add stairs to a random room
+    def add_stairs_to_dungeon(self, chance, one_room = False):
+
+        for i in self.rooms:
+            chnce = tcod.random_get_int(0, 0, 100)
+
+            if (chnce <= (chance * 100)):
+                random_room = self.grab_random_room()
+                (room_centre_x, room_centre_y) = random_room.rect.center()
+
+                stairs = Stairs(room_centre_x, room_centre_y, name = "dungeon_stairs", game = self.game)
+
+                gameobjects_at_point = find_gameobjects_at_point(self.game, room_centre_x, room_centre_y)
+
+                # place stair at room center if no other object is there
+                if (len(gameobjects_at_point) == 0):
+                    add_gameobject_to_game(self.game, stairs)
+                    print (str(stairs) + " placed.")
+
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):

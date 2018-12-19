@@ -84,6 +84,7 @@ def init_game(g):
     # Add monsters and pickups to the dungeon
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
+    dungeon.add_stairs_to_dungeon(chance = 0.3)
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)

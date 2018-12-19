@@ -14,7 +14,7 @@ class CombatBehavior:
     # name of fighter
     # current level of combatant
 
-    # NOTE level up options
+    # TODO level up options abstraction
     def __init__(self, combat_stats = None, fighter_name = None, level = 1, level_up_threshold = 100, restore_health_on_level_up = True):
 
         if (fighter_name):

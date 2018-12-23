@@ -46,10 +46,14 @@ class Chest(Entity):
         else:
             if (recipient.type == "Entity"):
                 print (str(recipient.name) + " recieved " + str(self.chest_item.name))
-                
+
+                # Empty the chest after being opened by an applicable recipient
+                self.chest_item = None
+
         # TODO interact with inventory system
 
         #
+
         self.opened = True
         self.chr = self.open_chr
 

@@ -115,7 +115,10 @@ class TurnBasedPlayer(ControllableEntity):
             if (gameobject.x == potential_x and gameobject.y == potential_y):
                 if (gameobject.entity_type == "chest"):
                     chest = gameobject
-                    chest.open_chest(self)
+                    if (chest.opened == False):
+                        chest.open_chest(self)
+                    else:
+                        chest.close_chest()
 
         # Let the game now take a turn
         if (turn_taken and self.turn_handler):

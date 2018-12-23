@@ -13,7 +13,7 @@ class CustomMessageDashboard(DashboardBase):
     # Same params as DashboardBase
     # + additional message parameter for custom message
     def __init__(self, x, y, width, height, message = "", visible = True):
-        DashboardBase.__init__(self, x, y, width, height, visible)
+        DashboardBase.__init__(self, x, y, width, height, visible, dashboard_type = "custom")
         self.message = message
 
     # Set the custom message

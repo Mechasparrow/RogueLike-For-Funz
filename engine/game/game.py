@@ -9,18 +9,24 @@ import tcod
 import sys
 sys.path.append("..")
 
+# Utils
+from .dashboard_utils import *
+
 # Map
 from engine.mapping.game_map import GameMap
 
 # Renderer
 from engine.renderer import Renderer
 
+# UI
+from engine.ui import LogDashboard
+
 class Game:
 
     # params
     # name of game, width of console window, height of console window, game font, game fps
 
-    def __init__(self, game_name, window_width, window_height, font, fps = None):
+    def __init__(self, game_name, window_width, window_height, font, fps = None, message_log = True):
         # Game console props
         self.game_name = game_name
         self.window_width = window_width
@@ -53,9 +59,13 @@ class Game:
         # Dashboards
         self.dashboards = []
 
+        if (message_log == True):
+            margin = 4
+            message_log_dashboard = LogDashboard((self.window_width * 3) // 4,margin, self.window_width // 4, self.window_height - margin, messages = [])
+            add_dashboard_to_game(self, message_log_dashboard)
         # World map
         # TODO make the map width + height configurable
-        self.map = GameMap(60, 80)
+        self.map = GameMap((self.window_width * 3) // 4, self.window_height)
 
         # Input handlers
         self.input_handlers = []

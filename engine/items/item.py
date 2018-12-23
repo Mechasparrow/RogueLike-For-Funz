@@ -5,6 +5,10 @@
 class Item:
 
     # constructor for item model
+    #params
+    # name of item
+    # item type
+    # stackable: Can the item be stacked on top of itself (i.e Potions, Arrows, etc)
     def __init__(self, name, item_type, stackable = False):
         self.name = name
         self.item_type = item_type

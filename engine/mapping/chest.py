@@ -8,11 +8,20 @@ from engine.items import Item
 
 class Chest(Entity):
 
-    def __init__(self, x, y, name = "chest", open_chr = "&", close_chr = "#", color = (153, 51, 0), game, chest_item = None, opened = False):
+    # Params
+    # Same params as entity minus combat_behavior
+
+    # open_chr: the character of the opened chest
+    # close_chr: the character of the closed chest
+    # chest_item: the item of the chest
+    # opened: chest opened
+
+
+    def __init__(self, x, y, name = "chest", open_chr = "&", close_chr = "#", color = (153, 51, 0), game = None, chest_item = None, opened = False):
         self.open_chr = open_chr
         self.close_chr = close_chr
-        self.opened = opened
         self.chest_item = chest_item
+        self.opened = opened
 
         # Set the character chest character
         entity_chr = open_chr
@@ -22,7 +31,7 @@ class Chest(Entity):
             entity_chr = close_chr
 
         # Base Entity props
-        Entity.__init__(self, x, y, name, chr = close_chr, color, combat_behavior = None, game = game, entity_type = "chest")
+        Entity.__init__(self, x, y, name = name, chr = close_chr, color = color, combat_behavior = None, game = game, entity_type = "chest")
 
 
     def open_chest(self, recipient):

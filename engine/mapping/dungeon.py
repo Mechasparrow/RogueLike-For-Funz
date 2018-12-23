@@ -11,6 +11,7 @@ from .rect import Rect
 from .room import Room
 from .tunnel import Tunnel
 from .stairs import Stairs
+from .chest import Chest
 
 # polyfill
 import sys
@@ -18,6 +19,7 @@ sys.path.append("..")
 
 # Engine imports
 from engine.gameobjects import GameObject
+from engine.items import Item
 from engine.hostiles import *
 from engine.game import *
 from engine.pickups import *
@@ -42,6 +44,7 @@ class Dungeon:
         self.pickups = []
         self.hostiles = []
         self.stairs = []
+        self.chests = []
 
         # generate the dungeon
         self.gen_dungeon()
@@ -49,13 +52,14 @@ class Dungeon:
     # clear the spawns from the dungeon
     def clear_dungeon_spawns(self):
 
-        for item in (self.pickups + self.hostiles + self.stairs):
+        for item in (self.pickups + self.hostiles + self.stairs + self.chests):
             if (item in self.game.objects):
                 remove_gameobject_from_game(self.game, item)
 
         self.pickups = []
         self.hostiles = []
         self.stairs = []
+        self.chests = []
 
     # removes dead bodies from dungeon
     def remove_dead_bodies(self):
@@ -213,7 +217,29 @@ class Dungeon:
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
         add_gameobject_to_game(self.game, pickup)
         self.pickups.append(pickup)
-        print("spawned")
+        print("health drop spawned")
+
+    # add chests to the rooms with a specified chance
+    def add_chests_to_rooms(self, chance):
+        for room in self.rooms:
+            chnce = tcod.random_get_int(0, 0, 100)
+            if (chnce <= (chance * 100)):
+                self.add_chest_to_room(room)
+
+    # add chest to a specific room
+    def add_chest_to_room(self, room):
+
+        rando_x = tcod.random_get_int(0, room.rect.x, room.rect.x + room.rect.w - 1)
+        rando_y = tcod.random_get_int(0, room.rect.y, room.rect.y + room.rect.h - 1)
+
+        # DEBUG give it a dummy item
+        dummy_item = Item("trash item")
+
+        # Add the chest
+        chest = Chest(rando_x, rando_y, game = self.game, chest_item = dummy_item)
+        add_gameobject_to_game(self.game, chest)
+        self.chests.append(chest)
+        print ("A chest was spawned")
 
     # add monsters to a room
     def add_monsters_to_room(self, room, monster_target):
@@ -235,6 +261,7 @@ class Dungeon:
 
             add_agent_to_game(self.game, monster)
             self.hostiles.append(monster)
+
 
     # add stairs to a random room
     def add_stairs_to_dungeon(self, chance, one_room = False):

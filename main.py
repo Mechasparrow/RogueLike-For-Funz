@@ -49,6 +49,7 @@ def core_logic(game):
     handle_inputs(game)
 
 # Generates the next floor of the game
+# TODO can optimize and refactor
 def generate_next_floor():
     global player
     global dungeon
@@ -67,6 +68,7 @@ def generate_next_floor():
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
     dungeon.add_stairs_to_dungeon(chance = 0.3)
+    dungeon.add_chests_to_rooms(chance = 0.5)
 
     print ("Next Floor")
 
@@ -105,6 +107,7 @@ def init_game(g):
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
     dungeon.add_stairs_to_dungeon(chance = 0.3)
+    dungeon.add_chests_to_rooms(chance = 0.5)
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)

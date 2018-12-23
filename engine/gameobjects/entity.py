@@ -10,11 +10,21 @@ from .gameobject import GameObject
 # Extends from GameObject
 class Entity(GameObject):
 
-    # position, name, character, a color, reference to game world, combat behavior for combat, etype of entity
-    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, entity_type = "base"):
+    # params
+    # position
+    # name
+    # Ascii character
+    # a color
+    # reference to game world
+    # combat behavior for combat
+    # items for inventory system
+    # type of entity
+
+    def __init__(self, x, y, name, chr, color, combat_behavior = None, items = None, game = None, entity_type = "base"):
         GameObject.__init__(self, x, y, name, chr, color, game, type = "Entity")
         self.combat_behavior = combat_behavior
         self.entity_type = entity_type
+        self.items = []
 
         if (self.combat_behavior):
             self.combat_behavior.fighter_name = self.name

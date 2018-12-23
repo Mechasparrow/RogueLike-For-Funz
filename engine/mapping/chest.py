@@ -5,6 +5,7 @@
 import tcod
 from engine.gameobjects import Entity
 from engine.items import Item
+from engine.inventory import *
 
 class Chest(Entity):
 
@@ -45,14 +46,19 @@ class Chest(Entity):
         # DEBUG show message of recipient recieving item
         else:
             if (recipient.type == "Entity"):
-                print (str(recipient.name) + " recieved " + str(self.chest_item.name))
 
-                # Empty the chest after being opened by an applicable recipient
-                self.chest_item = None
+                # TODO interact with inventory system
+                if (recipient.items != None):
+                    recipient.items.append(self.chest_item)
+                    print (str(recipient.name) + " recieved " + str(self.chest_item.name))
+                    display_inventory_debug(recipient.items)
+                    # Empty the chest after being opened by an applicable recipient
+                    self.chest_item = None
+                else:
+                    print ("unable to recieve item")
 
-        # TODO interact with inventory system
 
-        #
+
 
         self.opened = True
         self.chr = self.open_chr

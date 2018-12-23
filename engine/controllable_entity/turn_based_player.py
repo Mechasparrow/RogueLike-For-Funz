@@ -14,7 +14,7 @@ from engine.game import *
 # Uses Controllable Entity as Base
 class TurnBasedPlayer(ControllableEntity):
 
-    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, turn_handler = None):
+    def __init__(self, x, y, name, chr, color, items = [], combat_behavior = None, game = None, turn_handler = None):
         # predetermined list of action for a turn based player entity
         available_actions = [
             "left",
@@ -23,7 +23,7 @@ class TurnBasedPlayer(ControllableEntity):
             "down"
         ]
 
-        ControllableEntity.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, available_actions = available_actions, game = game)
+        ControllableEntity.__init__(self, x, y, name, chr, color, items = items, combat_behavior = combat_behavior, available_actions = available_actions, game = game)
 
         # turn handler param to tell the game world to take its turn after the player does
         self.turn_handler = turn_handler

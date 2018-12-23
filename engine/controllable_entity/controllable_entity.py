@@ -11,8 +11,8 @@ from engine.gameobjects import Entity, DeadBodyEntity
 class ControllableEntity(Entity):
 
     # Initialize object
-    def __init__(self, x, y, name, chr, color, combat_behavior = None, available_actions = [], game = None):
-        Entity.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = game, entity_type = "Controllable")
+    def __init__(self, x, y, name, chr, color, items = None, combat_behavior = None, available_actions = [], game = None):
+        Entity.__init__(self, x, y, name, chr, color, items = items, combat_behavior = combat_behavior, game = game, entity_type = "Controllable")
 
         # Pass set of available actions for the controllable entity as a param
         self.available_actions = available_actions

@@ -9,10 +9,11 @@ class Item:
     # name of item
     # item type
     # stackable: Can the item be stacked on top of itself (i.e Potions, Arrows, etc)
-    def __init__(self, name, item_type = "basic", stackable = False):
+    def __init__(self, name, description = None, item_type = "basic", stack_limit = 1):
         self.name = name
+        self.description = description
         self.item_type = item_type
-        self.stackable = stackable
+        self.stack_limit = stack_limit
 
     # Uses the item
     def use_item(self, recipient):

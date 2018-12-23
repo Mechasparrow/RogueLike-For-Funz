@@ -109,6 +109,14 @@ class TurnBasedPlayer(ControllableEntity):
                     pickup.pickup_behavior(self)
                     remove_gameobject_from_game(self.game, pickup)
 
+        # Chest behavior
+        # If the gameobject at the next position is a pickup, pick it up
+        for gameobject in self.game.objects:
+            if (gameobject.x == potential_x and gameobject.y == potential_y):
+                if (gameobject.entity_type == "chest"):
+                    chest = gameobject
+                    chest.open_chest(self)
+
         # Let the game now take a turn
         if (turn_taken and self.turn_handler):
             print ("taking turn")

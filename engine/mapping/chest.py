@@ -35,11 +35,18 @@ class Chest(Entity):
 
 
     def open_chest(self, recipient):
+        # Dont do anything if chest is already opened
+        if (self.opened == True):
+            return
 
-        # TODO if item is None, the chest was is empty
-
+        # TODO if item is None, the chest is empty
+        if (self.chest_item == None):
+            print ("No item found in chest")
         # DEBUG show message of recipient recieving item
-
+        else:
+            if (recipient.type == "Entity"):
+                print (str(recipient.name) + " recieved " + str(self.chest_item.name))
+                
         # TODO interact with inventory system
 
         #

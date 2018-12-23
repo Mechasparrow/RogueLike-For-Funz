@@ -31,9 +31,18 @@ class TurnBasedPlayer(ControllableEntity):
     # controls the entity based on the actions passed to it
     def control_entity(self, action, callback = None):
 
-        # if player dead dont do anything else
+        # if the player is dead remove itself and spawn a dead body in its place
+        if (self.combat_behavior.dead):
+            player = self
+            dead_player = player.drop_body()
+            remove_gameobject_from_game(self.game, player)
+            add_gameobject_to_game(self.game, dead_player)
+
+        # if player dead or no action taken dont do anything else
         if (self.combat_behavior.dead or (action not in self.get_actions_available())):
             return
+
+
 
         # By default no has been taken
         turn_taken = False

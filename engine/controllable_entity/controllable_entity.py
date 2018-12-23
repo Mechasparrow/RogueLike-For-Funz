@@ -6,7 +6,7 @@
 import sys
 sys.path.append("..")
 
-from engine.gameobjects import Entity
+from engine.gameobjects import Entity, DeadBodyEntity
 
 class ControllableEntity(Entity):
 
@@ -21,7 +21,10 @@ class ControllableEntity(Entity):
     def get_actions_available(self):
         return self.available_actions
 
-    # TODO consider dropping bodies
+    # Returns a dead version of the controllable entity
+    def drop_body(self):
+        dead_body = DeadBodyEntity(self.x , self.y, color = self.color, game = self.game)
+        return dead_body
 
     # Main function that controls entity based off certain action passed in via other entity interaction, keyboard control, etc
     def control_entity(self, action, callback=None):

@@ -22,15 +22,15 @@ from engine.controllable_entity import *
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
     # Grab the player object
-    player = find_gameobjects_by_name(game, "Player")[0]
-    player.control_entity(action)
+    if (len(find_gameobjects_by_name(game, "Player")) > 0):
+        player = find_gameobjects_by_name(game, "Player")[0]
+        player.control_entity(action)
 
-    # If dead drop a body TODO
+        # If dead drop a body TODO
+        if (player.combat_behavior.dead):
+            gameover_dashboard.show_dashboard()
 
-    if (player.combat_behavior.dead):
-        gameover_dashboard.show_dashboard()
-
-    game.map.compute_fov_map(player.x, player.y, radius = 8)
+        game.map.compute_fov_map(player.x, player.y, radius = 8)
 
 
 # Generate game behavior

@@ -23,6 +23,7 @@ class Renderer:
     # Render everything to the root game console
     def render_all(self):
 
+
         # Render the dashboards
         render_dashboards(self.console, self.game.dashboards)
 

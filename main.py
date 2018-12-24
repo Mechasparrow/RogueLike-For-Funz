@@ -7,6 +7,7 @@
 # Import additional libs
 import tcod
 import time
+import copy
 
 # Import constants
 from gameconstants import *
@@ -54,10 +55,23 @@ def core_logic(game):
 
 # Generates the next floor of the game
 # TODO can optimize and refactor
-def generate_next_floor(player, dungeon):
+def generate_next_floor(player, game):
 
-    dungeon.gen_dungeon()
+    new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [], game = game)
+
+    game.floors.append(new_floor)
+    game.current_floor = game.current_floor + 1
+
+    dungeon = Dungeon(game,map = game.get_current_floor().game_map, generate_floor = generate_next_floor_global(player, game))
     dungeon.push_dungeon_to_map()
+
+
+    # DEBUG
+    ##
+
+    # TODO remove player from previous floor
+
+    #
 
     # grab random room to spawn in TODO make into dungeon function
     random_dungeon_room = dungeon.grab_random_room()
@@ -69,15 +83,24 @@ def generate_next_floor(player, dungeon):
 
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
-    dungeon.add_stairs_to_dungeon(chance = 0.3)
+    dungeon.add_stairs_to_dungeon(chance = 0.8)
     dungeon.add_chests_to_rooms(chance = 0.5)
 
-    print ("Next Floor")
+    print ("Gen next floor")
 
-def generate_next_floor_global(player, dungeon):
+
+    # grab player
+    player = None
+    if (len(find_gameobjects_by_name(game.get_current_floor(), "Player")) > 0):
+        player = find_gameobjects_by_name(game.get_current_floor(), "Player")[0]
+
+    print (new_floor.objects == game.floors[game.current_floor - 1])
+
+
+def generate_next_floor_global(player, game):
 
     def generate_next_floor_factory():
-        generate_next_floor(player, dungeon)
+        generate_next_floor(player, game)
 
     return generate_next_floor_factory
 
@@ -92,6 +115,7 @@ def init_game(g):
     global dungeon
     global player
 
+
     # Turn based handler for game
     game_turn_handler = GameTurnHandler(g)
 
@@ -104,9 +128,7 @@ def init_game(g):
     add_gameobject_to_game(g.get_current_floor(), player)
 
     # create dungeon FIXME
-    dungeon = Dungeon(g,g.get_current_floor().game_map, [])
-    dungeon.generate_floor = generate_next_floor_global(player, dungeon)
-    generate_next_floor(player, dungeon)
+    generate_next_floor(player, g)
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)

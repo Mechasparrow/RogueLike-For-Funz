@@ -85,7 +85,8 @@ def init_game(g):
     game_turn_handler = GameTurnHandler(g)
 
     # Create the player
-    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20)
+    player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(5, 5, 5, 0))
+    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
     # create dungeon

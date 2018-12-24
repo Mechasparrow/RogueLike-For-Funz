@@ -22,7 +22,7 @@ class CombatDashboard(DashboardBase):
         defense = self.combat_behavior.get_combat_stats().defense
         damage = self.combat_behavior.get_combat_stats().defense
         current_xp = self.combat_behavior.current_xp
-        current_level = self.combat_behavior.level
+        current_level = self.combat_behavior.leveling_system.level
 
         health_string = "Health: " + str(health)
         defense_string = "Defense: " + str(defense)

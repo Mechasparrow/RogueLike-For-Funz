@@ -58,7 +58,7 @@ class Game:
 
         # Floor handling DEBUG bring into own handler class
         self.floors = []
-        self.floors.append(Floor((self.window_width * 3) // 4, self.window_height))
+        self.floors.append(Floor((self.window_width * 3) // 4, self.window_height, game = self))
         self.current_floor = 0
 
         # Dashboards

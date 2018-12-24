@@ -40,7 +40,7 @@ class Dungeon:
         self.rooms = rooms
         self.generate_floor = generate_floor
 
-        # list of dungeon spawns
+        # list of dungeon spawns KILLME
         self.pickups = []
         self.hostiles = []
         self.stairs = []
@@ -49,7 +49,7 @@ class Dungeon:
         # generate the dungeon
         self.gen_dungeon()
 
-    # clear the spawns from the dungeon FIXME
+    # clear the spawns from the dungeon FIXME KILLME
     def clear_dungeon_spawns(self):
 
         for item in (self.pickups + self.hostiles + self.stairs + self.chests):
@@ -61,7 +61,7 @@ class Dungeon:
         self.stairs = []
         self.chests = []
 
-    # removes dead bodies from dungeon FIXME
+    # removes dead bodies from dungeon FIXME KILLME
     def remove_dead_bodies(self):
         for object in (self.game.get_current_floor().objects):
             if (object.entity_type == "dead_body"):

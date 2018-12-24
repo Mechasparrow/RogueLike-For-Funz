@@ -44,6 +44,10 @@ def general_game_behavior(game, action):
 def core_logic(game):
     # TODO retrieve dashboard from game instead
     global gameover_dashboard
+    global floor_dashboard
+
+    # DEBUG update floor number
+    floor_dashboard.set_message("Current floor: " + str(game.current_floor))
 
     # handle the game inputs
     handle_inputs(game)
@@ -84,6 +88,7 @@ def init_game(g):
     # TODO seperate into more functions for kicks and giggles
     # TODO don't make this GLOBAL!!!!
     global gameover_dashboard
+    global floor_dashboard
     global dungeon
     global player
 
@@ -105,12 +110,18 @@ def init_game(g):
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)
+
+    # DEBUG floor dashboard
+    floor_dashboard = CustomMessageDashboard(1, 6, 80, 2, message = "Current floor: " + str(g.current_floor))
+
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()
+
 
     # Add dashboards to the game
     add_dashboard_to_game(g, player_dashboard)
     add_dashboard_to_game(g, gameover_dashboard)
+    add_dashboard_to_game(g, floor_dashboard)
 
     # input handlers
 

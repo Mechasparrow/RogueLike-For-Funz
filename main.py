@@ -57,7 +57,8 @@ def core_logic(game):
 # TODO can optimize and refactor
 def generate_next_floor(player, game):
 
-    new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [], game = game)
+    game.get_current_floor().objects.remove(player)
+    new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [player], game = game)
 
     game.floors.append(new_floor)
     game.current_floor = game.current_floor + 1
@@ -81,6 +82,7 @@ def generate_next_floor(player, game):
     player.x = room_centre_x
     player.y = room_centre_y
 
+    # BUG does not work after first floor
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
     dungeon.add_stairs_to_dungeon(chance = 0.8)

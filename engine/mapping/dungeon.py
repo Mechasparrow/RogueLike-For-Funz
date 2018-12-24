@@ -39,42 +39,15 @@ class Dungeon:
         self.map = map
         self.rooms = rooms
         self.generate_floor = generate_floor
-
-        # list of dungeon spawns KILLME
-        self.pickups = []
-        self.hostiles = []
-        self.stairs = []
-        self.chests = []
-
-        # generate the dungeon
         self.gen_dungeon()
-
-    # clear the spawns from the dungeon FIXME KILLME
-    def clear_dungeon_spawns(self):
-
-        for item in (self.pickups + self.hostiles + self.stairs + self.chests):
-            if (item in self.game.get_current_floor().objects):
-                remove_gameobject_from_game(self.game.get_current_floor(), item)
-
-        self.pickups = []
-        self.hostiles = []
-        self.stairs = []
-        self.chests = []
-
-    # removes dead bodies from dungeon FIXME KILLME
-    def remove_dead_bodies(self):
-        for object in (self.game.get_current_floor().objects):
-            if (object.entity_type == "dead_body"):
-                remove_gameobject_from_game(self.game.get_current_floor(), object)
-
 
     def gen_dungeon(self):
 
-        # Clear the map
+        # Clear the map DEAD to us
         self.rooms = []
         self.map.clear_tiles()
-        self.clear_dungeon_spawns()
-        self.remove_dead_bodies()
+        print (self.game.current_floor)
+        print ("Floor objects: " + str(len(self.game.get_current_floor().objects)))
 
         # generate dungeon bsp
         map_width =  self.map.width
@@ -217,7 +190,6 @@ class Dungeon:
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
         #FIXME
         add_gameobject_to_game(self.game.get_current_floor(), pickup)
-        self.pickups.append(pickup)
         print("health drop spawned")
 
     # add chests to the rooms with a specified chance
@@ -239,7 +211,6 @@ class Dungeon:
         # Add the chest FIXME
         chest = Chest(rando_x, rando_y, game = self.game, chest_item = dummy_item)
         add_gameobject_to_game(self.game.get_current_floor(), chest)
-        self.chests.append(chest)
         print ("A chest was spawned")
 
     # add monsters to a room
@@ -262,7 +233,6 @@ class Dungeon:
 
             # FIXME
             add_agent_to_game(self.game.get_current_floor(), monster)
-            self.hostiles.append(monster)
 
 
     # add stairs to a random room
@@ -281,7 +251,6 @@ class Dungeon:
 
                 # place stair at room center if no other object is there
                 if (len(gameobjects_at_point) == 0):
-                    self.stairs.append(stairs)
                     # FIXME
                     add_gameobject_to_game(self.game.get_current_floor(), stairs)
                     print (str(stairs) + " placed.")

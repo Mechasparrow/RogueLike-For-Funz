@@ -8,7 +8,7 @@ from engine.mapping import GameMap
 
 class Floor:
 
-    def __init__(self, width, height, objects = [], fov = True, floor_init = None, game = None):
+    def __init__(self, width, height, objects = None, fov = True, floor_init = None, game = None):
         self.game = game
         self.width = width
         self.height = height
@@ -18,3 +18,6 @@ class Floor:
         # Initialize the floor DEBUG
         if (floor_init):
             floor_init(self)
+
+    def empty_objects(self):
+        self.objects = []

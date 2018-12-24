@@ -26,7 +26,7 @@ def render_gameobject(con, object):
     tcod.console_set_default_foreground(con, object.color)
     # Draw the object rep on to the console
     tcod.console_put_char(con, object.x, object.y, object.chr, tcod.BKGND_NONE)
-
+    
 # Clear a gameobject from a console
 def clear_gameobject(con, object):
     # Set the color

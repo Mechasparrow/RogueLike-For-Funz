@@ -36,7 +36,9 @@ class MonsterAgent(IntelligentAgent):
         # alias
         target = self.ai_target
         combat_behavior = self.combat_behavior
-        fov_map = self.game.map.fov_map
+
+        # FIXME
+        fov_map = self.game.get_current_floor().game_map.fov_map
 
         # Only trigger ai if in FOV
         if (fov_map.fov[self.y][self.x] == False):
@@ -63,8 +65,8 @@ class MonsterAgent(IntelligentAgent):
             predicted_pos_x = self.x + dx
             predicted_pos_y = self.y + dy
 
-            # check if there are any gameobjects at the predicted
-            gameobjects_at_next_position = find_gameobjects_at_point(self.game, predicted_pos_x, predicted_pos_y)
+            # check if there are any gameobjects at the predicted FIXME
+            gameobjects_at_next_position = find_gameobjects_at_point(self.game.get_current_floor(), predicted_pos_x, predicted_pos_y)
 
             # TODO ignore other monsters
             # dont move if a gameobject is at the next position

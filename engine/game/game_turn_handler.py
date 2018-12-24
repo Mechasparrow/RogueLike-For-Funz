@@ -21,26 +21,26 @@ class GameTurnHandler:
     def take_turn(self):
 
         # run all the agent ai behavior
-        # check if any agents are dead, drop their body + pickups
-        agents = get_game_agents(self.game)
+        # check if any agents are dead, drop their body + pickups FIXME
+        agents = get_game_agents(self.game.get_current_floor())
         # iterate through all the agents
         for agent in agents:
             if (agent.combat_behavior.dead):
 
-                # remove the agent from the game
-                remove_gameobject_from_game(self.game, agent)
+                # remove the agent from the game FIXME
+                remove_gameobject_from_game(self.game.get_current_floor(), agent)
 
                 # Drop a dead body
                 dead_body = agent.drop_body()
 
-                # add the dead body to the game
-                add_gameobject_to_game(self.game, dead_body)
+                # add the dead body to the game FIXME
+                add_gameobject_to_game(self.game.get_current_floor(), dead_body)
 
-                # drop the xp
+                # drop the xp FIXME
                 if (agent.combat_behavior):
                     if (agent.combat_behavior.get_combat_stats().xp_drop):
                         dropped_xp = XPDrop(agent.x, agent.y, xp = agent.combat_behavior.get_combat_stats().xp_drop, game = self.game)
-                        add_gameobject_to_game(self.game, dropped_xp)
+                        add_gameobject_to_game(self.game.get_current_floor(), dropped_xp)
 
             # AI agent behavior
             agent.ai_behavior()

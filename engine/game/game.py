@@ -12,6 +12,9 @@ sys.path.append("..")
 # Utils
 from .dashboard_utils import *
 
+# Floor gen
+from .floor import Floor
+
 # Map
 from engine.mapping.game_map import GameMap
 
@@ -53,8 +56,10 @@ class Game:
         # Additional props
         self.props = {}
 
-        # Game objects
-        self.objects = []
+        # Floor handling DEBUG bring into own handler class
+        self.floors = []
+        self.floors.append(Floor((self.window_width * 3) // 4, self.window_height))
+        self.current_floor = 0
 
         # Dashboards
         self.dashboards = []
@@ -65,13 +70,17 @@ class Game:
             add_dashboard_to_game(self, message_log_dashboard)
         # World map
         # TODO make the map width + height configurable
-        self.map = GameMap((self.window_width * 3) // 4, self.window_height)
+        #self.map = GameMap((self.window_width * 3) // 4, self.window_height) DEAD
 
         # Input handlers
         self.input_handlers = []
 
         #Renderer
         self.game_renderer = Renderer(game = self)
+
+    # DEBUG get current floor ... put into util or handler
+    def get_current_floor(self):
+        return self.floors[self.current_floor]
 
     # Start the main game loop
     def start_loop(self, logic):

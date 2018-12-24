@@ -33,7 +33,8 @@ class Entity(GameObject):
     # can only move on walkable tiles
     def move(self, dx, dy):
 
-        game_map = self.game.map
+        # FIXME
+        game_map = self.game.get_current_floor().game_map
         (potential_x, potential_y) = self.anticipate_move(dx, dy)
 
         if (potential_x < game_map.width and potential_x >= 0 and potential_y < game_map.height and potential_y >= 0):

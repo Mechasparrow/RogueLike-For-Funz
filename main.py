@@ -21,16 +21,16 @@ from engine.controllable_entity import *
 
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
-    # Grab the player object
-    if (len(find_gameobjects_by_name(game, "Player")) > 0):
-        player = find_gameobjects_by_name(game, "Player")[0]
+    # Grab the player object FIXME
+    if (len(find_gameobjects_by_name(game.get_current_floor(), "Player")) > 0):
+        player = find_gameobjects_by_name(game.get_current_floor(), "Player")[0]
         player.control_entity(action)
 
         # If dead drop a body TODO
         if (player.combat_behavior.dead):
             gameover_dashboard.show_dashboard()
 
-        game.map.compute_fov_map(player.x, player.y, radius = 8)
+        game.get_current_floor().game_map.compute_fov_map(player.x, player.y, radius = 8)
 
 
 # Generate game behavior
@@ -95,14 +95,13 @@ def init_game(g):
     player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
-    # Add player to the game
-    add_gameobject_to_game(g, player)
+    # Add player to the game FIXME
+    add_gameobject_to_game(g.get_current_floor(), player)
 
-    # create dungeon
-    dungeon = Dungeon(g,g.map, [])
+    # create dungeon FIXME
+    dungeon = Dungeon(g,g.get_current_floor().game_map, [])
     dungeon.generate_floor = generate_next_floor_global(player, dungeon)
     generate_next_floor(player, dungeon)
-
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)

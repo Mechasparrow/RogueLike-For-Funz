@@ -49,23 +49,23 @@ class Dungeon:
         # generate the dungeon
         self.gen_dungeon()
 
-    # clear the spawns from the dungeon
+    # clear the spawns from the dungeon FIXME
     def clear_dungeon_spawns(self):
 
         for item in (self.pickups + self.hostiles + self.stairs + self.chests):
-            if (item in self.game.objects):
-                remove_gameobject_from_game(self.game, item)
+            if (item in self.game.get_current_floor().objects):
+                remove_gameobject_from_game(self.game.get_current_floor(), item)
 
         self.pickups = []
         self.hostiles = []
         self.stairs = []
         self.chests = []
 
-    # removes dead bodies from dungeon
+    # removes dead bodies from dungeon FIXME
     def remove_dead_bodies(self):
-        for object in (self.game.objects):
+        for object in (self.game.get_current_floor().objects):
             if (object.entity_type == "dead_body"):
-                remove_gameobject_from_game(self.game, object)
+                remove_gameobject_from_game(self.game.get_current_floor(), object)
 
 
     def gen_dungeon(self):
@@ -215,7 +215,8 @@ class Dungeon:
         # Add health pickup
 
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
-        add_gameobject_to_game(self.game, pickup)
+        #FIXME
+        add_gameobject_to_game(self.game.get_current_floor(), pickup)
         self.pickups.append(pickup)
         print("health drop spawned")
 
@@ -235,9 +236,9 @@ class Dungeon:
         # DEBUG give it a dummy item
         dummy_item = Item("trash item")
 
-        # Add the chest
+        # Add the chest FIXME
         chest = Chest(rando_x, rando_y, game = self.game, chest_item = dummy_item)
-        add_gameobject_to_game(self.game, chest)
+        add_gameobject_to_game(self.game.get_current_floor(), chest)
         self.chests.append(chest)
         print ("A chest was spawned")
 
@@ -259,7 +260,8 @@ class Dungeon:
             monster.x = rando_x
             monster.y = rando_y
 
-            add_agent_to_game(self.game, monster)
+            # FIXME
+            add_agent_to_game(self.game.get_current_floor(), monster)
             self.hostiles.append(monster)
 
 
@@ -275,12 +277,13 @@ class Dungeon:
 
                 stairs = Stairs(room_centre_x, room_centre_y, name = "dungeon_stairs", game = self.game, stairs_behavior = self.generate_floor)
 
-                gameobjects_at_point = find_gameobjects_at_point(self.game, room_centre_x, room_centre_y)
+                gameobjects_at_point = find_gameobjects_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)
 
                 # place stair at room center if no other object is there
                 if (len(gameobjects_at_point) == 0):
                     self.stairs.append(stairs)
-                    add_gameobject_to_game(self.game, stairs)
+                    # FIXME
+                    add_gameobject_to_game(self.game.get_current_floor(), stairs)
                     print (str(stairs) + " placed.")
 
 
@@ -290,4 +293,5 @@ class Dungeon:
         for room in self.rooms:
             room.draw_room()
 
-        self.game.map.update_fov_map()
+        # FIXME
+        self.game.get_current_floor().game_map.update_fov_map()

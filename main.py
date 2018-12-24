@@ -50,9 +50,7 @@ def core_logic(game):
 
 # Generates the next floor of the game
 # TODO can optimize and refactor
-def generate_next_floor():
-    global player
-    global dungeon
+def generate_next_floor(player, dungeon):
 
     dungeon.gen_dungeon()
     dungeon.push_dungeon_to_map()
@@ -72,6 +70,14 @@ def generate_next_floor():
 
     print ("Next Floor")
 
+def generate_next_floor_global(player, dungeon):
+
+    def generate_next_floor_factory():
+        generate_next_floor(player, dungeon)
+
+    return generate_next_floor_factory
+
+
 # Initialize the game world + constituents
 def init_game(g):
 
@@ -89,26 +95,14 @@ def init_game(g):
     player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
-    # create dungeon
-    dungeon = Dungeon(g,g.map, [], generate_floor = generate_next_floor)
-    dungeon.push_dungeon_to_map()
-
-    # grab random room to spawn in TODO make into dungeon function
-    random_dungeon_room = dungeon.grab_random_room()
-    (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
-
-    # Put Player in random dungeon
-    player.x = room_centre_x
-    player.y = room_centre_y
-
     # Add player to the game
     add_gameobject_to_game(g, player)
 
-    # Add monsters and pickups to the dungeon
-    dungeon.add_monsters_to_rooms(player)
-    dungeon.add_health_to_rooms(chance = 0.5)
-    dungeon.add_stairs_to_dungeon(chance = 0.3)
-    dungeon.add_chests_to_rooms(chance = 0.5)
+    # create dungeon
+    dungeon = Dungeon(g,g.map, [])
+    dungeon.generate_floor = generate_next_floor_global(player, dungeon)
+    generate_next_floor(player, dungeon)
+
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)

@@ -53,26 +53,61 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
+# TODO Finalize into class 
+def go_floor_up(player, game):
+
+    if (game.current_floor > 1):
+
+        # Update the current floor with the last player position
+        game.get_current_floor().props["past_player_x"] = player.x
+        game.get_current_floor().props["past_player_y"] = player.y
+        game.get_current_floor().objects.remove(player)
+
+        game.current_floor = game.current_floor - 1
+
+        # Take the last player position from upper floor and update player pos
+        game.get_current_floor().objects.append(player)
+        player.x = game.get_current_floor().props["past_player_x"]
+        player.y = game.get_current_floor().props["past_player_y"]
+
+def go_floor_up_factory(player,game):
+    def go_floor_up_general():
+        go_floor_up(player,game)
+
+    return go_floor_up_general
+
+
 # Generates the next floor of the game
 # TODO can optimize and refactor
 def generate_next_floor(player, game):
 
+    game.get_current_floor().props["past_player_x"] = player.x
+    game.get_current_floor().props["past_player_y"] = player.y
     game.get_current_floor().objects.remove(player)
+
+    if ((game.current_floor) == (len(game.floors) - 2)):
+        print ("The floor already EXISTS")
+        game.current_floor += 1
+
+        # Add player back with past player coordinates
+        game.get_current_floor().objects.append(player)
+        player.x = game.get_current_floor().props["past_player_x"]
+        player.y = game.get_current_floor().props["past_player_y"]
+        return
+    else:
+        print ("New floor being generated")
+
     new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [player], game = game)
 
     game.floors.append(new_floor)
     game.current_floor = game.current_floor + 1
 
-    dungeon = Dungeon(game,map = game.get_current_floor().game_map, generate_floor = generate_next_floor_global(player, game))
+    dungeon = Dungeon(game,map = game.get_current_floor().game_map, generate_floor = generate_next_floor_global(player, game), go_upward = go_floor_up_factory(player, game))
     dungeon.push_dungeon_to_map()
 
 
     # DEBUG
     ##
-
-    # TODO remove player from previous floor
-
-    #
 
     # grab random room to spawn in TODO make into dungeon function
     random_dungeon_room = dungeon.grab_random_room()
@@ -86,6 +121,7 @@ def generate_next_floor(player, game):
     dungeon.add_monsters_to_rooms(player)
     dungeon.add_health_to_rooms(chance = 0.5)
     dungeon.add_stairs_to_dungeon(chance = 0.8)
+    dungeon.add_stairs_to_dungeon(chance = 1.0, upward = True)
     dungeon.add_chests_to_rooms(chance = 0.5)
 
     print ("Gen next floor")

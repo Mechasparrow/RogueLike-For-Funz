@@ -13,6 +13,7 @@ class Floor:
         self.width = width
         self.height = height
         self.objects = objects
+        self.props = {}
         self.game_map = GameMap(self.width, self.height, fov = fov)
 
         # Initialize the floor DEBUG

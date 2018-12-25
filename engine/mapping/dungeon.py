@@ -34,11 +34,12 @@ class Dungeon:
     # ref to map
     # list of rooms for dungeon
     # function for generating next floor
-    def __init__(self, game, map, rooms = [], generate_floor = None):
+    def __init__(self, game, map, rooms = [], generate_floor = None, go_upward = None):
         self.game = game
         self.map = map
         self.rooms = rooms
         self.generate_floor = generate_floor
+        self.go_upward = go_upward
         self.gen_dungeon()
 
     def gen_dungeon(self):
@@ -236,7 +237,7 @@ class Dungeon:
 
 
     # add stairs to a random room
-    def add_stairs_to_dungeon(self, chance, one_room = False):
+    def add_stairs_to_dungeon(self, chance, one_room = False, upward = False):
 
         for i in self.rooms:
             chnce = tcod.random_get_int(0, 0, 100)
@@ -247,6 +248,15 @@ class Dungeon:
 
                 stairs = Stairs(room_centre_x, room_centre_y, name = "dungeon_stairs", game = self.game, stairs_behavior = self.generate_floor)
 
+                # Upward version of stairs
+                if (upward):
+                    stairs.color = (255, 153, 204)
+                    stairs.stairs_behavior = self.go_upward
+
+                    # If first floor don't create any upward stairs
+                    if (self.game.current_floor <= 1):
+                        return
+
                 gameobjects_at_point = find_gameobjects_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)
 
                 # place stair at room center if no other object is there
@@ -254,7 +264,6 @@ class Dungeon:
                     # FIXME
                     add_gameobject_to_game(self.game.get_current_floor(), stairs)
                     print (str(stairs) + " placed.")
-
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):

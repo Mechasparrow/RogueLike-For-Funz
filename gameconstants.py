@@ -19,6 +19,6 @@ color_dark_wall = (153, 51, 102)
 color_light_wall = (255, 80, 80)
 
 # Monster colors
-monster_basic_color = (244, 223, 66)
-monster_itermediate_color = (244, 149, 65)
-monster_advanced = (244, 79, 65)
+monster_basic_color = (9, 232, 53)
+monster_itermediate_color = (224, 232, 9)
+monster_advanced = (232, 31, 9)

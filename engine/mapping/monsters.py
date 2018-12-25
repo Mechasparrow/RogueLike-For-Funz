@@ -8,12 +8,15 @@ sys.path.append("..")
 
 # get the monster class
 from engine.hostiles import Monster
+from engine.combat import LevelingSystem
 
 # define some monsters
 # TODO put in JSON config system
-goblin = Monster("Goblin", "G")
-druid = Monster("Druid", "D")
-serpent = Monster("Serpent", "S")
+default_leveling_deltas = LevelingSystem.generate_update_stats_deltas(1,1,1,2)
+
+goblin = Monster("Goblin", "G", leveling_deltas = default_leveling_deltas)
+druid = Monster("Druid", "D", leveling_deltas = default_leveling_deltas)
+serpent = Monster("Serpent", "S", leveling_deltas = default_leveling_deltas)
 
 monsters = {
     "goblin": goblin,

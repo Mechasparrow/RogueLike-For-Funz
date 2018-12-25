@@ -225,9 +225,11 @@ class Dungeon:
             # Add a monter
             monster_values = list(monsters.values())
             rando_monster_blueprint = monster_values[tcod.random_get_int(0, 0, len(monster_values) - 1)]
-            rando_difficulty = ["basic", "intermediary", "advanced"][tcod.random_get_int(0,0,2)]
 
-            monster = rando_monster_blueprint.spawn_instance(rando_difficulty, monster_target)
+            # OBSOLETE
+            #rando_difficulty = ["basic", "intermediary", "advanced"][tcod.random_get_int(0,0,2)]
+
+            monster = rando_monster_blueprint.spawn_instance(self.game.current_floor, monster_target)
             monster.game = self.game
             monster.x = rando_x
             monster.y = rando_y

@@ -53,7 +53,7 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
-# TODO Finalize into class 
+# TODO Finalize into class
 def go_floor_up(player, game):
 
     if (game.current_floor > 1):
@@ -158,7 +158,7 @@ def init_game(g):
     game_turn_handler = GameTurnHandler(g)
 
     # Create the player
-    player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(5, 5, 5, 0))
+    player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(1, 1, 1, 0))
     player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 

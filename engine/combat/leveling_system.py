@@ -35,6 +35,20 @@ class LevelingSystem:
         if (combat_behavior.current_xp >= self.level_up_threshold):
             self.level_up(combat_behavior)
 
+    # updates the combat stats of a combat_behavior if valid
+    def update_combat_stats_by_delta(self, combat_behavior):
+        if (self.update_stat_deltas):
+            deltas = self.update_stat_deltas
+            old_combat_stats = combat_behavior.combat_stats
+            new_combat_stats = CombatStats(max_health = old_combat_stats.max_health + deltas["d_health"], attack = old_combat_stats.attack + deltas["d_attack"], defense = old_combat_stats.defense + deltas["d_defense"], xp_drop = old_combat_stats.xp_drop + deltas["d_xp_drop"])
+            combat_behavior.combat_stats = new_combat_stats
+            print ("combat stats updated!")
+
+    # restores health of combatant if valid option
+    def restore_combatant_health(self, combat_behavior):
+        if (self.restore_health):
+            combat_behavior.current_health = combat_behavior.combat_stats.max_health
+
     # Levels up the combat behavior entity if able to
     def level_up(self, combat_behavior):
         self.level += 1
@@ -43,13 +57,7 @@ class LevelingSystem:
         if (combat_behavior.combat_stats):
 
             # Update the modify the combat stats
-            if (self.update_stat_deltas):
-                deltas = self.update_stat_deltas
-                old_combat_stats = combat_behavior.combat_stats
-                new_combat_stats = CombatStats(max_health = old_combat_stats.max_health + deltas["d_health"], attack = old_combat_stats.attack + deltas["d_attack"], defense = old_combat_stats.defense + deltas["d_defense"], xp_drop = old_combat_stats.xp_drop + deltas["d_xp_drop"])
-                combat_behavior.combat_stats = new_combat_stats
-                print ("combat stats updated!")
+            self.update_combat_stats_by_delta(combat_behavior)
 
             # Restore entity health
-            if (self.restore_health):
-                combat_behavior.current_health = combat_behavior.combat_stats.max_health
+            self.restore_combatant_health(combat_behavior)

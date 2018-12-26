@@ -52,10 +52,6 @@ class CombatBehavior:
         combat_behavior = CombatBehavior(combat_stats = CombatStats(max_health, attack, defense, xp_drop), fighter_name = fighter_name, leveling_system = leveling_system)
         return combat_behavior
 
-    # get the combat stats (Max_Health, Defense, etc)
-    def get_combat_stats(self):
-        return self.combat_stats
-
     # updates the combatants death status
     def die(self):
         if (self.combat_stats.xp_drop):
@@ -76,7 +72,10 @@ class CombatBehavior:
         if ((damage - self.combat_stats.defense) < 0):
             push_message_to_log(self.game,"The attack was ineffective")
         else:
-            self.current_health = self.current_health - (damage - self.combat_stats.defense)
+            damage_recieved = (damage - self.combat_stats.defense)
+            push_message_to_log(self.game, "Hit with " + str(damage_recieved) + " damage")
+            self.current_health = self.current_health - damage_recieved
+            push_message_to_log(self.game, str(self.fighter_name) + " now has " + str(self.current_health) + " left")
 
         if (self.current_health <= 0):
             self.die()

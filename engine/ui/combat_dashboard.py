@@ -19,8 +19,8 @@ class CombatDashboard(DashboardBase):
     # Render stats to the dash console
     def render_stats_to_console(self):
         health = self.combat_behavior.current_health
-        defense = self.combat_behavior.get_combat_stats().defense
-        damage = self.combat_behavior.get_combat_stats().defense
+        defense = self.combat_behavior.combat_stats.defense
+        damage = self.combat_behavior.combat_stats.attack
         current_xp = self.combat_behavior.current_xp
         current_level = self.combat_behavior.leveling_system.level
 

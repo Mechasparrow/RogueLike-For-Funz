@@ -20,7 +20,7 @@ from engine.game import *
 class MonsterAgent(IntelligentAgent):
 
     def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, ai_target = None):
-        IntelligentAgent.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = game)
+        IntelligentAgent.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = game, agent_type = "monster")
 
         # takes in ai target to know what to chase
         self.ai_target = ai_target
@@ -29,6 +29,29 @@ class MonsterAgent(IntelligentAgent):
     def from_gameobject(gameobject, combat_behavior = None):
         gameobject_monster_agent = MonsterAgent(gameobject.x, gameobject.y, gameobject.name, gameobject.chr, gameobject.color, combat_behavior = combat_behavior, game = gameobject.game)
         return gameobject_monster_agent
+
+    def attack_adjacent(self, target):
+        current_position = (self.x, self.y)
+        # Check if adjacent blocks have a gameobject that can be attacked
+        adjacent_positions = [(current_position[0] + 1 , current_position[1]), (current_position[0] - 1, current_position[1]), ( current_position[0], current_position[1] + 1), ( current_position[0], current_position[1] - 1)]
+
+        surrounding_gameobjects = []
+        for adjacent_position in adjacent_positions:
+            # FIXME
+            gameobjects_at_point = find_gameobjects_at_point(self.game.get_current_floor(), adjacent_position[0], adjacent_position[1])
+            surrounding_gameobjects += gameobjects_at_point
+
+        # NOTE ditto of line 76
+        # if there are gameobjects adjacent to the hostile, attack
+        if (len(surrounding_gameobjects) > 0):
+            # Check if any of the surrounding objects are attackable
+            for gameobject in surrounding_gameobjects:
+                if (gameobject == target):
+                    # Dont move there instead attack + make sure it is not a fellow agent (for now)
+                    if (target.combat_behavior and target.entity_type != "Agent"):
+                        target_behavior = target.combat_behavior
+                        self.combat_behavior.attack(target_behavior)
+                        print ("monster_agent.py: attack ajacent")
 
     # pathfinding for monster + attacking TODO
     def ai_behavior(self):
@@ -55,7 +78,7 @@ class MonsterAgent(IntelligentAgent):
         # generate the next x and next y on the path recompute if necessary
         (next_x, next_y) = tcod.path_walk(path, recompute = True)
 
-        # Only move if
+        # Only move if BUG FOUND
         if (next_x and next_y):
             # get the movement values
             dx = next_x - self.x
@@ -70,15 +93,9 @@ class MonsterAgent(IntelligentAgent):
 
             # TODO ignore other monsters
             # dont move if a gameobject is at the next position
-            if (len(gameobjects_at_next_position) > 0):
-                # if a gameobject does exist at the next possition and happens to be one that can be attacked
-                # attack it
-                for gameobject in gameobjects_at_next_position:
-                    if (gameobject == target):
-                        # Dont move there instead attack
-                        if (target.combat_behavior):
-                            target_behavior = target.combat_behavior
-                            self.combat_behavior.attack(target_behavior)
-            else:
+            if not (len(gameobjects_at_next_position) > 0):
                 # if there are no gameobjects at the next position, go ahead and move
                 self.move(dx, dy)
+
+        # Check for adjacent attacks
+        self.attack_adjacent(target)

@@ -156,7 +156,7 @@ def init_game(g):
     # Create the player
     player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(1, 1, 1, 0))
     player_leveling_system.enable_dashboard_logging(g)
-    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
+    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 10, leveling_system = player_leveling_system)
     player_combat.game = g
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
@@ -167,7 +167,7 @@ def init_game(g):
     generate_next_floor(player, g)
 
     # Create UI dashboards
-    player_dashboard = CombatDashboard(1,1, 60, 6, combat_behavior = player_combat)
+    player_dashboard = CombatDashboard(1,1, 80, 6, combat_behavior = player_combat)
 
     # DEBUG floor dashboard
     floor_dashboard = CustomMessageDashboard(1, 6, 80, 2, message = "Current floor: " + str(g.current_floor))

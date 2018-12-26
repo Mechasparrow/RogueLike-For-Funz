@@ -38,8 +38,8 @@ class GameTurnHandler:
 
                 # drop the xp FIXME
                 if (agent.combat_behavior):
-                    if (agent.combat_behavior.get_combat_stats().xp_drop):
-                        dropped_xp = XPDrop(agent.x, agent.y, xp = agent.combat_behavior.get_combat_stats().xp_drop, game = self.game)
+                    if (agent.combat_behavior.combat_stats.xp_drop):
+                        dropped_xp = XPDrop(agent.x, agent.y, xp = agent.combat_behavior.combat_stats.xp_drop, game = self.game)
                         add_gameobject_to_game(self.game.get_current_floor(), dropped_xp)
 
             # AI agent behavior

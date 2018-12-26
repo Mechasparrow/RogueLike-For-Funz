@@ -15,8 +15,9 @@ from engine.gameobjects import Entity, DeadBodyEntity
 # Intelligent agent is sub class of Entities
 class IntelligentAgent(Entity):
 
-    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None):
+    def __init__(self, x, y, name, chr, color, combat_behavior = None, game = None, agent_type = "basic"):
         Entity.__init__(self, x, y, name, chr, color, combat_behavior = combat_behavior, game = game, entity_type = "Agent")
+        self.agent_type = agent_type
 
     # Drops a body at the same location as the agent, preferably when dead.
     def drop_body(self):

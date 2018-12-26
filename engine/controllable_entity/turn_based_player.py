@@ -92,6 +92,8 @@ class TurnBasedPlayer(ControllableEntity):
         # TODO generalize to any gameobject FIXME
         for agent in get_game_agents(self.game.get_current_floor()):
             if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
+                print ("turn_based_player: Attacking...")
+                print (self.combat_behavior.combat_stats.attack)
                 self.combat_behavior.attack(agent.combat_behavior)
 
         # Stair Behavior FIXME

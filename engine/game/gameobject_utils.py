@@ -2,6 +2,8 @@
 # gameobject_utils.py
 # Author: Michael Navazhylau
 
+#NOTE generalize to FloorHandler
+
 # Add a gameobject to the game
 def add_gameobject_to_game(game,gb, bottom = False):
     game.objects.append(gb)
@@ -37,3 +39,9 @@ def find_gameobjects_at_point(game,x, y):
 
     filtered_gameobjects = list(filter(filter_by_point, game.objects))
     return filtered_gameobjects
+
+# returns a boolean as to whether gameobjects exist a point on the map
+def gameobjects_exist_at_point(game, x, y):
+
+    gameobjects = find_gameobjects_at_point(game, x, y)
+    return len(gameobjects) > 0

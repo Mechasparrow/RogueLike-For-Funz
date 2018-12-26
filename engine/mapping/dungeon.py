@@ -190,8 +190,10 @@ class Dungeon:
 
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
         #FIXME
-        add_gameobject_to_game(self.game.get_current_floor(), pickup)
-        print("health drop spawned")
+        #Only spawn a health drop on a tile that does not have anything else on it
+        if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
+            add_gameobject_to_game(self.game.get_current_floor(), pickup)
+            print("health drop spawned")
 
     # add chests to the rooms with a specified chance
     def add_chests_to_rooms(self, chance):
@@ -210,9 +212,12 @@ class Dungeon:
         dummy_item = Item("trash item")
 
         # Add the chest FIXME
+        # Only adds chest to game if it is on a tile that does not have another object on it
         chest = Chest(rando_x, rando_y, game = self.game, chest_item = dummy_item)
-        add_gameobject_to_game(self.game.get_current_floor(), chest)
-        print ("A chest was spawned")
+
+        if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
+            add_gameobject_to_game(self.game.get_current_floor(), chest)
+            print ("A chest was spawned")
 
     # add monsters to a room
     def add_monsters_to_room(self, room, monster_target):
@@ -235,8 +240,9 @@ class Dungeon:
             monster.x = rando_x
             monster.y = rando_y
 
-            # FIXME
-            add_agent_to_game(self.game.get_current_floor(), monster)
+            # FIXME.. Only adds monster to game if it is not on a tile that has something else on it
+            if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
+                add_agent_to_game(self.game.get_current_floor(), monster)
 
 
     # add stairs to a random room
@@ -260,11 +266,8 @@ class Dungeon:
                     if (self.game.current_floor <= 1):
                         return
 
-                gameobjects_at_point = find_gameobjects_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)
-
-                # place stair at room center if no other object is there
-                if (len(gameobjects_at_point) == 0):
-                    # FIXME
+                # place stair at room center if no other object is there FIXME
+                if not (gameobjects_exist_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)):
                     add_gameobject_to_game(self.game.get_current_floor(), stairs)
                     print (str(stairs) + " placed.")
 

@@ -86,7 +86,7 @@ def generate_next_floor(player, game):
     game.get_current_floor().objects.remove(player)
 
     if ((game.current_floor) == (len(game.floors) - 2)):
-        print ("The floor already EXISTS")
+
         game.current_floor += 1
 
         # Add player back with past player coordinates
@@ -94,8 +94,7 @@ def generate_next_floor(player, game):
         player.x = game.get_current_floor().props["past_player_x"]
         player.y = game.get_current_floor().props["past_player_y"]
         return
-    else:
-        print ("New floor being generated")
+    # Then just generate a new floor
 
     new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [player], game = game)
 
@@ -124,15 +123,12 @@ def generate_next_floor(player, game):
     dungeon.add_stairs_to_dungeon(chance = 1.0, upward = True)
     dungeon.add_chests_to_rooms(chance = 0.5)
 
-    print ("Gen next floor")
 
 
     # grab player
     player = None
     if (len(find_gameobjects_by_name(game.get_current_floor(), "Player")) > 0):
         player = find_gameobjects_by_name(game.get_current_floor(), "Player")[0]
-
-    print (new_floor.objects == game.floors[game.current_floor - 1])
 
 
 def generate_next_floor_global(player, game):

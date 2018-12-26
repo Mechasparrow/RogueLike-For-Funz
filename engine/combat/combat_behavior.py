@@ -58,9 +58,8 @@ class CombatBehavior:
 
     # updates the combatants death status
     def die(self):
-        print (self.fighter_name + " was killed")
         if (self.combat_stats.xp_drop):
-            print (self.fighter_name + " dropped " + str(self.combat_stats.xp_drop) + " xp")
+            push_message_to_log(self.game, self.fighter_name + " dropped " + str(self.combat_stats.xp_drop) + " xp")
 
         self.dead = True
 

@@ -21,6 +21,5 @@ class Stairs(Entity):
 
     # Use the stairs
     def use_stairs(self):
-        print ("using the stairs")
         if (self.stairs_behavior):
             self.stairs_behavior()

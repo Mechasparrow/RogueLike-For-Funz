@@ -47,8 +47,6 @@ class Dungeon:
         # Clear the map DEAD to us
         self.rooms = []
         self.map.clear_tiles()
-        print (self.game.current_floor)
-        print ("Floor objects: " + str(len(self.game.get_current_floor().objects)))
 
         # generate dungeon bsp
         map_width =  self.map.width
@@ -86,7 +84,7 @@ class Dungeon:
     def bsp_create_room(self, node):
         padding = 5
         node_rect = Rect(node.x+padding, node.y+padding, node.width-padding, node.height-padding)
-        print (node_rect)
+
         new_room = Room(self.map.tiles, node_rect)
         self.add_room(new_room)
 
@@ -97,9 +95,6 @@ class Dungeon:
             room_centre = room.rect.center()
             if (node.contains(room_centre[0], room_centre[1])):
                 return room
-
-        print ("No room was found")
-        return
 
     # add a room to a dungeon
     def add_room(self, room):
@@ -129,7 +124,6 @@ class Dungeon:
             # Horiz tunnel
         elif (room_a.top_edge() < room_b.bottom_edge() or room_b.top_edge() < room_a.bottom_edge()):
 
-            print ("VERT")
 
             room_a_x = tcod.random_get_int(0,(room_a.left_edge() + 1), room_a.right_edge()) - 1
             room_b_x = tcod.random_get_int(0,(room_b.left_edge() + 1), room_b.right_edge()) - 1
@@ -137,17 +131,16 @@ class Dungeon:
             if (room_a.top_edge() < room_b.bottom_edge()):
                 tunnel_point1 = (room_a_x, room_a.bottom_edge())
                 tunnel_point2 = (room_b_x, room_b.top_edge())
-                print ("a")
+
             else:
                 tunnel_point2 = (room_a_x, room_a.top_edge())
                 tunnel_point1 = (room_b_x, room_b.bottom_edge())
-                print ("b")
+
 
             vert_tunnel = Tunnel(tunnel_point1, tunnel_point2, "v")
             vert_tunnel.draw_tunnel(self.map.tiles)
 
         else:
-            print ("Intersecting")
             # Already connected
             return
 
@@ -193,7 +186,6 @@ class Dungeon:
         #Only spawn a health drop on a tile that does not have anything else on it
         if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
             add_gameobject_to_game(self.game.get_current_floor(), pickup)
-            print("health drop spawned")
 
     # add chests to the rooms with a specified chance
     def add_chests_to_rooms(self, chance):
@@ -217,7 +209,7 @@ class Dungeon:
 
         if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
             add_gameobject_to_game(self.game.get_current_floor(), chest)
-            print ("A chest was spawned")
+
 
     # add monsters to a room
     def add_monsters_to_room(self, room, monster_target):
@@ -269,7 +261,6 @@ class Dungeon:
                 # place stair at room center if no other object is there FIXME
                 if not (gameobjects_exist_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)):
                     add_gameobject_to_game(self.game.get_current_floor(), stairs)
-                    print (str(stairs) + " placed.")
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):

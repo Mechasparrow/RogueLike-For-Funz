@@ -17,6 +17,6 @@ class HealthDrop(BasePickUp):
     def pickup_behavior(self,recieving_entity):
         if (recieving_entity.combat_behavior):
             recieving_entity.combat_behavior.gain_health(self.health)
-            print ("pickup!")
+    
         else:
             return

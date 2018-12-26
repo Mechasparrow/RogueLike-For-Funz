@@ -29,8 +29,7 @@ class Tunnel:
     # Draw a vertical tunnel between two points
     def draw_v_tunnel(self,map):
         dx = (self.point2[0] - self.point1[0])
-        print (dx)
-
+    
         dy = abs(self.point2[1] - self.point1[1])
 
         x = self.point1[0]

@@ -78,7 +78,6 @@ class MonsterAgent(IntelligentAgent):
                         # Dont move there instead attack
                         if (target.combat_behavior):
                             target_behavior = target.combat_behavior
-                            print ("preparing to attack")
                             self.combat_behavior.attack(target_behavior)
             else:
                 # if there are no gameobjects at the next position, go ahead and move

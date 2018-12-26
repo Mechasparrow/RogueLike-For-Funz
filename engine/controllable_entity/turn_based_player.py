@@ -122,7 +122,6 @@ class TurnBasedPlayer(ControllableEntity):
 
         # Let the game now take a turn
         if (turn_taken and self.turn_handler):
-            print ("taking turn")
             self.turn_handler.take_turn()
 
         # Place player back at top of the game console FIXME

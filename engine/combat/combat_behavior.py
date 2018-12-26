@@ -6,6 +6,9 @@
 from .combat_stats import CombatStats
 from .leveling_system import LevelingSystem
 
+# Logging system
+from engine.game import *
+
 # CombastBehavior model
 class CombatBehavior:
 
@@ -17,6 +20,8 @@ class CombatBehavior:
 
     # TODO level up options abstraction
     def __init__(self, combat_stats = None, fighter_name = None, leveling_system = LevelingSystem(), game = None):
+
+        self.game = game
 
         # Fighter name initialization
         if (fighter_name):
@@ -40,6 +45,7 @@ class CombatBehavior:
         # initially the combatant is not dead
         self.dead = False
 
+
     # TODO create more appropiate name
     # creates the combat behavior with combat stats manually supplied
     def create_combat_behavior_manual(max_health, attack, defense, xp_drop = 0, fighter_name = None, leveling_system = LevelingSystem()):
@@ -60,16 +66,16 @@ class CombatBehavior:
 
     # attack another combatant
     def attack(self, target):
-        print (self.fighter_name + " attacked " + target.fighter_name)
+        push_message_to_log(self.game, self.fighter_name + " attacked " + target.fighter_name)
         target.recieve_hit(self.combat_stats.attack)
 
     # recieve a damage
     def recieve_hit(self, damage):
 
-        print (self.fighter_name + " was hit")
+        push_message_to_log(self.game, self.fighter_name + " was hit")
 
         if ((damage - self.combat_stats.defense) < 0):
-            print ("The attack was ineffective")
+            push_message_to_log(self.game,"The attack was ineffective")
         else:
             self.current_health = self.current_health - (damage - self.combat_stats.defense)
 
@@ -79,7 +85,7 @@ class CombatBehavior:
     # gain xp
     def gain_xp(self, xp):
         self.current_xp = self.current_xp + xp
-        print (self.fighter_name + " has gained " + str(xp) + " xp")
+        push_message_to_log(self.game,self.fighter_name + " has gained " + str(xp) + " xp")
 
         # leveling system
         if (self.leveling_system):
@@ -91,4 +97,4 @@ class CombatBehavior:
         if (self.current_health > self.combat_stats.max_health):
             self.current_health = self.combat_stats.max_health
 
-        print (self.fighter_name + " has gained " + str(health) + " health")
+        push_message_to_log(self.game, self.fighter_name + " has gained " + str(health) + " health")

@@ -231,6 +231,7 @@ class Dungeon:
 
             monster = rando_monster_blueprint.spawn_instance(self.game.current_floor, monster_target)
             monster.game = self.game
+            monster.combat_behavior.game = self.game
             monster.x = rando_x
             monster.y = rando_y
 

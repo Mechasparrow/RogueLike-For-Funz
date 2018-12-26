@@ -20,7 +20,9 @@ def find_dashboard_by_type(game, type):
     return filtered_dashboard
 
 def push_message_to_log(game, message):
-
+    if (game == None):
+        return
+        
     message_boards = find_dashboard_by_type(game, type = "log")
 
     if (len(message_boards) > 0):

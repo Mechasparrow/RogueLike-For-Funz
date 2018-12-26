@@ -159,7 +159,9 @@ def init_game(g):
 
     # Create the player
     player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(1, 1, 1, 0))
+    player_leveling_system.enable_dashboard_logging(g)
     player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 20, leveling_system = player_leveling_system)
+    player_combat.game = g
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
     # Add player to the game FIXME

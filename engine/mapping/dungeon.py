@@ -27,6 +27,9 @@ from engine.pickups import *
 # Monsters to spawn
 from .monsters import monsters
 
+#Spawn stats
+from .dungeon_spawn_stats import DungeonSpawnStats
+
 class Dungeon:
 
     # params
@@ -34,13 +37,19 @@ class Dungeon:
     # ref to map
     # list of rooms for dungeon
     # function for generating next floor
-    def __init__(self, floor, rooms = [], generate_floor = None, go_upward = None, game = None):
+    def __init__(self, floor, rooms = [], dungeon_spawn_rates = None, generate_floor = None, go_upward = None, game = None):
         self.game = game
         self.floor = floor
         self.map = self.floor.game_map
         self.rooms = rooms
         self.generate_floor = generate_floor
         self.go_upward = go_upward
+
+        if (dungeon_spawn_rates is None):
+            self.dungeon_spawn_rates = DungeonSpawnStats()
+        else:
+            self.dungeon_spawn_rates = dungeon_spawn_rates
+
         self.gen_dungeon()
 
     def gen_dungeon(self):
@@ -162,10 +171,10 @@ class Dungeon:
         return random_room
 
     # add monsters to all the rooms
-    def add_monsters_to_rooms(self, monster_target):
+    def add_monsters_to_rooms(self, monster_target, monster_cnt):
 
         for room in self.rooms:
-            self.add_monsters_to_room(room, monster_target)
+            self.add_monsters_to_room(room, monster_target, monster_cnt)
 
     # add health pickups to the rooms with a specified chance
     def add_health_to_rooms(self, chance):
@@ -213,8 +222,7 @@ class Dungeon:
 
 
     # add monsters to a room
-    def add_monsters_to_room(self, room, monster_target):
-        monster_cnt = 2
+    def add_monsters_to_room(self, room, monster_target, monster_cnt):
 
         for i in range(0, monster_cnt):
             rando_x = tcod.random_get_int(0, room.rect.x, room.rect.x + room.rect.w - 1)
@@ -236,6 +244,7 @@ class Dungeon:
             # Only adds monster to game if it is not on a tile that has something else on it
             if not (gameobjects_exist_at_point(self.floor, rando_x, rando_y)):
                 add_agent_to_floor(self.floor, monster)
+                print ("spawned!")
 
 
     # add stairs to a random room
@@ -262,6 +271,17 @@ class Dungeon:
                 # place stair at room center if no other object is there
                 if not (gameobjects_exist_at_point(self.floor, room_centre_x, room_centre_y)):
                     add_gameobject_to_floor(self.floor, stairs)
+
+    def add_spawns_to_dungeon(self, monster_target = None):
+
+        if (monster_target != None):
+            self.add_monsters_to_rooms(monster_target, monster_cnt = self.dungeon_spawn_rates.monsters_per_room)
+
+        self.add_health_to_rooms(self.dungeon_spawn_rates.health_chance)
+        self.add_stairs_to_dungeon(self.dungeon_spawn_rates.stairs_chance)
+        self.add_stairs_to_dungeon(self.dungeon_spawn_rates.upward_stairs_chance, upward = True)
+        self.add_chests_to_rooms(self.dungeon_spawn_rates.chest_spawn_chance)
+
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):

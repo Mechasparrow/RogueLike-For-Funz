@@ -10,3 +10,4 @@ from . import controllable_entity
 from . import combat
 from . import items
 from . import inventory
+from . import floors

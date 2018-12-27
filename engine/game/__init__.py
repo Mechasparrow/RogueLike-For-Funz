@@ -5,5 +5,3 @@ from .input_utils import *
 from .game_turn_handler import GameTurnHandler
 from .game import Game
 from .input_handler import InputHandler
-from .floor import Floor
-from .floor_manager import FloorManager

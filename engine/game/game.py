@@ -13,8 +13,8 @@ sys.path.append("..")
 from .dashboard_utils import *
 
 # Floor gen
-from .floor import Floor
-from .floor_manager import FloorManager
+from engine.floors import Floor
+from engine.floors import FloorManager
 
 # Map
 from engine.mapping.game_map import GameMap
@@ -61,8 +61,7 @@ class Game:
         # Floor handling DEBUG bring into own handler class
         if (floor_manager is None):
             self.floor_manager = FloorManager((self.window_width * 3) // 4, self.window_height, game = self)
-            self.floor_manager.add_empty_floor()
-            self.floor_manager.goto_next_floor()
+
 
         # Dashboards
         self.dashboards = []

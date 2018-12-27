@@ -19,6 +19,7 @@ from engine.ui import *
 from engine.mapping import *
 from engine.combat import *
 from engine.controllable_entity import *
+from engine.floors import DungeonFloorManager
 
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
@@ -53,94 +54,6 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
-# TODO Finalize into class
-def go_floor_up(player, game):
-
-    if (game.floor_manager.current_floor_number > 1):
-
-        # Update the current floor with the last player position
-        game.floor_manager.get_current_floor().props["past_player_x"] = player.x
-        game.floor_manager.get_current_floor().props["past_player_y"] = player.y
-        game.floor_manager.get_current_floor().objects.remove(player)
-
-        # Go up a floor
-        game.floor_manager.current_floor_number = game.current_floor_number - 1
-
-        # Take the last player position from upper floor and update player pos
-        game.floor_manager.get_current_floor().objects.append(player)
-        player.x = game.floor_manager.get_current_floor().props["past_player_x"]
-        player.y = game.floor_manager.get_current_floor().props["past_player_y"]
-
-def go_floor_up_factory(player,game):
-    def go_floor_up_general():
-        go_floor_up(player,game)
-
-    return go_floor_up_general
-
-
-# Generates the next floor of the game
-# TODO can optimize and refactor
-def generate_next_floor(player, game):
-
-    game.floor_manager.get_current_floor().props["past_player_x"] = player.x
-    game.floor_manager.get_current_floor().props["past_player_y"] = player.y
-    game.floor_manager.get_current_floor().objects.remove(player)
-
-    if ((game.floor_manager.current_floor_number) == (len(game.floor_manager.floors) - 2)):
-
-        game.floor_manager.current_floor_number += 1
-
-        # Add player back with past player coordinates
-        game.floor_manager.get_current_floor().objects.append(player)
-        player.x = game.floor_manager.get_current_floor().props["past_player_x"]
-        player.y = game.floor_manager.get_current_floor().props["past_player_y"]
-        return
-    # Then just generate a new floor
-
-    new_floor = game.floor_manager.gen_empty_floor()
-    new_floor.objects = [player]
-
-    game.floor_manager.add_floor(new_floor)
-    game.floor_manager.goto_next_floor()
-
-    dungeon = Dungeon(floor = game.floor_manager.get_current_floor(), generate_floor = generate_next_floor_global(player, game), go_upward = go_floor_up_factory(player, game), game = game)
-    dungeon.push_dungeon_to_map()
-
-
-    # DEBUG
-    ##
-
-    # grab random room to spawn in TODO make into dungeon function
-    random_dungeon_room = dungeon.grab_random_room()
-    (room_centre_x, room_centre_y) = random_dungeon_room.rect.center()
-
-    # Put Player in random dungeon
-    player.x = room_centre_x
-    player.y = room_centre_y
-
-    # BUG does not work after first floor
-    dungeon.add_monsters_to_rooms(player)
-    dungeon.add_health_to_rooms(chance = 0.5)
-    dungeon.add_stairs_to_dungeon(chance = 0.8)
-    dungeon.add_stairs_to_dungeon(chance = 1.0, upward = True)
-    dungeon.add_chests_to_rooms(chance = 0.5)
-
-
-
-    # grab player
-    player = None
-    if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0):
-        player = find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")[0]
-
-
-def generate_next_floor_global(player, game):
-
-    def generate_next_floor_factory():
-        generate_next_floor(player, game)
-
-    return generate_next_floor_factory
-
-
 # Initialize the game world + constituents
 def init_game(g):
 
@@ -162,11 +75,15 @@ def init_game(g):
     player_combat.game = g
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
-    # Add player to the game
-    add_gameobject_to_floor(g.floor_manager.get_current_floor(), player)
+    # spawn rates for dungeon
+    dungeon_spawn_rates = DungeonSpawnStats(monsters_per_room = 3, health_chance = 0.5, stairs_chance = 0.4, upward_stairs_chance = 0.4, chest_spawn_chance = 0.5)
 
     # create dungeon
-    generate_next_floor(player, g)
+    dungeon_floor_manager = DungeonFloorManager(g.floor_manager.floor_width, g.floor_manager.floor_height, floors = g.floor_manager.floors, main_entity = player, dungeon_spawn_stats = dungeon_spawn_rates, game = g)
+    g.floor_manager = dungeon_floor_manager
+
+    # generate the next floor
+    g.floor_manager.generate_and_go_to_next_floor()
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 80, 6, combat_behavior = player_combat)

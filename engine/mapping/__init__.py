@@ -1,4 +1,5 @@
 from .dungeon import Dungeon
+from .dungeon_spawn_stats import DungeonSpawnStats
 from .game_map import GameMap
 from .rect import Rect
 from .room import Room

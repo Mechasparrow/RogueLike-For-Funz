@@ -28,6 +28,8 @@ class FloorManager:
         # If no floors specified, set it to empty
         if floors is None:
             self.floors = []
+        else:
+            self.floors = floors
 
         self.current_floor_number = 0
 
@@ -69,28 +71,39 @@ class FloorManager:
         '''
         Goes to the next floor
         and runs any additional code (callback)
+        callback must have a current floor and previous floor parameter
         '''
 
-        #if (self.current_floor_number )
+        # if we are on the last floor then there is no next floor to go to
+        if (len(self.floors) == self.current_floor_number):
+            return None
 
+        previous_floor = self.get_current_floor()
         self.current_floor_number += 1
-
+        current_floor = self.get_current_floor()
 
         # If callback exists, run it
         if (callback):
-            callback()
+            callback(current_floor, previous_floor)
 
     def goto_previous_floor(self, callback = None):
         '''
         Goes to the previous floor
         and runs any additional code (callback)
+        callback must have a current floor and previous floor parameter
         '''
 
+        # If we are on the last floor, there is no previous floor to go to
+        if (self.current_floor_number <= 1):
+            return None
+
+        previous_floor = self.get_current_floor()
         self.current_floor_number -= 1
+        current_floor = self.get_current_floor()
 
         # If callback exists, run it
         if (callback):
-            callback()
+            callback(current_floor, previous_floor)
 
     def get_current_floor(self):
         '''
@@ -108,5 +121,3 @@ class FloorManager:
         '''
 
         return len(self.floors)
-
-    # TODO shift floor gen over here... (dungeon)

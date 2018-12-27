@@ -22,16 +22,16 @@ from engine.controllable_entity import *
 
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
-    # Grab the player object FIXME
-    if (len(find_gameobjects_by_name(game.get_current_floor(), "Player")) > 0):
-        player = find_gameobjects_by_name(game.get_current_floor(), "Player")[0]
+    # Grab the player object
+    if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0):
+        player = find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")[0]
         player.control_entity(action)
 
         # If dead drop a body TODO
         if (player.combat_behavior.dead):
             gameover_dashboard.show_dashboard()
 
-        game.get_current_floor().game_map.compute_fov_map(player.x, player.y, radius = 8)
+        game.floor_manager.get_current_floor().game_map.compute_fov_map(player.x, player.y, radius = 8)
 
 
 # Generate game behavior
@@ -48,7 +48,7 @@ def core_logic(game):
     global floor_dashboard
 
     # DEBUG update floor number
-    floor_dashboard.set_message("Current floor: " + str(game.current_floor))
+    floor_dashboard.set_message("Current floor: " + str(game.floor_manager.current_floor_number))
 
     # handle the game inputs
     handle_inputs(game)
@@ -56,19 +56,20 @@ def core_logic(game):
 # TODO Finalize into class
 def go_floor_up(player, game):
 
-    if (game.current_floor > 1):
+    if (game.floor_manager.current_floor_number > 1):
 
         # Update the current floor with the last player position
-        game.get_current_floor().props["past_player_x"] = player.x
-        game.get_current_floor().props["past_player_y"] = player.y
-        game.get_current_floor().objects.remove(player)
+        game.floor_manager.get_current_floor().props["past_player_x"] = player.x
+        game.floor_manager.get_current_floor().props["past_player_y"] = player.y
+        game.floor_manager.get_current_floor().objects.remove(player)
 
-        game.current_floor = game.current_floor - 1
+        # Go up a floor
+        game.floor_manager.current_floor_number = game.current_floor_number - 1
 
         # Take the last player position from upper floor and update player pos
-        game.get_current_floor().objects.append(player)
-        player.x = game.get_current_floor().props["past_player_x"]
-        player.y = game.get_current_floor().props["past_player_y"]
+        game.floor_manager.get_current_floor().objects.append(player)
+        player.x = game.floor_manager.get_current_floor().props["past_player_x"]
+        player.y = game.floor_manager.get_current_floor().props["past_player_y"]
 
 def go_floor_up_factory(player,game):
     def go_floor_up_general():
@@ -81,27 +82,28 @@ def go_floor_up_factory(player,game):
 # TODO can optimize and refactor
 def generate_next_floor(player, game):
 
-    game.get_current_floor().props["past_player_x"] = player.x
-    game.get_current_floor().props["past_player_y"] = player.y
-    game.get_current_floor().objects.remove(player)
+    game.floor_manager.get_current_floor().props["past_player_x"] = player.x
+    game.floor_manager.get_current_floor().props["past_player_y"] = player.y
+    game.floor_manager.get_current_floor().objects.remove(player)
 
-    if ((game.current_floor) == (len(game.floors) - 2)):
+    if ((game.floor_manager.current_floor_number) == (len(game.floor_manager.floors) - 2)):
 
-        game.current_floor += 1
+        game.floor_manager.current_floor_number += 1
 
         # Add player back with past player coordinates
-        game.get_current_floor().objects.append(player)
-        player.x = game.get_current_floor().props["past_player_x"]
-        player.y = game.get_current_floor().props["past_player_y"]
+        game.floor_manager.get_current_floor().objects.append(player)
+        player.x = game.floor_manager.get_current_floor().props["past_player_x"]
+        player.y = game.floor_manager.get_current_floor().props["past_player_y"]
         return
     # Then just generate a new floor
 
-    new_floor = Floor((game.window_width * 3) // 4, game.window_height, objects = [player], game = game)
+    new_floor = game.floor_manager.gen_empty_floor()
+    new_floor.objects = [player]
 
-    game.floors.append(new_floor)
-    game.current_floor = game.current_floor + 1
+    game.floor_manager.add_floor(new_floor)
+    game.floor_manager.goto_next_floor()
 
-    dungeon = Dungeon(game,map = game.get_current_floor().game_map, generate_floor = generate_next_floor_global(player, game), go_upward = go_floor_up_factory(player, game))
+    dungeon = Dungeon(floor = game.floor_manager.get_current_floor(), generate_floor = generate_next_floor_global(player, game), go_upward = go_floor_up_factory(player, game), game = game)
     dungeon.push_dungeon_to_map()
 
 
@@ -127,8 +129,8 @@ def generate_next_floor(player, game):
 
     # grab player
     player = None
-    if (len(find_gameobjects_by_name(game.get_current_floor(), "Player")) > 0):
-        player = find_gameobjects_by_name(game.get_current_floor(), "Player")[0]
+    if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0):
+        player = find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")[0]
 
 
 def generate_next_floor_global(player, game):
@@ -160,17 +162,17 @@ def init_game(g):
     player_combat.game = g
     player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
 
-    # Add player to the game FIXME
-    add_gameobject_to_game(g.get_current_floor(), player)
+    # Add player to the game
+    add_gameobject_to_floor(g.floor_manager.get_current_floor(), player)
 
-    # create dungeon FIXME
+    # create dungeon
     generate_next_floor(player, g)
 
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 80, 6, combat_behavior = player_combat)
 
     # DEBUG floor dashboard
-    floor_dashboard = CustomMessageDashboard(1, 6, 80, 2, message = "Current floor: " + str(g.current_floor))
+    floor_dashboard = CustomMessageDashboard(1, 6, 80, 2, message = "Current floor: " + str(g.floor_manager.current_floor_number))
 
     gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
     gameover_dashboard.hide_dashboard()

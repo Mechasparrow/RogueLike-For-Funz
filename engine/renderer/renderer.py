@@ -27,11 +27,11 @@ class Renderer:
         # Render the dashboards
         render_dashboards(self.console, self.game.dashboards)
 
-        # Render the gameobjects FIXME
-        render_gameobjects(self.console, self.game.get_current_floor().objects, self.game.get_current_floor().game_map.fov_map)
+        # Render the gameobjects
+        render_gameobjects(self.console, self.game.floor_manager.get_current_floor().objects, self.game.floor_manager.get_current_floor().game_map.fov_map)
 
-        # Rendering the map FIXME
-        render_map(self.console, self.game.get_current_floor().game_map)
+        # Rendering the map
+        render_map(self.console, self.game.floor_manager.get_current_floor().game_map)
 
     # Update the root game console
     def update_console(self):
@@ -42,8 +42,8 @@ class Renderer:
             #clear dashboards
             clear_dashboards(self.console, self.game.dashboards)
 
-            # clear gameobjects FIXME
-            clear_gameobjects(self.console, self.game.get_current_floor().objects)
+            # clear gameobjects
+            clear_gameobjects(self.console, self.game.floor_manager.get_current_floor().objects)
 
-            # Clearing the map FIXME
-            clear_map(self.console, self.game.get_current_floor().game_map)
+            # Clearing the map
+            clear_map(self.console, self.game.floor_manager.get_current_floor().game_map)

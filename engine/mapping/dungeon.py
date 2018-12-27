@@ -34,9 +34,10 @@ class Dungeon:
     # ref to map
     # list of rooms for dungeon
     # function for generating next floor
-    def __init__(self, game, map, rooms = [], generate_floor = None, go_upward = None):
+    def __init__(self, floor, rooms = [], generate_floor = None, go_upward = None, game = None):
         self.game = game
-        self.map = map
+        self.floor = floor
+        self.map = self.floor.game_map
         self.rooms = rooms
         self.generate_floor = generate_floor
         self.go_upward = go_upward
@@ -182,10 +183,10 @@ class Dungeon:
         # Add health pickup
 
         pickup = HealthDrop(rando_x, rando_y, 10, game = self.game)
-        #FIXME
+
         #Only spawn a health drop on a tile that does not have anything else on it
-        if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
-            add_gameobject_to_game(self.game.get_current_floor(), pickup)
+        if not (gameobjects_exist_at_point(self.floor, rando_x, rando_y)):
+            add_gameobject_to_floor(self.floor, pickup)
 
     # add chests to the rooms with a specified chance
     def add_chests_to_rooms(self, chance):
@@ -203,12 +204,12 @@ class Dungeon:
         # DEBUG give it a dummy item
         dummy_item = Item("trash item")
 
-        # Add the chest FIXME
+        # Add the chest
         # Only adds chest to game if it is on a tile that does not have another object on it
         chest = Chest(rando_x, rando_y, game = self.game, chest_item = dummy_item)
 
-        if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
-            add_gameobject_to_game(self.game.get_current_floor(), chest)
+        if not (gameobjects_exist_at_point(self.floor, rando_x, rando_y)):
+            add_gameobject_to_floor(self.floor, chest)
 
 
     # add monsters to a room
@@ -226,15 +227,15 @@ class Dungeon:
             # OBSOLETE
             #rando_difficulty = ["basic", "intermediary", "advanced"][tcod.random_get_int(0,0,2)]
 
-            monster = rando_monster_blueprint.spawn_instance(self.game.current_floor, monster_target)
+            monster = rando_monster_blueprint.spawn_instance(self.game.floor_manager.current_floor_number, monster_target)
             monster.game = self.game
             monster.combat_behavior.game = self.game
             monster.x = rando_x
             monster.y = rando_y
 
-            # FIXME.. Only adds monster to game if it is not on a tile that has something else on it
-            if not (gameobjects_exist_at_point(self.game.get_current_floor(), rando_x, rando_y)):
-                add_agent_to_game(self.game.get_current_floor(), monster)
+            # Only adds monster to game if it is not on a tile that has something else on it
+            if not (gameobjects_exist_at_point(self.floor, rando_x, rando_y)):
+                add_agent_to_floor(self.floor, monster)
 
 
     # add stairs to a random room
@@ -255,12 +256,12 @@ class Dungeon:
                     stairs.stairs_behavior = self.go_upward
 
                     # If first floor don't create any upward stairs
-                    if (self.game.current_floor <= 1):
+                    if (self.game.floor_manager.current_floor_number <= 1):
                         return
 
-                # place stair at room center if no other object is there FIXME
-                if not (gameobjects_exist_at_point(self.game.get_current_floor(), room_centre_x, room_centre_y)):
-                    add_gameobject_to_game(self.game.get_current_floor(), stairs)
+                # place stair at room center if no other object is there
+                if not (gameobjects_exist_at_point(self.floor, room_centre_x, room_centre_y)):
+                    add_gameobject_to_floor(self.floor, stairs)
 
     # push the dungeon to the game map
     def push_dungeon_to_map(self):
@@ -268,5 +269,4 @@ class Dungeon:
         for room in self.rooms:
             room.draw_room()
 
-        # FIXME
-        self.game.get_current_floor().game_map.update_fov_map()
+        self.map.update_fov_map()

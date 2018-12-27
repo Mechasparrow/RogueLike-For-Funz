@@ -31,12 +31,12 @@ class TurnBasedPlayer(ControllableEntity):
     # controls the entity based on the actions passed to it
     def control_entity(self, action, callback = None):
 
-        # if the player is dead remove itself and spawn a dead body in its place FIXME
+        # if the player is dead remove itself and spawn a dead body in its place
         if (self.combat_behavior.dead):
             player = self
             dead_player = player.drop_body()
-            remove_gameobject_from_game(self.game.get_current_floor(), player)
-            add_gameobject_to_game(self.game.get_current_floor(), dead_player)
+            remove_gameobject_from_floor(self.game.floor_manager.get_current_floor(), player)
+            add_gameobject_to_floor(self.game.floor_manager.get_current_floor(), dead_player)
 
         # if player dead or no action taken dont do anything else
         if (self.combat_behavior.dead or (action not in self.get_actions_available())):
@@ -70,9 +70,9 @@ class TurnBasedPlayer(ControllableEntity):
 
         # Limiting behavior
         # Can't move if another gameobject is in the way
-        # But if its dead or a pickup, then yeah, we can move FIXME
+        # But if its dead or a pickup, then yeah, we can move
         safe_to_move = True
-        for object in self.game.get_current_floor().objects:
+        for object in self.game.floor_manager.get_current_floor().objects:
             if (object.x == potential_x and object.y == potential_y):
                 safe_to_move = False
 
@@ -89,31 +89,31 @@ class TurnBasedPlayer(ControllableEntity):
             self.move(dx, dy)
 
         # Attack Behavior
-        # TODO generalize to any gameobject FIXME
-        for agent in get_game_agents(self.game.get_current_floor()):
+        # TODO generalize to any gameobject
+        for agent in get_game_agents(self.game.floor_manager.get_current_floor()):
             if (agent.x == potential_x and agent.y == potential_y and not agent.combat_behavior.dead):
                 print ("turn_based_player: Attacking...")
                 print (self.combat_behavior.combat_stats.attack)
                 self.combat_behavior.attack(agent.combat_behavior)
 
-        # Stair Behavior FIXME
-        for object in self.game.get_current_floor().objects:
+        # Stair Behavior
+        for object in self.game.floor_manager.get_current_floor().objects:
             if (object.entity_type == "stairs" and object.x == potential_x and object.y == potential_y):
                 stairs = object
                 stairs.use_stairs()
 
         # Pickup behavior
-        # If the gameobject at the next position is a pickup, pick it up FIXME
-        for gameobject in self.game.get_current_floor().objects:
+        # If the gameobject at the next position is a pickup, pick it up
+        for gameobject in self.game.floor_manager.get_current_floor().objects:
             if (gameobject.x == potential_x and gameobject.y == potential_y):
                 if (gameobject.entity_type == "pickup"):
                     pickup = gameobject
                     pickup.pickup_behavior(self)
-                    remove_gameobject_from_game(self.game.get_current_floor(), pickup)
+                    remove_gameobject_from_floor(self.game.floor_manager.get_current_floor(), pickup)
 
         # Chest behavior
-        # If the gameobject at the next position is a pickup, pick it up FIXME
-        for gameobject in self.game.get_current_floor().objects:
+        # If the gameobject at the next position is a pickup, pick it up
+        for gameobject in self.game.floor_manager.get_current_floor().objects:
             if (gameobject.x == potential_x and gameobject.y == potential_y):
                 if (gameobject.entity_type == "chest"):
                     chest = gameobject
@@ -126,8 +126,8 @@ class TurnBasedPlayer(ControllableEntity):
         if (turn_taken and self.turn_handler):
             self.turn_handler.take_turn()
 
-        # Place player back at top of the game console FIXME
-        if self in self.game.get_current_floor().objects:
+        # Place player back at top of the game console
+        if self in self.game.floor_manager.get_current_floor().objects:
             player = self
-            remove_gameobject_from_game(self.game.get_current_floor(), player)
-            add_gameobject_to_game(self.game.get_current_floor(), player)
+            remove_gameobject_from_floor(self.game.floor_manager.get_current_floor(), player)
+            add_gameobject_to_floor(self.game.floor_manager.get_current_floor(), player)

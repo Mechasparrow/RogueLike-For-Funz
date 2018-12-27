@@ -6,11 +6,11 @@
 from .gameobject_utils import *
 
 # Add a agent entity to the game
-def add_agent_to_game(game, agent):
-    add_gameobject_to_game(game, agent)
+def add_agent_to_floor(floor, agent):
+    add_gameobject_to_floor(floor, agent)
 
 # Retrieve all agent entities from the game
-def get_game_agents(game):
+def get_game_agents(floor):
 
     def filter_agents(object):
         if (object.type == "Entity"):
@@ -19,6 +19,6 @@ def get_game_agents(game):
         else:
             return False
 
-    filtered_agents = list(filter(filter_agents, game.objects))
+    filtered_agents = list(filter(filter_agents, floor.objects))
 
     return filtered_agents

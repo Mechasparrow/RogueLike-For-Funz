@@ -14,6 +14,7 @@ from .dashboard_utils import *
 
 # Floor gen
 from .floor import Floor
+from .floor_manager import FloorManager
 
 # Map
 from engine.mapping.game_map import GameMap
@@ -24,12 +25,13 @@ from engine.renderer import Renderer
 # UI
 from engine.ui import LogDashboard
 
+
 class Game:
 
     # params
     # name of game, width of console window, height of console window, game font, game fps
 
-    def __init__(self, game_name, window_width, window_height, font, fps = None, message_log = True):
+    def __init__(self, game_name, window_width, window_height, font, fps = None, floor_manager = None, message_log = True):
         # Game console props
         self.game_name = game_name
         self.window_width = window_width
@@ -57,9 +59,10 @@ class Game:
         self.props = {}
 
         # Floor handling DEBUG bring into own handler class
-        self.floors = []
-        self.floors.append(Floor((self.window_width * 3) // 4, self.window_height, objects = [], game = self))
-        self.current_floor = 0
+        if (floor_manager is None):
+            self.floor_manager = FloorManager((self.window_width * 3) // 4, self.window_height, game = self)
+            self.floor_manager.add_empty_floor()
+            self.floor_manager.goto_next_floor()
 
         # Dashboards
         self.dashboards = []
@@ -77,10 +80,6 @@ class Game:
 
         #Renderer
         self.game_renderer = Renderer(game = self)
-
-    # DEBUG get current floor ... put into util or handler
-    def get_current_floor(self):
-        return self.floors[self.current_floor]
 
     # Start the main game loop
     def start_loop(self, logic):

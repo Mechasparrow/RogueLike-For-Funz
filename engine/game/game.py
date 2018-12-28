@@ -31,7 +31,7 @@ class Game:
     # params
     # name of game, width of console window, height of console window, game font, game fps
 
-    def __init__(self, game_name, window_width, window_height, font, fps = None, floor_manager = None, message_log = True):
+    def __init__(self, game_name, window_width, window_height, font, fps = None, floor_manager = None, main_menu = None, message_log = True):
         # Game console props
         self.game_name = game_name
         self.window_width = window_width
@@ -52,8 +52,13 @@ class Game:
         # Initialize root console
         self.root_console = tcod.console_init_root(self.window_width, self.window_height, self.game_name)
 
+        # Initialize the main menu
+        self.main_menu = main_menu
+        if (self.main_menu):
+            self.main_menu.game = self
+
         # Initially game is not running
-        self.running = False
+        self.game_state = "not_running"
 
         # Additional props
         self.props = {}
@@ -83,10 +88,13 @@ class Game:
     # Start the main game loop
     def start_loop(self, logic):
         # set the game to be running
-        self.running = True
+        if (self.main_menu):
+            self.game_state = "in_menu"
+        else:
+            self.game_state = "playing"
 
         # game loop
-        while(self.running):
+        while(self.game_state != "not_running"):
             # game logic
             logic(self)
 
@@ -94,11 +102,16 @@ class Game:
             # run through all the input handlers
 
             # Render
-            self.game_renderer.render_all()
-            self.game_renderer.update_console()
-            self.game_renderer.clear_all()
-
+            if (self.game_state == "playing"):
+                self.game_renderer.render_all()
+                self.game_renderer.update_console()
+                self.game_renderer.clear_all()
+            elif (self.game_state == "in_menu"):
+                # TODO implement me
+                self.game_renderer.render_menu(self.main_menu)
+                self.game_renderer.update_console()
+                tcod.console_clear(self.root_console)
 
     # Stop the game loop
     def stop_loop(self):
-        self.running = False
+        self.game_state = "not_running"

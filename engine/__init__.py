@@ -11,3 +11,4 @@ from . import combat
 from . import items
 from . import inventory
 from . import floors
+from . import menu

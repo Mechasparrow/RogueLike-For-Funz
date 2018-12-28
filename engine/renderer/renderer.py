@@ -9,6 +9,7 @@ import tcod
 from .gameobject_renderer import *
 from .map_renderer import *
 from .dashboard_renderer import *
+from .menu_renderer import *
 
 class Renderer:
 
@@ -20,6 +21,9 @@ class Renderer:
 
         self.game = game
 
+    # Renders a menu system onto the screen
+    def render_menu(self, menu_system):
+        render_menu_system(self.console, menu_system)
     # Render everything to the root game console
     def render_all(self):
 

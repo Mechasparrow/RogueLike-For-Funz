@@ -244,7 +244,6 @@ class Dungeon:
             # Only adds monster to game if it is not on a tile that has something else on it
             if not (gameobjects_exist_at_point(self.floor, rando_x, rando_y)):
                 add_agent_to_floor(self.floor, monster)
-                print ("spawned!")
 
 
     # add stairs to a random room

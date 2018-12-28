@@ -20,6 +20,7 @@ from engine.mapping import *
 from engine.combat import *
 from engine.controllable_entity import *
 from engine.floors import DungeonFloorManager
+from engine.menu import *
 
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
@@ -102,6 +103,16 @@ def init_game(g):
 
     # input handlers
 
+    ## Menu input handler
+    # TODO temporary
+    menu_key_actions = {
+        "menu_up": UP_KEY,
+        "menu_down": DOWN_KEY,
+        "menu_select": ENTER_KEY
+    }
+    menu_input_handler = InputHandler(g, menu_key_actions)
+    menu_input_handler.add_behavior(g.main_menu.handle_menu_interaction)
+
     ## player input handler
     player_key_actions = {
         "up": UP_KEY,
@@ -122,6 +133,7 @@ def init_game(g):
     # Add input handlers to the game
     add_input_handler(g, player_input_handler)
     add_input_handler(g, general_game_input_handler)
+    add_input_handler(g, menu_input_handler)
 
 
 def run():
@@ -129,8 +141,24 @@ def run():
     # create game font
     game_font = Font(FONT, FONT_FLAGS)
 
+
+    # menu functions
+    # TODO put somewhere else
+    def start_game(game):
+        game.game_state = "playing"
+
+    def exit_game(game):
+        game.stop_loop()
+
+
+    # create the main menu for the game
+    main_menu_items = [MenuItem(text="Start Game", menu_action = start_game), MenuItem(text="Exit", menu_action = exit_game)]
+    main_menu = MenuSystem(SCREEN_WIDTH, SCREEN_HEIGHT)
+    main_menu.selected_menu_screen.menu_options = main_menu_items
+    main_menu.selected_menu_screen.set_selected_option(main_menu_items[0])
+
     # create game console with props
-    g = Game(TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, game_font, fps=GAME_FPS)
+    g = Game(TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, game_font, fps=GAME_FPS, main_menu=main_menu)
 
     # initialize the game (generate dungeon, create player, etc)
     init_game(g)

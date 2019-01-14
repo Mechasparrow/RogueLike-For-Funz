@@ -8,10 +8,14 @@
 import tcod
 import time
 import copy
+import sys
 
 # Import constants
 from gameconstants import *
 from keycodes import *
+
+#pickle
+import pickle
 
 # Import Game engine
 from engine.game import *
@@ -59,8 +63,23 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
+# Save and Load algorithms
+# TODO extrapolate into its own class for simplification
+# WARNING not functional
+def save_game(g):
+
+    with open('saves/game.pickle', 'wb') as f:
+        pickle.dump(g, f)
+
+def load_game(g):
+
+    with open('saves/game.pickle', 'rb') as f:
+        g = pickle.load(f)
+
+
 # Hard reset of the game
 # TODO extrapolate into its own class for simplification
+
 def reset_game(g):
 
     global player
@@ -204,7 +223,7 @@ def run():
 
 
     # create the main menu for the game
-    main_menu_items = [MenuItem(text="Start Game", menu_action = start_game), MenuItem(text="Exit", menu_action = exit_game)]
+    main_menu_items = [MenuItem(text="Start Game", menu_action = start_game), MenuItem(text="Exit", menu_action = exit_game), MenuItem(text="Save", menu_action = save_game), MenuItem(text="Load", menu_action = load_game)]
     main_menu = MenuSystem(SCREEN_WIDTH, SCREEN_HEIGHT)
     main_menu.selected_menu_screen.menu_options = main_menu_items
     main_menu.selected_menu_screen.set_selected_option(main_menu_items[0])

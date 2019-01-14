@@ -15,7 +15,7 @@ def render_dashboards(con, dashboards):
 def clear_dashboards(con, dashboards):
     for dashboard in dashboards:
         clear_dashboard(con, dashboard)
-
+        
 # Draw a dashboard to the console
 def draw_dashboard(con, dashboard):
     dashboard.update_dash_console()

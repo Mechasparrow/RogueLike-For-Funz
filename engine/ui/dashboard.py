@@ -10,12 +10,13 @@ class DashboardBase:
     # params
     # position + width and height of dashboard
     # whether dashboard is visible (boolean)
-    def __init__(self, x, y, width, height, visible = True, dashboard_type = "base"):
+    def __init__(self, x, y, width, height, visible = True, dashboard_name = None, dashboard_type = "base"):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.visible = visible
+        self.dashboard_name = dashboard_name
         self.dashboard_type = dashboard_type
 
         # create a console to handle this dashboard

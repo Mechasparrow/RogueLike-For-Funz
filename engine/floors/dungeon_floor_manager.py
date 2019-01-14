@@ -25,6 +25,12 @@ class DungeonFloorManager(FloorManager):
         else:
             self.dungeon_spawn_stats = dungeon_spawn_stats
 
+    def replace_main_entity(self,new_entity):
+
+        remove_gameobject_from_floor(self.get_current_floor(), self.main_entity)
+        add_gameobject_to_floor(self.get_current_floor(), new_entity);
+
+
     def go_floor_up(self):
         self.goto_previous_floor(callback = self.next_floor_when_it_exists)
 

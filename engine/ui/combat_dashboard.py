@@ -12,8 +12,8 @@ class CombatDashboard(DashboardBase):
 
     # Same params as DashboardBase
     # with additional parameter of combat behavior to render information
-    def __init__(self, x, y, width, height, combat_behavior, visible = True):
-        DashboardBase.__init__(self, x, y, width, height, visible, dashboard_type = "combat")
+    def __init__(self, x, y, width, height, combat_behavior, dashboard_name = None, visible = True):
+        DashboardBase.__init__(self, x, y, width, height, visible, dashboard_name = dashboard_name, dashboard_type = "combat")
         self.combat_behavior = combat_behavior
 
     # Render stats to the dash console

@@ -13,8 +13,8 @@ class LogDashboard(DashboardBase):
     # Same params as DashboardBase
     # with additional parameter of messages display a message log
 
-    def __init__(self, x, y, width, height, messages = [], visible = True):
-        DashboardBase.__init__(self, x, y, width, height, visible, dashboard_type = "log")
+    def __init__(self, x, y, width, height, messages = [], dashboard_name = None, visible = True):
+        DashboardBase.__init__(self, x, y, width, height, visible, dashboard_name = dashboard_name, dashboard_type = "log")
         self.messages = messages
 
     # Logs the messages to the message log

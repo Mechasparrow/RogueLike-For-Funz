@@ -15,6 +15,7 @@ from keycodes import *
 
 # Import Game engine
 from engine.game import *
+from engine.floors import *
 from engine.ui import *
 from engine.mapping import *
 from engine.combat import *
@@ -32,6 +33,7 @@ def player_behavior(game, action):
         # If dead drop a body TODO
         if (player.combat_behavior.dead):
             gameover_dashboard.show_dashboard()
+            print ("still dead")
 
         game.floor_manager.get_current_floor().game_map.compute_fov_map(player.x, player.y, radius = 8)
 
@@ -42,6 +44,8 @@ def general_game_behavior(game, action):
 
     if (action == 'exit'):
         game.stop_loop()
+    elif (action == 'reset'):
+        reset_game(game)
 
 # Core logic of the game in question
 def core_logic(game):
@@ -55,14 +59,62 @@ def core_logic(game):
     # handle the game inputs
     handle_inputs(game)
 
+# Hard reset of the game
+# TODO extrapolate into its own class for simplification
+def reset_game(g):
+
+    global player
+
+    # TODO reset the player properties
+
+
+    # Create the player
+    # TODO allows leveling system to be have ability to reset stats along with combat behavior
+
+    # Turn based handler for game
+    game_turn_handler = GameTurnHandler(g)
+
+    # Reset player stats
+    player_leveling_system = LevelingSystem(update_stat_deltas = LevelingSystem.generate_update_stats_deltas(1, 1, 1, 0))
+    player_leveling_system.enable_dashboard_logging(g)
+    player_combat = CombatBehavior.create_combat_behavior_manual(max_health = 100, defense = 2, attack = 10, leveling_system = player_leveling_system)
+    player_combat.game = g
+    player = TurnBasedPlayer(0, 0, "Player", "@", color = (255, 255, 255), combat_behavior = player_combat, turn_handler = game_turn_handler, game = g)
+
+    # Reset player dashboard and gameover dashboard
+
+    # TODO simplify
+    player_dashboards = find_dashboard_by_name(g, "player_dash")
+    if (len(player_dashboards) > 0):
+        player_dashboard = player_dashboards[0]
+        player_dashboard.combat_behavior = player_combat
+
+    # TODO simplify
+    gameover_dashboards = find_dashboard_by_name(g, "gameover_dash")
+    if (len(gameover_dashboards) > 0):
+        gameover_dashboard = gameover_dashboards[0]
+        gameover_dashboard.hide_dashboard()
+
+
+    # spawn rates for dungeon
+    dungeon_spawn_rates = DungeonSpawnStats(monsters_per_room = 3, health_chance = 0.5, stairs_chance = 0.4, upward_stairs_chance = 0.4, chest_spawn_chance = 0.5)
+
+    # create dungeon
+    g.floor_manager = FloorManager((g.window_width * 3) // 4, g.window_height, game = g)
+    dungeon_floor_manager = DungeonFloorManager(g.floor_manager.floor_width, g.floor_manager.floor_height, floors = g.floor_manager.floors, main_entity = player, dungeon_spawn_stats = dungeon_spawn_rates, game = g)
+    g.floor_manager = dungeon_floor_manager
+
+    # generate the next floor
+    g.floor_manager.generate_and_go_to_next_floor()
+
 # Initialize the game world + constituents
+
 def init_game(g):
 
     # TODO seperate into more functions for kicks and giggles
     # TODO don't make this GLOBAL!!!!
     global gameover_dashboard
     global floor_dashboard
-    global dungeon
     global player
 
 
@@ -87,12 +139,12 @@ def init_game(g):
     g.floor_manager.generate_and_go_to_next_floor()
 
     # Create UI dashboards
-    player_dashboard = CombatDashboard(1,1, 80, 6, combat_behavior = player_combat)
+    player_dashboard = CombatDashboard(1,1, 80, 6, dashboard_name = "player_dash", combat_behavior = player_combat)
 
     # DEBUG floor dashboard
     floor_dashboard = CustomMessageDashboard(1, 6, 80, 2, message = "Current floor: " + str(g.floor_manager.current_floor_number))
 
-    gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over")
+    gameover_dashboard = CustomMessageDashboard(40,10,60,3, message = "Game Over",  dashboard_name = "gameover_dash")
     gameover_dashboard.hide_dashboard()
 
 
@@ -125,7 +177,8 @@ def init_game(g):
 
     ## game handler
     game_key_actions = {
-        "exit": tcod.KEY_ESCAPE
+        "exit": tcod.KEY_ESCAPE,
+        "reset": "r"
     }
     general_game_input_handler = InputHandler(g, game_key_actions)
     general_game_input_handler.add_behavior(general_game_behavior)
@@ -134,7 +187,6 @@ def init_game(g):
     add_input_handler(g, player_input_handler)
     add_input_handler(g, general_game_input_handler)
     add_input_handler(g, menu_input_handler)
-
 
 def run():
 
@@ -160,8 +212,8 @@ def run():
     # create game console with props
     g = Game(TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, game_font, fps=GAME_FPS, main_menu=main_menu)
 
-    # initialize the game (generate dungeon, create player, etc)
     init_game(g)
+    # initialize the game (generate dungeon, create player, etc)
 
     # start the main game loops
     g.start_loop(core_logic)

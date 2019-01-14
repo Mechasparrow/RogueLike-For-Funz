@@ -15,4 +15,4 @@ def handle_inputs(game):
     key = tcod.console_check_for_keypress()
 
     for handler in game.input_handlers:
-        handler.handle_input(key.vk)
+        handler.handle_input(key)

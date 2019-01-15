@@ -25,6 +25,16 @@ class DungeonFloorManager(FloorManager):
         else:
             self.dungeon_spawn_stats = dungeon_spawn_stats
 
+    def as_dictionary(self):
+        original_dict = super().as_dictionary()
+
+        dungeon_floor_dict = {
+            "dungeon_spawn_stats": self.dungeon_spawn_stats.as_dictionary()
+        }
+
+        merged_dict = {**original_dict, **dungeon_floor_dict}
+        return merged_dict
+
     def replace_main_entity(self,new_entity):
 
         remove_gameobject_from_floor(self.get_current_floor(), self.main_entity)

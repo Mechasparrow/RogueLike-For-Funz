@@ -43,3 +43,13 @@ class DungeonSpawnStats:
             self.chest_spawn_chance = 0
         else:
             self.chest_spawn_chance = chest_spawn_chance
+
+    def as_dictionary(self):
+        stats_dictionary = {
+            'monsters_per_room': self.monsters_per_room,
+            'health_chance': self.health_chance,
+            'stairs_chance': self.stairs_chance,
+            'chest_spawn_chance': self.chest_spawn_chance
+        }
+
+        return stats_dictionary

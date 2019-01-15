@@ -20,5 +20,16 @@ class Floor:
         if (floor_init):
             floor_init(self)
 
+    def as_dictionary(self):
+        floor_dict = {
+            'width': self.width,
+            'height': self.height,
+            'objects': self.objects,
+            'props': self.props,
+            'game_map': self.game_map
+        }
+
+        return floor_dict
+
     def empty_objects(self):
         self.objects = []

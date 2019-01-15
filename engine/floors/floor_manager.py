@@ -9,7 +9,7 @@ from engine.mapping import *
 
 class FloorManager:
 
-    def __init__(self, floor_width, floor_height, floors = None, game = None, custom_floor_gen = None):
+    def __init__(self, floor_width, floor_height, floors = None, game = None):
         '''
         @params
         floors: list of all the floors on the floor manager
@@ -20,11 +20,6 @@ class FloorManager:
         self.floor_width = floor_width
         self.floor_height = floor_height
 
-        if (custom_floor_gen == None):
-            self.custom_floor_gen = self.default_custom_floor_gen
-        else:
-            self.custom_floor_gen = custom_floor_gen
-
         # If no floors specified, set it to empty
         if floors is None:
             self.floors = []
@@ -32,6 +27,17 @@ class FloorManager:
             self.floors = floors
 
         self.current_floor_number = 0
+
+    def as_dictionary(self):
+        # TODO convert floors list to dictionary as well
+        floor_dictionary = {
+            "floor_width": self.floor_width,
+            "floor_height": self.floor_height,
+            "current_floor_number": self.current_floor_number,
+            "floors": self.floors
+        }
+
+        return floor_dictionary
 
     def default_custom_floor_gen(self):
         return self.gen_empty_floor()

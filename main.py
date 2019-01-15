@@ -66,16 +66,18 @@ def core_logic(game):
 # Save and Load algorithms
 # TODO extrapolate into its own class for simplification
 # WARNING not functional
+
 def save_game(g):
 
-    with open('saves/game.pickle', 'wb') as f:
-        pickle.dump(g, f)
+    floor_dungeon = g.floor_manager
+    print (str(floor_dungeon.as_dictionary()))
+
+
+    pass
 
 def load_game(g):
 
-    with open('saves/game.pickle', 'rb') as f:
-        g = pickle.load(f)
-
+    pass
 
 # Hard reset of the game
 # TODO extrapolate into its own class for simplification

@@ -9,3 +9,15 @@ class CombatStats:
         self.attack = attack
         self.defense = defense
         self.xp_drop = xp_drop
+
+    def as_dictionary(self):
+        return {
+            'max_health': self.max_health,
+            'attack': self.attack,
+            'defense': self.defense,
+            'xp_drop': self.xp_drop
+        }
+
+    def from_dictionary():
+
+        pass

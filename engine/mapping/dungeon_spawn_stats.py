@@ -53,3 +53,7 @@ class DungeonSpawnStats:
         }
 
         return stats_dictionary
+
+    def from_dictionary():
+
+        pass

@@ -29,6 +29,28 @@ class Entity(GameObject):
         if (self.combat_behavior):
             self.combat_behavior.fighter_name = self.name
 
+    def as_dictionary(self):
+        parent_dictionary = super().as_dictionary()
+
+        # Check to see if combat behavior needs to be serialized
+        if (self.combat_behavior):
+            serialized_combat_behavior = self.combat_behavior.as_dictionary()
+        else:
+            serialized_combat_behavior = None
+
+        entity_dict = {
+            'combat_behavior': serialized_combat_behavior,
+            'entity_type': self.entity_type,
+            'items': self.items
+        }
+
+        merged_dict = {**parent_dictionary, **entity_dict}
+        return merged_dict
+
+    def from_dictionary():
+
+        pass
+
     # move the entity a certain dx and dy
     # can only move on walkable tiles
     def move(self, dx, dy):

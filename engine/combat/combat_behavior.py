@@ -45,6 +45,20 @@ class CombatBehavior:
         # initially the combatant is not dead
         self.dead = False
 
+    def as_dictionary(self):
+        return {
+            'fighter_name': self.fighter_name,
+            'current_health': self.current_health,
+            'dead': self.dead,
+            'current_xp': self.current_xp,
+            'leveling_system': self.leveling_system.as_dictionary(),
+            'combat_stats': self.combat_stats.as_dictionary()
+        }
+
+    def from_dictionary():
+
+        pass
+
 
     # TODO create more appropiate name
     # creates the combat behavior with combat stats manually supplied

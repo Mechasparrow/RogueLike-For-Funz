@@ -18,6 +18,20 @@ class GameObject:
         self.game = game
         self.type = type
 
+    def as_dictionary(self):
+        return {
+            'x': self.x,
+            'y': self.y,
+            'name': self.name,
+            'chr': self.chr,
+            'color': self.color,
+            'type': self.type
+        }
+
+    def from_dictionary():
+
+        pass
+
     # return a point at the generated from anticipating a move with a dx, dy
     def anticipate_move(self, dx, dy):
         potential_x = self.x + dx

@@ -34,10 +34,14 @@ class FloorManager:
             "floor_width": self.floor_width,
             "floor_height": self.floor_height,
             "current_floor_number": self.current_floor_number,
-            "floors": self.floors
+            "floors": [floor.as_dictionary() for floor in self.floors]
         }
 
         return floor_dictionary
+
+    def from_dictionary():
+
+        pass
 
     def default_custom_floor_gen(self):
         return self.gen_empty_floor()

@@ -26,6 +26,19 @@ class LevelingSystem:
         else:
             self.update_stat_deltas = LevelingSystem.generate_update_stats_deltas(0,0,0,0)
 
+    def as_dictionary(self):
+
+        return {
+            'level': self.level,
+            'level_up_threshold': self.level_up_threshold,
+            'restore_health': self.restore_health,
+            'update_stat_deltas': self.update_stat_deltas
+        }
+
+    def from_dictionary():
+
+        pass
+
     # TODO generalize
     # Enable regular logging
     def enable_default_logging(self):
@@ -73,7 +86,7 @@ class LevelingSystem:
     def level_up(self, combat_behavior):
         self.level += 1
         self.logging_function(str(combat_behavior) + " has leveled up!")
-        
+
         combat_behavior.current_xp = combat_behavior.current_xp - self.level_up_threshold
 
         if (combat_behavior.combat_stats):

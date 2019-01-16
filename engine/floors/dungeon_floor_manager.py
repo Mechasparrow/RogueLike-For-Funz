@@ -35,6 +35,10 @@ class DungeonFloorManager(FloorManager):
         merged_dict = {**original_dict, **dungeon_floor_dict}
         return merged_dict
 
+    def from_dictionary():
+
+        pass
+
     def replace_main_entity(self,new_entity):
 
         remove_gameobject_from_floor(self.get_current_floor(), self.main_entity)

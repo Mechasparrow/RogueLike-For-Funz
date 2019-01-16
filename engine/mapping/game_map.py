@@ -22,6 +22,7 @@ class GameMap:
 
         # 2d array of empty tiles to start
         self.tiles = GameMap.generate_empty_tiles(self.width, self.height)
+        self.fov = fov
 
         # generate fov based off tile 2d array if enabled
         if (fov == True):
@@ -30,6 +31,20 @@ class GameMap:
         else:
             self.fov_map = None
 
+    def as_dictionary(self):
+
+        return {
+            'width': self.width,
+            'height': self.height,
+            'tiles': [[tile.as_dictionary() for tile in tile_row] for tile_row in self.tiles],
+            'fov': self.fov
+        }
+
+        pass
+
+    def from_dictionary():
+
+        pass
 
     def clear_tiles(self):
         for x in range(0, self.width):

@@ -24,12 +24,16 @@ class Floor:
         floor_dict = {
             'width': self.width,
             'height': self.height,
-            'objects': self.objects,
+            'objects': [object.as_dictionary() for object in self.objects],
             'props': self.props,
-            'game_map': self.game_map
+            'game_map': self.game_map.as_dictionary()
         }
 
         return floor_dict
+
+    def from_dictionary():
+
+        pass
 
     def empty_objects(self):
         self.objects = []

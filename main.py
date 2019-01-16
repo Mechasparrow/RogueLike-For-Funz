@@ -14,7 +14,8 @@ import sys
 from gameconstants import *
 from keycodes import *
 
-#pickle
+# JSON
+import json
 import pickle
 
 # Import Game engine
@@ -70,12 +71,17 @@ def core_logic(game):
 def save_game(g):
 
     floor_dungeon = g.floor_manager
-    print (str(floor_dungeon.as_dictionary()))
 
-
-    pass
+    with open('saves/game.pickle', 'wb+') as f:
+        f.write(pickle.dumps(floor_dungeon.as_dictionary()))
+        f.close()
 
 def load_game(g):
+
+    with open('saves/game.pickle', 'rb') as f:
+        dungeon = pickle.load(f)
+        print (str(dungeon))
+
 
     pass
 

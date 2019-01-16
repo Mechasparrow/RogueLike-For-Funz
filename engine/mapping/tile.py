@@ -17,3 +17,15 @@ class Tile:
         self.blocking = blocking
         self.block_visibility = block_visibility
         self.explored = explored
+
+    def as_dictionary(self):
+        return {
+            'walkable': self.walkable,
+            'blocking': self.blocking,
+            'block_visibility': self.block_visibility,
+            'explored': self.explored
+        }
+
+    def from_dictionary():
+
+        pass

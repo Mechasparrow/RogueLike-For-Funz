@@ -31,9 +31,17 @@ class Floor:
 
         return floor_dict
 
-    def from_dictionary():
+    def from_dictionary(floor_dict, g):
+        width = floor_dict['width']
+        height = floor_dict['height']
 
-        pass
+        # FIXME convert to proper objects
+        objects = floor_dict['objects']
+
+        props = floor_dict['props']
+        game_map = floor_dict['game_map']
+
+        return Floor(width, height, objects = objects, fov = game_map['fov'], floor_init = None, game = g)
 
     def empty_objects(self):
         self.objects = []

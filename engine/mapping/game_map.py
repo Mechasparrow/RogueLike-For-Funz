@@ -40,8 +40,6 @@ class GameMap:
             'fov': self.fov
         }
 
-        pass
-
     def from_dictionary():
 
         pass

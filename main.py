@@ -73,17 +73,18 @@ def save_game(g):
     floor_dungeon = g.floor_manager
 
     with open('saves/game.pickle', 'wb+') as f:
-        f.write(pickle.dumps(floor_dungeon.as_dictionary()))
+        floor_data = floor_dungeon.as_dictionary()
+        #print (floor_data)
+        f.write(pickle.dumps(floor_data))
         f.close()
 
 def load_game(g):
 
     with open('saves/game.pickle', 'rb') as f:
-        dungeon = pickle.load(f)
-        print (str(dungeon))
-
-
-    pass
+        floor_dungeon = pickle.load(f)
+        parsed_floor_dungeon = DungeonFloorManager.from_dictionary(floor_dungeon, g)
+        print (parsed_floor_dungeon.current_floor_number)
+        g.floor_manager = parsed_floor_dungeon
 
 # Hard reset of the game
 # TODO extrapolate into its own class for simplification

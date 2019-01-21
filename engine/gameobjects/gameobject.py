@@ -19,6 +19,7 @@ class GameObject:
         self.type = type
 
     def as_dictionary(self):
+        print (self.__class__.__mro__)
         return {
             'x': self.x,
             'y': self.y,

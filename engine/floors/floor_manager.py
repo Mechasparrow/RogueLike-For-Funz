@@ -30,6 +30,7 @@ class FloorManager:
 
     def as_dictionary(self):
         # TODO convert floors list to dictionary as well
+
         floor_dictionary = {
             "floor_width": self.floor_width,
             "floor_height": self.floor_height,
@@ -39,7 +40,9 @@ class FloorManager:
 
         return floor_dictionary
 
-    def from_dictionary():
+    def from_dictionary(floor_dictionary, g):
+
+
 
         pass
 

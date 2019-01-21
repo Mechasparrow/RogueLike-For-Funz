@@ -3,6 +3,7 @@
 # Author: Michael Navazhylau
 
 from .floor_manager import FloorManager
+from .floor import Floor
 
 from engine.mapping import Dungeon, DungeonSpawnStats
 from engine.game import *
@@ -29,15 +30,25 @@ class DungeonFloorManager(FloorManager):
         original_dict = super().as_dictionary()
 
         dungeon_floor_dict = {
-            "dungeon_spawn_stats": self.dungeon_spawn_stats.as_dictionary()
+            "dungeon_spawn_stats": self.dungeon_spawn_stats.as_dictionary(),
+            "main_entity": self.main_entity.as_dictionary()
         }
 
         merged_dict = {**original_dict, **dungeon_floor_dict}
         return merged_dict
 
-    def from_dictionary():
+    def from_dictionary(floor_dictionary, g):
+        floor_width = floor_dictionary["floor_width"]
+        floor_height = floor_dictionary["floor_height"]
+        floors = [Floor.from_dictionary(flr_dict, g) for flr_dict in floor_dictionary["floors"]]
+        main_entity = floor_dictionary["main_entity"]
+        current_floor_number = floor_dictionary["current_floor_number"]
+        dungeon_spawn_stats = floor_dictionary["dungeon_spawn_stats"]
 
-        pass
+        dungeon_floor_manager = DungeonFloorManager(floor_width, floor_height, floors = floors, main_entity = main_entity, dungeon_spawn_stats = dungeon_spawn_stats, game = g)
+        dungeon_floor_manager.current_floor_number = current_floor_number
+        return dungeon_floor_manager
+
 
     def replace_main_entity(self,new_entity):
 

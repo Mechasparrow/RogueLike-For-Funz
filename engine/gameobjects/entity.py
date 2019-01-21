@@ -47,7 +47,7 @@ class Entity(GameObject):
         merged_dict = {**parent_dictionary, **entity_dict}
         return merged_dict
 
-    def from_dictionary():
+    def from_dictionary(g):
 
         pass
 

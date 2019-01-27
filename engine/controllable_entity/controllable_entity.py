@@ -8,6 +8,8 @@ sys.path.append("..")
 
 from engine.gameobjects import Entity, DeadBodyEntity
 
+# TODO serialize + parse
+
 class ControllableEntity(Entity):
 
     # Initialize object
@@ -16,6 +18,22 @@ class ControllableEntity(Entity):
 
         # Pass set of available actions for the controllable entity as a param
         self.available_actions = available_actions
+
+    #serialization + parsing
+    def as_dictionary(self):
+
+        entity_dictionary = super().as_dictionary()
+
+        controllable_dict = {
+            'available_actions': self.available_actions
+        }
+
+        merged_dict = {**entity_dictionary, **controllable_dict}
+        return merged_dict
+
+    def from_dictionary(dictionary, g):
+
+        pass
 
     # function to retrieve list of available actions for said entity
     def get_actions_available(self):

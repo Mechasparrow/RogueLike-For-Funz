@@ -35,6 +35,34 @@ class Chest(Entity):
         # Base Entity props
         Entity.__init__(self, x, y, name = name, chr = close_chr, color = color, combat_behavior = None, game = game, entity_type = "chest")
 
+    #serialization + parsing
+    def as_dictionary(self):
+
+        entity_dictionary = super().as_dictionary()
+
+        #NOTE serialize the chest item
+        serialized_chest_item = self.chest_item.as_dictionary()
+
+        #TEMP stairs behavior is function so it can not be serialized
+        chest_dictionary = {
+            'open_chr': self.open_chr,
+            'close_chr': self.close_chr,
+            'chest_item': serialized_chest_item,
+            'opened': self.opened
+        }
+
+        merged_dict = {**entity_dictionary, **chest_dictionary}
+        return merged_dict
+
+
+        pass
+
+    def from_dictionary(dictionary, g):
+
+        #NOTE parse Item
+        parsed_chest_item = Item.from_dictionary(dictionary['chest_item'], g)
+
+        return Chest(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], open_chr = dictionary['open_chr'], close_chr = dictionary['close_chr'], color = dictionary['color'], game = g, chest_item = parsed_chest_item, opened = dictionary['opened'])
 
     def open_chest(self, recipient):
         # Dont do anything if chest is already opened

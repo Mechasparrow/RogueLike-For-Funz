@@ -13,9 +13,22 @@ sys.path.append("..")
 # Game pickups
 from engine.pickups import XPDrop
 
+# TODO serialize + parse
+
 class GameTurnHandler:
     def __init__(self, game):
         self.game = game
+
+
+    #serialization and parsing
+    def as_dictionary(self):
+        # NOTE will get complicated later on
+        return {
+
+        }
+
+    def from_dictionary(dictionary, g):
+        return GameTurnHandler(g)
 
     # Execute the game's/computer's turn for turn based games
     def take_turn(self):

@@ -35,9 +35,9 @@ class LevelingSystem:
             'update_stat_deltas': self.update_stat_deltas
         }
 
-    def from_dictionary():
+    def from_dictionary(dictionary, g):
+        return LevelingSystem(level = dictionary['level'], level_up_threshold = dictionary['level_up_threshold'], restore_health = dictionary['restore_health'], update_stat_deltas = dictionary['update_stat_deltas'])
 
-        pass
 
     # TODO generalize
     # Enable regular logging

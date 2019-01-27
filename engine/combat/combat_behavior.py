@@ -55,10 +55,20 @@ class CombatBehavior:
             'combat_stats': self.combat_stats.as_dictionary()
         }
 
-    def from_dictionary():
+    def from_dictionary(dictionary, g):
 
-        pass
+        if (dictionary == None):
+            return None
 
+        parsed_leveling_system= LevelingSystem.from_dictionary(dictionary['leveling_system'], g)
+        parsed_combat_stats= CombatStats.from_dictionary(dictionary['combat_stats'], g)
+
+        combat_behavior = CombatBehavior(combat_stats = parsed_combat_stats, fighter_name = dictionary['fighter_name'], leveling_system = parsed_leveling_system, game = g)
+        combat_behavior.current_health = dictionary['current_health']
+        combat_behavior.dead = dictionary['dead']
+        combat_behavior.current_xp = dictionary['current_xp']
+
+        return combat_behavior
 
     # TODO create more appropiate name
     # creates the combat behavior with combat stats manually supplied

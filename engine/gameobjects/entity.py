@@ -38,6 +38,7 @@ class Entity(GameObject):
         else:
             serialized_combat_behavior = None
 
+        # FIXME serialize items
         entity_dict = {
             'combat_behavior': serialized_combat_behavior,
             'entity_type': self.entity_type,
@@ -47,7 +48,7 @@ class Entity(GameObject):
         merged_dict = {**parent_dictionary, **entity_dict}
         return merged_dict
 
-    def from_dictionary(g):
+    def from_dictionary(dictionary, g):
 
         pass
 

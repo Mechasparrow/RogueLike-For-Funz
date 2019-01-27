@@ -10,6 +10,7 @@ class CombatStats:
         self.defense = defense
         self.xp_drop = xp_drop
 
+    # serialization + parsing
     def as_dictionary(self):
         return {
             'max_health': self.max_health,
@@ -18,6 +19,5 @@ class CombatStats:
             'xp_drop': self.xp_drop
         }
 
-    def from_dictionary():
-
-        pass
+    def from_dictionary(dictionary, g = None):
+        return CombatStats(dictionary['max_health'], dictionary['attack'], dictionary['defense'], dictionary['xp_drop'])

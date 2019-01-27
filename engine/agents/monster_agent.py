@@ -15,6 +15,9 @@ sys.path.append("..")
 # utilize some game functions
 from engine.game import *
 
+# Combat
+from engine.combat import *
+
 # Monster Agent Class Def
 # extends from Intelligent Agent
 class MonsterAgent(IntelligentAgent):
@@ -24,6 +27,32 @@ class MonsterAgent(IntelligentAgent):
 
         # takes in ai target to know what to chase
         self.ai_target = ai_target
+
+    def as_dictionary(self):
+
+        agent_dictionary = super().as_dictionary()
+        ai_target_dict = self.ai_target.as_dictionary()
+
+        monster_dict = {
+            'ai_target': ai_target_dict
+        }
+
+        #merged_dict = {**agent_dictionary, **monster_dict}
+        merged_dict = {**agent_dictionary, **monster_dict}
+        return merged_dict
+
+    def from_dictionary(dictionary, g):
+        print (dictionary['ai_target'])
+
+        # GOTTA parse AI_TARGET + COMBAT_BEHAVIOR
+
+        parsed_combat_behavior = CombatBehavior.from_dictionary(dictionary['combat_behavior'],g)
+
+        # FIXME
+        #parsed_ai_target =
+
+        monster_agent = MonsterAgent(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], combat_behavior = parsed_combat_behavior, game = g, ai_target = dictionary['ai_target'])
+        return monster_agent
 
     # convert gameobject to a monster agent
     def from_gameobject(gameobject, combat_behavior = None):

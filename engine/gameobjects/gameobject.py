@@ -19,17 +19,17 @@ class GameObject:
         self.type = type
 
     def as_dictionary(self):
-        print (self.__class__.__mro__)
         return {
             'x': self.x,
             'y': self.y,
             'name': self.name,
             'chr': self.chr,
             'color': self.color,
-            'type': self.type
+            'type': self.type,
+            'class': self.__class__.__name__
         }
 
-    def from_dictionary():
+    def from_dictionary(dictionary, g):
 
         pass
 

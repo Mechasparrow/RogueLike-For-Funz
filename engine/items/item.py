@@ -15,6 +15,19 @@ class Item:
         self.item_type = item_type
         self.stack_limit = stack_limit
 
+
+    #serialization + parsing
+    def as_dictionary(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'item_type': self.item_type,
+            'stack_limit': self.stack_limit
+        }
+
+    def from_dictionary(item_dict, g):
+        return Item(item_dict['name'], item_dict['description'], item_dict['item_type'], item_dict['stack_limit'])
+
     # Uses the item
     def use_item(self, recipient):
 

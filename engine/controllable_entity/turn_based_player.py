@@ -3,6 +3,9 @@
 # Author: Michael Navazhylau
 
 from .controllable_entity import ControllableEntity
+from engine.game import GameTurnHandler
+
+from engine.combat import CombatBehavior
 
 # import polyfill
 import sys
@@ -10,6 +13,8 @@ sys.path.append("..")
 
 # Game utils
 from engine.game import *
+
+# TODO serialize + parse
 
 # Uses Controllable Entity as Base
 class TurnBasedPlayer(ControllableEntity):
@@ -27,6 +32,33 @@ class TurnBasedPlayer(ControllableEntity):
 
         # turn handler param to tell the game world to take its turn after the player does
         self.turn_handler = turn_handler
+
+    #serialization + parsing
+    def as_dictionary(self):
+
+        controllable_dict = super().as_dictionary()
+
+        turn_handler_dict = self.turn_handler.as_dictionary()
+
+        # NOTE turn handler gotta get serialized and parsed properly
+        turn_based_player_dict = {
+            'turn_handler': turn_handler_dict
+        }
+
+        merged_dict = {**controllable_dict, **turn_based_player_dict}
+        return merged_dict
+
+    def from_dictionary(dictionary, g):
+
+        turn_handler = GameTurnHandler.from_dictionary(dictionary['turn_handler'],g)
+        parsed_combat_behavior = CombatBehavior.from_dictionary(dictionary['combat_behavior'], g)
+
+        parsed_items = []
+        for item_dict in dictionary['items']:
+            parsed_items.append(Item.from_dictionary(item_dict))
+
+        # NOTE need to parse items + combat_behavior
+        return TurnBasedPlayer(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], items = parsed_items, combat_behavior = parsed_combat_behavior, game = g, turn_handler = turn_handler)
 
     # controls the entity based on the actions passed to it
     def control_entity(self, action, callback = None):

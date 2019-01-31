@@ -18,6 +18,9 @@ from engine.game import *
 # Combat
 from engine.combat import *
 
+# Import engine entities list
+import engine
+
 # Monster Agent Class Def
 # extends from Intelligent Agent
 class MonsterAgent(IntelligentAgent):
@@ -44,14 +47,17 @@ class MonsterAgent(IntelligentAgent):
     def from_dictionary(dictionary, g):
         print (dictionary['ai_target'])
 
-        # GOTTA parse AI_TARGET + COMBAT_BEHAVIOR
+
+
 
         parsed_combat_behavior = CombatBehavior.from_dictionary(dictionary['combat_behavior'],g)
 
-        # FIXME
-        #parsed_ai_target =
+        raw_ai_target = dictionary['ai_target']
+        ai_target_class = engine.entities[raw_ai_target['class']]
 
-        monster_agent = MonsterAgent(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], combat_behavior = parsed_combat_behavior, game = g, ai_target = dictionary['ai_target'])
+        parsed_ai_target = ai_target_class.from_dictionary(raw_ai_target, g)
+        
+        monster_agent = MonsterAgent(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], combat_behavior = parsed_combat_behavior, game = g, ai_target = parsed_ai_target)
         return monster_agent
 
     # convert gameobject to a monster agent

@@ -31,7 +31,7 @@ from engine.menu import *
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
     # Grab the player object
-    if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0):
+    if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0 and game.game_state == "playing"):
         player = find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")[0]
         player.control_entity(action)
 

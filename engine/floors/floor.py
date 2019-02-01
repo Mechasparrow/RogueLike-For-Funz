@@ -48,17 +48,12 @@ class Floor:
         width = floor_dict['width']
         height = floor_dict['height']
 
-        # FIXME convert to proper objects
+        # Converts all objects to proper objects
         objects = floor_dict['objects']
-        print (objects)
         parsed_objects = []
         for obj_dict in objects:
-            # TODO parse with appropiate entity class
-            print (obj_dict)
             object_class = engine.entities[obj_dict['class']]
-            print (object_class)
             parsed_object = object_class.from_dictionary(obj_dict, g)
-            print(parsed_object)
 
             ## DEBUG Breaking code
             if (parsed_object == None):
@@ -67,12 +62,23 @@ class Floor:
 
             parsed_objects.append(parsed_object)
 
-        print ("ALL GOOD")
+        # NOTE inefficient
+        for parsed_object in parsed_objects:
+            object_name = parsed_object.__class__.__name__
+            if (object_name == 'MonsterAgent'):
+                ai_target = parsed_object.ai_target
+                existing_ai_targets = list(filter(lambda object: object.name == ai_target.name, parsed_objects))
+                if len(existing_ai_targets) > 0:
+                    parsed_object.ai_target = existing_ai_targets[0]
 
         props = floor_dict['props']
-        game_map = floor_dict['game_map']
 
-        return Floor(width, height, objects = parsed_objects, fov = game_map['fov'], floor_init = None, game = g)
+        # FIXME convert to proper game map
+        game_map = GameMap.from_dictionary(floor_dict['game_map'], g)
+
+        floor = Floor(width, height, objects = parsed_objects, fov = game_map.fov, floor_init = None, game = g)
+        floor.game_map = game_map
+        return floor
 
     def empty_objects(self):
         self.objects = []

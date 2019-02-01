@@ -49,11 +49,11 @@ class DungeonSpawnStats:
             'monsters_per_room': self.monsters_per_room,
             'health_chance': self.health_chance,
             'stairs_chance': self.stairs_chance,
+            'upward_stairs_chance': self.upward_stairs_chance,
             'chest_spawn_chance': self.chest_spawn_chance
         }
 
         return stats_dictionary
 
-    def from_dictionary():
-
-        pass
+    def from_dictionary(dictionary, g):
+        return DungeonSpawnStats(monsters_per_room = dictionary['monsters_per_room'], health_chance = dictionary['health_chance'], stairs_chance = dictionary['stairs_chance'], upward_stairs_chance = dictionary['upward_stairs_chance'], chest_spawn_chance = dictionary['chest_spawn_chance'])

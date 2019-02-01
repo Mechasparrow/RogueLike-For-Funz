@@ -4,7 +4,7 @@
 
 from .controllable_entity import ControllableEntity
 from engine.game import GameTurnHandler
-
+from engine.items import Item
 from engine.combat import CombatBehavior
 
 # import polyfill
@@ -55,7 +55,7 @@ class TurnBasedPlayer(ControllableEntity):
 
         parsed_items = []
         for item_dict in dictionary['items']:
-            parsed_items.append(Item.from_dictionary(item_dict))
+            parsed_items.append(Item.from_dictionary(item_dict, g))
 
         # NOTE need to parse items + combat_behavior
         return TurnBasedPlayer(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], items = parsed_items, combat_behavior = parsed_combat_behavior, game = g, turn_handler = turn_handler)

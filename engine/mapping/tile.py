@@ -26,6 +26,5 @@ class Tile:
             'explored': self.explored
         }
 
-    def from_dictionary():
-
-        pass
+    def from_dictionary(dictionary, g = None):
+        return Tile(dictionary['walkable'], dictionary['blocking'], dictionary['block_visibility'], dictionary['explored'])

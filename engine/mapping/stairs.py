@@ -35,7 +35,7 @@ class Stairs(Entity):
 
     def from_dictionary(dictionary, g):
         # TEMP FIXME default stair behavior is undefined
-        return Stairs(x = dictionary['x'], y = dictionary['x'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], game = g, stairs_behavior = None)
+        return Stairs(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], game = g, stairs_behavior = None)
 
     # Use the stairs
     def use_stairs(self):

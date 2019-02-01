@@ -41,7 +41,10 @@ class Chest(Entity):
         entity_dictionary = super().as_dictionary()
 
         #NOTE serialize the chest item
-        serialized_chest_item = self.chest_item.as_dictionary()
+        if (self.chest_item == None):
+            serialized_chest_item = None
+        else:
+            serialized_chest_item = self.chest_item.as_dictionary()
 
         #TEMP stairs behavior is function so it can not be serialized
         chest_dictionary = {

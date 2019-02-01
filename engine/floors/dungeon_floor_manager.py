@@ -8,6 +8,8 @@ from .floor import Floor
 from engine.mapping import Dungeon, DungeonSpawnStats
 from engine.game import *
 
+import engine
+
 class DungeonFloorManager(FloorManager):
 
     def __init__(self, floor_width, floor_height, floors = None, main_entity = None, dungeon_spawn_stats = None, game = None):
@@ -40,17 +42,23 @@ class DungeonFloorManager(FloorManager):
     def from_dictionary(floor_dictionary, g):
         floor_width = floor_dictionary["floor_width"]
         floor_height = floor_dictionary["floor_height"]
-        floors = [Floor.from_dictionary(flr_dict, g) for flr_dict in floor_dictionary["floors"]]
-        main_entity = floor_dictionary["main_entity"]
-        current_floor_number = floor_dictionary["current_floor_number"]
-        dungeon_spawn_stats = floor_dictionary["dungeon_spawn_stats"]
 
-        dungeon_floor_manager = DungeonFloorManager(floor_width, floor_height, floors = floors, main_entity = main_entity, dungeon_spawn_stats = dungeon_spawn_stats, game = g)
+        floors = [Floor.from_dictionary(flr_dict, g) for flr_dict in floor_dictionary["floors"]]
+
+        raw_main_entity = floor_dictionary['main_entity']
+        main_entity_class = engine.entities[raw_main_entity['class']]
+        parsed_main_entity = main_entity_class.from_dictionary(raw_main_entity, g)
+
+        current_floor_number = floor_dictionary["current_floor_number"]
+
+        parsed_dungeon_spawn_stats = DungeonSpawnStats.from_dictionary(floor_dictionary["dungeon_spawn_stats"],g)
+
+        dungeon_floor_manager = DungeonFloorManager(floor_width, floor_height, floors = floors, main_entity = parsed_main_entity, dungeon_spawn_stats = parsed_dungeon_spawn_stats, game = g)
         dungeon_floor_manager.current_floor_number = current_floor_number
         return dungeon_floor_manager
 
 
-    def replace_main_entity(self,new_entity):
+    def replace_main_entity(self, new_entity):
 
         remove_gameobject_from_floor(self.get_current_floor(), self.main_entity)
         add_gameobject_to_floor(self.get_current_floor(), new_entity);
@@ -98,9 +106,6 @@ class DungeonFloorManager(FloorManager):
     def gen_dungeon_floor(self):
 
         new_floor = self.gen_empty_floor()
-
-        if (self.main_entity != None):
-            add_gameobject_to_floor(new_floor, self.main_entity)
 
         dungeon = Dungeon(floor = new_floor, dungeon_spawn_rates = self.dungeon_spawn_stats, generate_floor = self.generate_and_go_to_next_floor, go_upward = self.go_floor_up, game = self.game)
         dungeon.push_dungeon_to_map()

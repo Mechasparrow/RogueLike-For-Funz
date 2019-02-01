@@ -13,9 +13,8 @@ class DeadBodyEntity(Entity):
 
     #serialization + parsing
     def as_dictionary(self):
-
-        pass
+        parent_dictionary = super().as_dictionary()
+        return parent_dictionary
 
     def from_dictionary(dictionary, g):
-
-        pass
+        return DeadBodyEntity(dictionary['x'], dictionary['y'],dictionary['name'], dictionary['chr'], dictionary['color'], game = g)

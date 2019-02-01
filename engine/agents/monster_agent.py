@@ -45,10 +45,6 @@ class MonsterAgent(IntelligentAgent):
         return merged_dict
 
     def from_dictionary(dictionary, g):
-        print (dictionary['ai_target'])
-
-
-
 
         parsed_combat_behavior = CombatBehavior.from_dictionary(dictionary['combat_behavior'],g)
 
@@ -56,7 +52,7 @@ class MonsterAgent(IntelligentAgent):
         ai_target_class = engine.entities[raw_ai_target['class']]
 
         parsed_ai_target = ai_target_class.from_dictionary(raw_ai_target, g)
-        
+
         monster_agent = MonsterAgent(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], combat_behavior = parsed_combat_behavior, game = g, ai_target = parsed_ai_target)
         return monster_agent
 
@@ -93,6 +89,8 @@ class MonsterAgent(IntelligentAgent):
 
         # alias
         target = self.ai_target
+        print (str(target.x)  + "," + str(target.y))
+
         combat_behavior = self.combat_behavior
 
         fov_map = self.game.floor_manager.get_current_floor().game_map.fov_map
@@ -117,6 +115,8 @@ class MonsterAgent(IntelligentAgent):
             # get the movement values
             dx = next_x - self.x
             dy = next_y - self.y
+            print (dx)
+            print (dy)
 
             # predicted position based off the path dx + dy
             predicted_pos_x = self.x + dx

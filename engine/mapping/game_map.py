@@ -40,9 +40,16 @@ class GameMap:
             'fov': self.fov
         }
 
-    def from_dictionary():
+    def from_dictionary(dictionary, g = None):
+        game_map = GameMap(dictionary['width'], dictionary['height'], dictionary['fov'])
 
-        pass
+        # TODO parse tiles
+        raw_tiles = dictionary['tiles']
+        parsed_tiles = [[Tile.from_dictionary(tile) for tile in tile_row] for tile_row in raw_tiles]
+
+        game_map.tiles = parsed_tiles
+        game_map.update_fov_map()
+        return game_map
 
     def clear_tiles(self):
         for x in range(0, self.width):

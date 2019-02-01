@@ -26,7 +26,11 @@ class Item:
         }
 
     def from_dictionary(item_dict, g):
-        return Item(item_dict['name'], item_dict['description'], item_dict['item_type'], item_dict['stack_limit'])
+        if (item_dict == None):
+            return None
+
+        print (item_dict)
+        item = Item(name = item_dict['name'], description = item_dict['description'], item_type = item_dict['item_type'], stack_limit = item_dict['stack_limit'])
 
     # Uses the item
     def use_item(self, recipient):

@@ -30,7 +30,7 @@ from engine.menu import *
 
 # Player behavior based off of current key pressed
 def player_behavior(game, action):
-    # Grab the player object
+
     if (len(find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")) > 0 and game.game_state == "playing"):
         player = find_gameobjects_by_name(game.floor_manager.get_current_floor(), "Player")[0]
         player.control_entity(action)
@@ -51,6 +51,8 @@ def general_game_behavior(game, action):
         game.stop_loop()
     elif (action == 'reset'):
         reset_game(game)
+    elif (action == 'menu'):
+        game.game_state = "in_menu"
 
 # Core logic of the game in question
 def core_logic(game):
@@ -85,6 +87,18 @@ def load_game(g):
         parsed_floor_dungeon = DungeonFloorManager.from_dictionary(floor_dungeon, g)
         print (parsed_floor_dungeon.current_floor_number)
         g.floor_manager = parsed_floor_dungeon
+
+        player_dashboards = find_dashboard_by_name(g, "player_dash")
+        players = find_gameobjects_by_name(g.floor_manager.get_current_floor(), "Player")
+
+        if (len(player_dashboards) > 0 and len(players) > 0):
+            player_dashboard = player_dashboards[0]
+            player_combat = players[0].combat_behavior
+            player_dashboard.combat_behavior = player_combat
+
+        print ("GAME LOADED")
+        g.game_state = "playing"
+
 
 # Hard reset of the game
 # TODO extrapolate into its own class for simplification
@@ -166,6 +180,7 @@ def init_game(g):
     # generate the next floor
     g.floor_manager.generate_and_go_to_next_floor()
 
+
     # Create UI dashboards
     player_dashboard = CombatDashboard(1,1, 80, 6, dashboard_name = "player_dash", combat_behavior = player_combat)
 
@@ -206,7 +221,8 @@ def init_game(g):
     ## game handler
     game_key_actions = {
         "exit": tcod.KEY_ESCAPE,
-        "reset": "r"
+        "reset": "r",
+        "menu": "m"
     }
     general_game_input_handler = InputHandler(g, game_key_actions)
     general_game_input_handler.add_behavior(general_game_behavior)

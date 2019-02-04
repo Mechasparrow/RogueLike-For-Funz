@@ -38,7 +38,6 @@ class Stairs(Entity):
         return merged_dict
 
     def from_dictionary(dictionary, g):
-        # TEMP FIXME default stair behavior is undefined
         return Stairs(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], game = g, stairs_behavior = None, stairs_direction = dictionary['stairs_direction'])
 
     # Use the stairs

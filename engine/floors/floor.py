@@ -44,6 +44,18 @@ class Floor:
 
         return floor_dict
 
+    def repair_monster_agents(objects):
+        parsed_objects = objects
+        for parsed_object in parsed_objects:
+            object_name = parsed_object.__class__.__name__
+            if (object_name == 'MonsterAgent'):
+                ai_target = parsed_object.ai_target
+                existing_ai_targets = list(filter(lambda object: object.name == ai_target.name, parsed_objects))
+                if len(existing_ai_targets) > 0:
+                    parsed_object.ai_target = existing_ai_targets[0]
+
+        return parsed_objects
+
     def from_dictionary(floor_dict, g):
         width = floor_dict['width']
         height = floor_dict['height']
@@ -63,13 +75,7 @@ class Floor:
             parsed_objects.append(parsed_object)
 
         # NOTE inefficient
-        for parsed_object in parsed_objects:
-            object_name = parsed_object.__class__.__name__
-            if (object_name == 'MonsterAgent'):
-                ai_target = parsed_object.ai_target
-                existing_ai_targets = list(filter(lambda object: object.name == ai_target.name, parsed_objects))
-                if len(existing_ai_targets) > 0:
-                    parsed_object.ai_target = existing_ai_targets[0]
+        parsed_objects = Floor.repair_monster_agents(parsed_objects)
 
         props = floor_dict['props']
 
@@ -78,6 +84,7 @@ class Floor:
 
         floor = Floor(width, height, objects = parsed_objects, fov = game_map.fov, floor_init = None, game = g)
         floor.game_map = game_map
+        floor.props = props
         return floor
 
     def empty_objects(self):

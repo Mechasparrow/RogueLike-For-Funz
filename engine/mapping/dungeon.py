@@ -262,10 +262,14 @@ class Dungeon:
                 if (upward):
                     stairs.color = (255, 153, 204)
                     stairs.stairs_behavior = self.go_upward
+                    stairs.stairs_direction = "up"
 
                     # If first floor don't create any upward stairs
                     if (self.game.floor_manager.current_floor_number <= 1):
                         return
+                else:
+                    stairs.stairs_direction = "down"
+
 
                 # place stair at room center if no other object is there
                 if not (gameobjects_exist_at_point(self.floor, room_centre_x, room_centre_y)):

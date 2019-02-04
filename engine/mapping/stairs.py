@@ -15,8 +15,11 @@ class Stairs(Entity):
     # color of stairs
     # game ref
     # behavior of stairs when interacted with
-    def __init__(self, x, y, name, chr = "^", color = (152, 158, 165), game = None, stairs_behavior = None):
+    def __init__(self, x, y, name, chr = "^", color = (152, 158, 165), game = None, stairs_behavior = None, stairs_direction = "down"):
         Entity.__init__(self, x, y, name, chr, color, combat_behavior = None, game = game, entity_type = "stairs")
+
+        # Stairs Direction
+        self.stairs_direction = stairs_direction
 
         # PROBLEMATIC FIXME
         self.stairs_behavior = stairs_behavior
@@ -27,7 +30,8 @@ class Stairs(Entity):
 
         #TEMP stairs behavior is function so it can not be serialized
         stairs_dictionary = {
-            'stairs_behavior': 'NONE'
+            'stairs_behavior': 'NONE',
+            'stairs_direction': self.stairs_direction
         }
 
         merged_dict = {**entity_dictionary, **stairs_dictionary}
@@ -35,7 +39,7 @@ class Stairs(Entity):
 
     def from_dictionary(dictionary, g):
         # TEMP FIXME default stair behavior is undefined
-        return Stairs(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], game = g, stairs_behavior = None)
+        return Stairs(x = dictionary['x'], y = dictionary['y'], name = dictionary['name'], chr = dictionary['chr'], color = dictionary['color'], game = g, stairs_behavior = None, stairs_direction = dictionary['stairs_direction'])
 
     # Use the stairs
     def use_stairs(self):

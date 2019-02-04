@@ -49,12 +49,44 @@ class DungeonFloorManager(FloorManager):
         main_entity_class = engine.entities[raw_main_entity['class']]
         parsed_main_entity = main_entity_class.from_dictionary(raw_main_entity, g)
 
+        # NOTE TODO reimplement when objectIDs implemented
+        for floor in floors:
+            for object in floor.objects:
+                if (object.name == parsed_main_entity.name):
+                    parsed_main_entity = object
+
         current_floor_number = floor_dictionary["current_floor_number"]
 
         parsed_dungeon_spawn_stats = DungeonSpawnStats.from_dictionary(floor_dictionary["dungeon_spawn_stats"],g)
 
         dungeon_floor_manager = DungeonFloorManager(floor_width, floor_height, floors = floors, main_entity = parsed_main_entity, dungeon_spawn_stats = parsed_dungeon_spawn_stats, game = g)
         dungeon_floor_manager.current_floor_number = current_floor_number
+
+        # Save Patches
+        for floor in dungeon_floor_manager.floors:
+            for object in floor.objects:
+
+                # Patchs stairs so they behave correctly
+                if (object.__class__.__name__ == "Stairs"):
+                    stair = object
+
+                    downward_behavior = dungeon_floor_manager.generate_and_go_to_next_floor
+                    upward_behavior = dungeon_floor_manager.go_floor_up
+
+                    # repairs the stairs so they go in the proper direction
+                    if (stair.stairs_direction == "down"):
+                        stair.stairs_behavior = downward_behavior
+                    elif (stair.stairs_direction == "up"):
+                        stair.stairs_behavior = upward_behavior
+
+                    print (stair.stairs_behavior)
+
+                # NOTE may not work if there are custom monster agents.Patches monster agents so they can follow the main character correctly since he propagates throughout floors
+                elif (object.__class__.__name__ == "MonsterAgent"):
+                    ai_target = object.ai_target
+                    if (ai_target.name == parsed_main_entity.name):
+                        object.ai_target = parsed_main_entity
+
         return dungeon_floor_manager
 
 
@@ -87,6 +119,8 @@ class DungeonFloorManager(FloorManager):
             if (previous_floor):
                 previous_floor.props["past_main_x"] = self.main_entity.x
                 previous_floor.props["past_main_y"] = self.main_entity.y
+                print (previous_floor.objects)
+                print (self.main_entity)
                 previous_floor.objects.remove(self.main_entity)
 
             # Add main_entity to current floor
@@ -106,6 +140,10 @@ class DungeonFloorManager(FloorManager):
     def gen_dungeon_floor(self):
 
         new_floor = self.gen_empty_floor()
+
+        # NOTE STAIRS
+        # Stairs downward generate_and_go_to_next_floor
+        # Stairs upward go_floor_up
 
         dungeon = Dungeon(floor = new_floor, dungeon_spawn_rates = self.dungeon_spawn_stats, generate_floor = self.generate_and_go_to_next_floor, go_upward = self.go_floor_up, game = self.game)
         dungeon.push_dungeon_to_map()

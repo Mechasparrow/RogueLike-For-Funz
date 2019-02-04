@@ -89,7 +89,6 @@ class MonsterAgent(IntelligentAgent):
 
         # alias
         target = self.ai_target
-        print (str(target.x)  + "," + str(target.y))
 
         combat_behavior = self.combat_behavior
 

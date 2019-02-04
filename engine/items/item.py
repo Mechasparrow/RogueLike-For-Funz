@@ -29,7 +29,6 @@ class Item:
         if (item_dict == None):
             return None
 
-        print (item_dict)
         item = Item(name = item_dict['name'], description = item_dict['description'], item_type = item_dict['item_type'], stack_limit = item_dict['stack_limit'])
 
     # Uses the item
